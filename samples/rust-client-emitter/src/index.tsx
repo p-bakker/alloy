@@ -40,8 +40,10 @@ function mapPrimitiveType(type: string): string {
   switch (type) {
     case "string":
       return "String";
-    case "number":
+    case "integer":
       return "i32";
+    case "float":
+      return "f64";
     case "boolean":
       return "bool";
     default:
@@ -210,9 +212,9 @@ const output = render(
               parameters={[
                 { name: baseUrlFieldKey, type: "&str" },
               ]}
-              returns={clientKey}
+              returns={<rust.Result ok={clientKey} err="reqwest::Error" />}
             >
-              <rust.StructExpression type={clientKey}>
+              Ok(<rust.StructExpression type={clientKey}>
                 <List>
                   <rust.StructFieldExpression name={baseUrlFieldKey}>
                     <rust.MemberExpression>
@@ -225,15 +227,14 @@ const output = render(
                     <rust.MemberExpression>
                       <rust.MemberExpression.Part>reqwest::Client::builder()</rust.MemberExpression.Part>
                       <rust.MemberExpression.Part id="timeout" args={[<>std::time::Duration::from_secs(30)</>]} />
-                      <rust.MemberExpression.Part id="build" args={[]} />
-                      <rust.MemberExpression.Part id="expect" args={[<>"failed to build HTTP client"</>]} />
+                      <rust.MemberExpression.Part id="build" args={[]} try />
                     </rust.MemberExpression>
                   </rust.StructFieldExpression>
                 </List>
-              </rust.StructExpression>
+              </rust.StructExpression>)
             </rust.FunctionDeclaration>
 
-            <For each={api.operations}>
+            <For each={api.operations} doubleHardline>
               {(op: RestApiOperation) => {
                 const params: { name: ReturnType<typeof namekey>; type: Children }[] = [];
 
@@ -274,8 +275,8 @@ const output = render(
                   formatStr = `"{}${op.endpoint}", self.base_url`;
                 }
 
-                // Build the HTTP method chain
-                const httpMethod = (
+                // Build the HTTP request chain
+                const httpRequest = (
                   <rust.MemberExpression>
                     <rust.MemberExpression.Part id="self" />
                     <rust.MemberExpression.Part id="client" />
@@ -284,8 +285,6 @@ const output = render(
                       : <rust.MemberExpression.Part id="get" args={[<>&url</>]} />
                     }
                     <rust.MemberExpression.Part id="send" args={[]} await try />
-                    <rust.MemberExpression.Part id="error_for_status" args={[]} try />
-                    <rust.MemberExpression.Part id="json" args={[]} await try />
                   </rust.MemberExpression>
                 );
 
@@ -302,7 +301,19 @@ const output = render(
                       <rust.MacroCall name="format">{formatStr}</rust.MacroCall>
                     </rust.LetDeclaration>
                     <hbr />
-                    Ok({httpMethod})
+                    <rust.LetDeclaration name={namekey("response")}>
+                      {httpRequest}
+                    </rust.LetDeclaration>
+                    <hbr />
+                    {`if !response.status().is_success() `}
+                    <rust.Block>
+                      {`let status = response.status().as_u16();\nlet message = response.text().await.unwrap_or_default();\nreturn Err(PetstoreError::Api { status, message });`}
+                    </rust.Block>
+                    <hbr />
+                    Ok(<rust.MemberExpression>
+                      <rust.MemberExpression.Part id="response" />
+                      <rust.MemberExpression.Part id="json" args={[]} await try />
+                    </rust.MemberExpression>)
                   </rust.FunctionDeclaration>
                 );
               }}
@@ -349,7 +360,7 @@ const output = render(
             returns="Result<(), petstore_client::PetstoreError>"
           >
             <rust.LetDeclaration name={namekey("client")}>
-              petstore_client::PetstoreClient::new("http://localhost:8080")
+              petstore_client::PetstoreClient::new("http://localhost:8080")?
             </rust.LetDeclaration>
             <hbr />
             <rust.LetDeclaration name={namekey("pets")}>

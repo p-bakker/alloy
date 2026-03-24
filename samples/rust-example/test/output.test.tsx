@@ -86,7 +86,7 @@ function renderExample() {
               <rust.StructDeclaration name={personRef} visibility="pub">
                 <List>
                   <rust.StructField name={nameFieldRef} type="String" visibility="pub" />
-                  <rust.StructField name={ageFieldRef} type="i32" visibility="pub" />
+                  <rust.StructField name={ageFieldRef} type="u8" visibility="pub" />
                 </List>
               </rust.StructDeclaration>
             </>
@@ -179,7 +179,7 @@ function renderExample() {
                 visibility="pub"
                 parameters={[
                   { name: nameFieldRef, type: "String" },
-                  { name: ageFieldRef, type: "i32" },
+                  { name: ageFieldRef, type: "u8" },
                 ]}
                 returns={personRef}
               >
@@ -295,23 +295,38 @@ function renderExample() {
             </rust.FunctionDeclaration>
 
             <rust.FunctionDeclaration
-              name={namekey("print_all")}
+              name={namekey("format_all")}
               visibility="pub"
               parameters={[{ name: namekey("items"), type: "&[String]" }]}
+              returns={<rust.Vec>String</rust.Vec>}
             >
-              <rust.ForLoop pattern="item" iter="items">
-                <rust.MacroCall name="println">{"\"item: {}\", item"}</rust.MacroCall>
-              </rust.ForLoop>
+              <rust.MemberExpression>
+                <rust.MemberExpression.Part id="items" />
+                <rust.MemberExpression.Part id="iter" args={[]} />
+                <rust.MemberExpression.Part id="map" args={[
+                  <rust.ClosureExpression params={[{ name: "item" }]}>
+                    <rust.MacroCall name="format">{"\"item: {}\", item"}</rust.MacroCall>
+                  </rust.ClosureExpression>
+                ]} />
+                <rust.MemberExpression.Part id="collect" args={[]} />
+              </rust.MemberExpression>
             </rust.FunctionDeclaration>
 
             <rust.FunctionDeclaration
               name={namekey("pop_all")}
               visibility="pub"
               parameters={[{ name: namekey("data"), type: "&mut Vec<i32>" }]}
+              returns={<rust.Vec>i32</rust.Vec>}
             >
+              <rust.LetDeclaration name={namekey("result")} mutable>
+                {"Vec::new()"}
+              </rust.LetDeclaration>
+              <hbr />
               <rust.WhileLetLoop pattern="Some(val)" expr="data.pop()">
-                <rust.MacroCall name="println">{"\"popped: {}\", val"}</rust.MacroCall>
+                {"result.push(val);"}
               </rust.WhileLetLoop>
+              <hbr />
+              result
             </rust.FunctionDeclaration>
 
             <rust.FunctionDeclaration
@@ -460,35 +475,71 @@ function renderExample() {
           </rust.SourceFile>
 
           <rust.SourceFile path="tests.rs">
-            <rust.TestModule>
-              <List doubleHardline>
-                <rust.FunctionDeclaration attributes="test" name={namekey("test_person_new")}>
-                  <rust.LetDeclaration name={namekey("p")}>
-                    {"crate::models::Person::new(\"Alice\".to_string(), 30)"}
-                  </rust.LetDeclaration>
-                  <hbr />
-                  <rust.MacroCall name="assert_eq">{"p.name, \"Alice\""}</rust.MacroCall>;
-                  <hbr />
-                  <rust.MacroCall name="assert_eq">{"p.age, 30"}</rust.MacroCall>;
-                </rust.FunctionDeclaration>
+            <List doubleHardline>
+              <rust.FunctionDeclaration attributes="test" name={namekey("test_person_new")}>
+                <rust.LetDeclaration name={namekey("p")}>
+                  {"crate::models::Person::new(\"Alice\".to_string(), 30)"}
+                </rust.LetDeclaration>
+                <hbr />
+                <rust.MacroCall name="assert_eq">{"p.name, \"Alice\""}</rust.MacroCall>;
+                <hbr />
+                <rust.MacroCall name="assert_eq">{"p.age, 30"}</rust.MacroCall>;
+              </rust.FunctionDeclaration>
 
-                <rust.FunctionDeclaration attributes="test" name={namekey("test_describe_age")}>
-                  <rust.LetDeclaration name={namekey("child")}>
-                    {"crate::models::Person::new(\"Bob\".to_string(), 10)"}
-                  </rust.LetDeclaration>
-                  <hbr />
-                  <rust.MacroCall name="assert_eq">{'child.describe_age(), "child"'}</rust.MacroCall>;
-                </rust.FunctionDeclaration>
+              <rust.FunctionDeclaration attributes="test" name={namekey("test_describe_age")}>
+                <rust.MacroCall name="assert_eq">{"crate::models::Person::new(\"A\".to_string(), 10).describe_age(), \"child\""}</rust.MacroCall>;
+                <hbr />
+                <rust.MacroCall name="assert_eq">{"crate::models::Person::new(\"A\".to_string(), 15).describe_age(), \"teenager\""}</rust.MacroCall>;
+                <hbr />
+                <rust.MacroCall name="assert_eq">{"crate::models::Person::new(\"A\".to_string(), 30).describe_age(), \"adult\""}</rust.MacroCall>;
+                <hbr />
+                <rust.MacroCall name="assert_eq">{"crate::models::Person::new(\"A\".to_string(), 70).describe_age(), \"senior\""}</rust.MacroCall>;
+              </rust.FunctionDeclaration>
 
-                <rust.FunctionDeclaration attributes="test" name={namekey("test_swap_pair")}>
-                  <rust.LetDeclaration name={namekey("result")}>
-                    crate::utils::swap_pair((1, 2))
-                  </rust.LetDeclaration>
-                  <hbr />
-                  <rust.MacroCall name="assert_eq">{"result, (2, 1)"}</rust.MacroCall>;
-                </rust.FunctionDeclaration>
-              </List>
-            </rust.TestModule>
+              <rust.FunctionDeclaration attributes="test" name={namekey("test_is_adult")}>
+                <rust.MacroCall name="assert">{"!crate::models::Person::new(\"A\".to_string(), 17).is_adult()"}</rust.MacroCall>;
+                <hbr />
+                <rust.MacroCall name="assert">{"crate::models::Person::new(\"A\".to_string(), 18).is_adult()"}</rust.MacroCall>;
+              </rust.FunctionDeclaration>
+
+              <rust.FunctionDeclaration attributes="test" name={namekey("test_swap_pair")}>
+                <rust.MacroCall name="assert_eq">{"crate::utils::swap_pair((1, 2)), (2, 1)"}</rust.MacroCall>;
+              </rust.FunctionDeclaration>
+
+              <rust.FunctionDeclaration attributes="test" name={namekey("test_first_word")}>
+                <rust.MacroCall name="assert_eq">{"crate::utils::first_word(\"hello world\"), \"hello\""}</rust.MacroCall>;
+                <hbr />
+                <rust.MacroCall name="assert_eq">{"crate::utils::first_word(\"\"), \"\""}</rust.MacroCall>;
+              </rust.FunctionDeclaration>
+
+              <rust.FunctionDeclaration attributes="test" name={namekey("test_parse_count")}>
+                <rust.MacroCall name="assert_eq">{"crate::client::parse_count(\"  42  \").unwrap(), 42"}</rust.MacroCall>;
+                <hbr />
+                <rust.MacroCall name="assert">{"crate::client::parse_count(\"abc\").is_err()"}</rust.MacroCall>;
+              </rust.FunctionDeclaration>
+
+              <rust.FunctionDeclaration attributes="test" name={namekey("test_format_all")}>
+                <rust.LetDeclaration name={namekey("input")}>
+                  {"vec![\"a\".to_string(), \"b\".to_string()]"}
+                </rust.LetDeclaration>
+                <hbr />
+                <rust.MacroCall name="assert_eq">{"crate::client::format_all(&input), vec![\"item: a\", \"item: b\"]"}</rust.MacroCall>;
+              </rust.FunctionDeclaration>
+
+              <rust.FunctionDeclaration attributes="test" name={namekey("test_pop_all")}>
+                <rust.LetDeclaration name={namekey("data")} mutable>
+                  {"vec![1, 2, 3]"}
+                </rust.LetDeclaration>
+                <hbr />
+                <rust.MacroCall name="assert_eq">{"crate::client::pop_all(&mut data), vec![3, 2, 1]"}</rust.MacroCall>;
+                <hbr />
+                <rust.MacroCall name="assert">{"data.is_empty()"}</rust.MacroCall>;
+              </rust.FunctionDeclaration>
+
+              <rust.FunctionDeclaration attributes="test" name={namekey("test_demo_macros")}>
+                <rust.MacroCall name="assert_eq">{"crate::client::demo_macros(), \"count: 3\""}</rust.MacroCall>;
+              </rust.FunctionDeclaration>
+            </List>
           </rust.SourceFile>
         </rust.SourceDirectory>
       </rust.CrateDirectory>
@@ -554,7 +605,7 @@ describe("rust-example output", () => {
     expect(c).toContain("#[derive(Debug, Clone)]");
     expect(c).toContain("pub struct Person");
     expect(c).toContain("pub name: String");
-    expect(c).toContain("pub age: i32");
+    expect(c).toContain("pub age: u8");
 
     // Lifetime struct
     expect(c).toContain("pub struct Borrowed<'a>");
@@ -604,7 +655,7 @@ describe("rust-example output", () => {
 
     // Impl block
     expect(c).toContain("impl Person");
-    expect(c).toContain("pub fn new(name: String, age: i32) -> Person");
+    expect(c).toContain("pub fn new(name: String, age: u8) -> Person");
 
     // Match expression
     expect(c).toContain("match self.age");
@@ -636,11 +687,13 @@ describe("rust-example output", () => {
     // Closure
     expect(c).toContain(".map(|s| s.to_uppercase())");
 
-    // For loop
-    expect(c).toContain("for item in items");
+    // Iterator-based format_all
+    expect(c).toContain("pub fn format_all(");
+    expect(c).toContain("-> Vec<String>");
 
-    // While let loop
+    // While let loop returning values
     expect(c).toContain("while let Some(val) = data.pop()");
+    expect(c).toContain("-> Vec<i32>");
 
     // Loop with label and break
     expect(c).toContain("'retry: loop");
@@ -701,17 +754,24 @@ describe("rust-example output", () => {
     expect(file).toBeDefined();
     const c = file.contents;
 
-    // Test module structure
-    expect(c).toContain("#[cfg(test)]");
-    expect(c).toContain("mod tests");
+    // Test functions are direct content (no extra mod tests wrapper)
+    expect(c).not.toContain("#[cfg(test)]");
+    expect(c).not.toContain("mod tests");
 
     // Test functions
     expect(c).toContain("#[test]");
     expect(c).toContain("fn test_person_new()");
     expect(c).toContain("fn test_describe_age()");
+    expect(c).toContain("fn test_is_adult()");
     expect(c).toContain("fn test_swap_pair()");
+    expect(c).toContain("fn test_first_word()");
+    expect(c).toContain("fn test_parse_count()");
+    expect(c).toContain("fn test_format_all()");
+    expect(c).toContain("fn test_pop_all()");
+    expect(c).toContain("fn test_demo_macros()");
 
     // Assert macros
     expect(c).toContain("assert_eq!");
+    expect(c).toContain("assert!");
   });
 });

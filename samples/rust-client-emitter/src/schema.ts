@@ -10,7 +10,7 @@ export interface RestApiOperation {
   verb: "get" | "post";
   requestBody?: RestApiModelReference;
   responseBody?: RestApiModelReference;
-  pathParams?: Record<string, "string" | "number" | "boolean">;
+  pathParams?: Record<string, "string" | "integer" | "float" | "boolean">;
 }
 
 export interface RestApiModelReference {
@@ -25,7 +25,7 @@ export interface RestApiModel {
 
 export interface RestApiModelProperty {
   name: string;
-  type: RestApiModel | RestApiModelReference | "string" | "number" | "boolean";
+  type: RestApiModel | RestApiModelReference | "string" | "integer" | "float" | "boolean";
 }
 
 export const api: RestApi = {
@@ -55,7 +55,7 @@ export const api: RestApi = {
       name: "get_pet",
       verb: "get",
       endpoint: "/pets/:id",
-      pathParams: { id: "number" },
+      pathParams: { id: "integer" },
       responseBody: {
         ref: "Pet",
       },
@@ -66,7 +66,7 @@ export const api: RestApi = {
       name: "Pet",
       properties: [
         { name: "name", type: "string" },
-        { name: "age", type: "number" },
+        { name: "age", type: "integer" },
         { name: "favoriteToy", type: { ref: "Toy" } },
       ],
     },
