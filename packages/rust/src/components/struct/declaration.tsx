@@ -21,6 +21,7 @@ import { NamedTypeSymbol } from "../../symbols/named-type.js";
 import { RustVisibility } from "../../symbols/rust.js";
 import { renderVisibility } from "../visibility/visibility.js";
 import { DocComment } from "../doc/comment.js";
+import { RenderAttributes } from "../attribute/attribute.js";
 import { Name } from "../Name.js";
 import { createTypeSymbol } from "../../symbols/factories.js";
 import {
@@ -34,6 +35,8 @@ export interface StructDeclarationProps {
   visibility?: RustVisibility;
   typeParameters?: TypeParameterProps[];
   lifetimes?: string[];
+  /** Outer attributes rendered before the struct (e.g. `"derive(Debug, Clone)"`). */
+  attributes?: string | string[];
   doc?: Children;
   children?: Children;
 }
@@ -78,6 +81,7 @@ export function StructDeclaration(props: StructDeclarationProps) {
 
   return (
     <>
+      <RenderAttributes attributes={props.attributes} />
       <Show when={Boolean(props.doc)}>
         <DocComment children={props.doc} />
         <hbr />
@@ -96,6 +100,8 @@ export interface StructFieldProps {
   type: Children;
   refkey?: Refkey;
   visibility?: RustVisibility;
+  /** Outer attributes rendered before the field (e.g. `'serde(rename = "camelCase")'`). */
+  attributes?: string | string[];
   doc?: Children;
 }
 
@@ -110,6 +116,7 @@ export function StructField(props: StructFieldProps) {
 
   return (
     <Declaration symbol={symbol}>
+      <RenderAttributes attributes={props.attributes} />
       <Show when={Boolean(props.doc)}>
         <DocComment children={props.doc} />
         <hbr />

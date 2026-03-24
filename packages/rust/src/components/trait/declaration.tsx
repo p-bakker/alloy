@@ -14,6 +14,7 @@ import { createTypeSymbol } from "../../symbols/factories.js";
 import { RustVisibility } from "../../symbols/rust.js";
 import { renderVisibility } from "../visibility/visibility.js";
 import { DocComment } from "../doc/comment.js";
+import { RenderAttributes } from "../attribute/attribute.js";
 import { Name } from "../Name.js";
 import {
   TypeParameterProps,
@@ -27,6 +28,8 @@ export interface TraitDeclarationProps {
   supertraits?: Children[];
   typeParameters?: TypeParameterProps[];
   lifetimes?: string[];
+  /** Outer attributes rendered before the trait. */
+  attributes?: string | string[];
   doc?: Children;
   asyncTrait?: boolean;
   children?: Children;
@@ -57,6 +60,7 @@ export function TraitDeclaration(props: TraitDeclarationProps) {
       <Show when={needsAsyncTraitAttr}>
         use async_trait::async_trait;{"\n"}{"\n"}
       </Show>
+      <RenderAttributes attributes={props.attributes} />
       <Show when={Boolean(props.doc)}>
         <DocComment children={props.doc} />
         <hbr />
@@ -90,6 +94,8 @@ export interface TraitMethodProps {
   parameters?: string;
   returns?: Children;
   async?: boolean;
+  /** Outer attributes rendered before the method signature. */
+  attributes?: string | string[];
   doc?: Children;
   children?: Children;
 }
@@ -106,6 +112,7 @@ export function TraitMethod(props: TraitMethodProps) {
 
   return (
     <>
+      <RenderAttributes attributes={props.attributes} />
       <Show when={Boolean(props.doc)}>
         <DocComment children={props.doc} />
         <hbr />

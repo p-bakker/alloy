@@ -1,5 +1,6 @@
 export { Block } from "@alloy-js/core";
-export * from "./attribute/attribute.js";
+export { InnerAttribute } from "./attribute/attribute.js";
+export type { InnerAttributeProps } from "./attribute/attribute.js";
 export * from "./attribute/cfg.js";
 export * from "./attribute/derive.js";
 export * from "./cargo/cargo-toml.js";

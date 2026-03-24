@@ -26,6 +26,7 @@ import {
   TypeParameters,
 } from "../parameters/typeparameters.jsx";
 import { elideLifetimeAnnotations } from "../../utils/lifetime-elision.js";
+import { RenderAttributes } from "../attribute/attribute.js";
 
 export interface FunctionProps {
   name: string | Namekey;
@@ -34,6 +35,20 @@ export interface FunctionProps {
   selfParam?: "&self" | "&mut self" | "self" | "mut self";
   refkey?: Refkey;
   doc?: Children;
+  /**
+   * Outer attributes to render before the function signature.
+   *
+   * Each string is wrapped in `#[...]` automatically.
+   *
+   * @example
+   * ```tsx
+   * <FunctionDeclaration attributes="test" ... />
+   * <FunctionDeclaration attributes={["test", "should_panic"]} ... />
+   * <FunctionDeclaration attributes="tokio::main" ... />
+   * <FunctionDeclaration attributes='cfg(feature = "async")' ... />
+   * ```
+   */
+  attributes?: string | string[];
   visibility?: RustVisibility;
   async?: boolean;
   unsafe?: boolean;
@@ -84,6 +99,7 @@ export function FunctionDeclaration(props: FunctionProps) {
   return (
     <Declaration symbol={functionSymbol}>
       <Scope value={functionScope}>
+        <RenderAttributes attributes={props.attributes} />
         <Show when={Boolean(props.doc)}>
           <DocComment children={props.doc} />
           <hbr />

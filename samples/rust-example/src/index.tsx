@@ -484,40 +484,31 @@ const output = render(
         <rust.SourceFile path="tests.rs">
           <rust.TestModule>
             <List doubleHardline>
-              <>
-                <rust.Attribute>test</rust.Attribute>
-                <rust.FunctionDeclaration name={namekey("test_person_new")}>
-                  <rust.LetDeclaration name={namekey("p")}>
-                    {"crate::models::Person::new(\"Alice\".to_string(), 30)"}
-                  </rust.LetDeclaration>
-                  <hbr />
-                  <rust.MacroCall name="assert_eq">{"p.name, \"Alice\""}</rust.MacroCall>;
-                  <hbr />
-                  <rust.MacroCall name="assert_eq">{"p.age, 30"}</rust.MacroCall>;
-                </rust.FunctionDeclaration>
-              </>
+              <rust.FunctionDeclaration attributes="test" name={namekey("test_person_new")}>
+                <rust.LetDeclaration name={namekey("p")}>
+                  {"crate::models::Person::new(\"Alice\".to_string(), 30)"}
+                </rust.LetDeclaration>
+                <hbr />
+                <rust.MacroCall name="assert_eq">{"p.name, \"Alice\""}</rust.MacroCall>;
+                <hbr />
+                <rust.MacroCall name="assert_eq">{"p.age, 30"}</rust.MacroCall>;
+              </rust.FunctionDeclaration>
 
-              <>
-                <rust.Attribute>test</rust.Attribute>
-                <rust.FunctionDeclaration name={namekey("test_describe_age")}>
-                  <rust.LetDeclaration name={namekey("child")}>
-                    {"crate::models::Person::new(\"Bob\".to_string(), 10)"}
-                  </rust.LetDeclaration>
-                  <hbr />
-                  <rust.MacroCall name="assert_eq">{'child.describe_age(), "child"'}</rust.MacroCall>;
-                </rust.FunctionDeclaration>
-              </>
+              <rust.FunctionDeclaration attributes="test" name={namekey("test_describe_age")}>
+                <rust.LetDeclaration name={namekey("child")}>
+                  {"crate::models::Person::new(\"Bob\".to_string(), 10)"}
+                </rust.LetDeclaration>
+                <hbr />
+                <rust.MacroCall name="assert_eq">{'child.describe_age(), "child"'}</rust.MacroCall>;
+              </rust.FunctionDeclaration>
 
-              <>
-                <rust.Attribute>test</rust.Attribute>
-                <rust.FunctionDeclaration name={namekey("test_swap_pair")}>
-                  <rust.LetDeclaration name={namekey("result")}>
-                    crate::utils::swap_pair((1, 2))
-                  </rust.LetDeclaration>
-                  <hbr />
-                  <rust.MacroCall name="assert_eq">{"result, (2, 1)"}</rust.MacroCall>;
-                </rust.FunctionDeclaration>
-              </>
+              <rust.FunctionDeclaration attributes="test" name={namekey("test_swap_pair")}>
+                <rust.LetDeclaration name={namekey("result")}>
+                  crate::utils::swap_pair((1, 2))
+                </rust.LetDeclaration>
+                <hbr />
+                <rust.MacroCall name="assert_eq">{"result, (2, 1)"}</rust.MacroCall>;
+              </rust.FunctionDeclaration>
             </List>
           </rust.TestModule>
         </rust.SourceFile>

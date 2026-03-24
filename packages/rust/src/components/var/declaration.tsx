@@ -10,6 +10,7 @@ import { createConstantSymbol, createVariableSymbol } from "../../symbols/factor
 import { RustVisibility } from "../../symbols/rust.js";
 import { renderVisibility } from "../visibility/visibility.js";
 import { DocComment } from "../doc/comment.js";
+import { RenderAttributes } from "../attribute/attribute.js";
 
 export interface ConstDeclarationProps {
   /** Defaults to `_` (discard) when omitted. Mutually exclusive with `pattern`. */
@@ -20,6 +21,8 @@ export interface ConstDeclarationProps {
   type?: Children;
   refkey?: Refkey;
   visibility?: RustVisibility;
+  /** Outer attributes rendered before the const declaration. */
+  attributes?: string | string[];
   doc?: Children;
   children: Children;
 }
@@ -31,6 +34,7 @@ export function ConstDeclaration(props: ConstDeclarationProps) {
   if (props.pattern) {
     return (
       <>
+        <RenderAttributes attributes={props.attributes} />
         <Show when={Boolean(props.doc)}>
           <DocComment children={props.doc} />
           <hbr />
@@ -48,6 +52,7 @@ export function ConstDeclaration(props: ConstDeclarationProps) {
 
   return (
     <>
+      <RenderAttributes attributes={props.attributes} />
       <Show when={Boolean(props.doc)}>
         <DocComment children={props.doc} />
         <hbr />
@@ -65,6 +70,8 @@ export interface StaticDeclarationProps {
   refkey?: Refkey;
   visibility?: RustVisibility;
   mutable?: boolean;
+  /** Outer attributes rendered before the static declaration. */
+  attributes?: string | string[];
   doc?: Children;
   children: Children;
 }
@@ -80,6 +87,7 @@ export function StaticDeclaration(props: StaticDeclarationProps) {
 
   return (
     <>
+      <RenderAttributes attributes={props.attributes} />
       <Show when={Boolean(props.doc)}>
         <DocComment children={props.doc} />
         <hbr />

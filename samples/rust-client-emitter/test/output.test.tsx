@@ -103,14 +103,12 @@ function renderOutput() {
                           const rustName = toSnakeCase(prop.name);
                           const needsRename = rustName !== prop.name;
                           return (
-                            <>
-                              {needsRename && <rust.Attribute>{`serde(rename = "${prop.name}")`}</rust.Attribute>}
-                              <rust.StructField
-                                name={namekey(prop.name)}
-                                type={mapPropertyType(prop.type)}
-                                visibility="pub"
-                              />
-                            </>
+                            <rust.StructField
+                              name={namekey(prop.name)}
+                              type={mapPropertyType(prop.type)}
+                              visibility="pub"
+                              attributes={needsRename ? `serde(rename = "${prop.name}")` : undefined}
+                            />
                           );
                         }}
                       </For>
@@ -325,29 +323,27 @@ function renderOutput() {
           </rust.SourceFile>
 
           <rust.SourceFile path="main.rs">
-            <>
-              <rust.Attribute>tokio::main</rust.Attribute>
-              <rust.FunctionDeclaration
-                name={namekey("main")}
-                async
-                returns="Result<(), petstore_client::PetstoreError>"
-              >
-                <rust.LetDeclaration name={namekey("client")}>
-                  petstore_client::PetstoreClient::new("http://localhost:8080")
-                </rust.LetDeclaration>
-                <hbr />
-                <rust.LetDeclaration name={namekey("pets")}>
-                  <rust.MemberExpression>
-                    <rust.MemberExpression.Part id="client" />
-                    <rust.MemberExpression.Part id="list_pets" args={[]} await try />
-                  </rust.MemberExpression>
-                </rust.LetDeclaration>
-                <hbr />
-                <rust.MacroCall name="println">{'"Found {} pets", pets.len()'}</rust.MacroCall>;
-                <hbr />
-                Ok(())
-              </rust.FunctionDeclaration>
-            </>
+            <rust.FunctionDeclaration
+              name={namekey("main")}
+              async
+              attributes="tokio::main"
+              returns="Result<(), petstore_client::PetstoreError>"
+            >
+              <rust.LetDeclaration name={namekey("client")}>
+                petstore_client::PetstoreClient::new("http://localhost:8080")
+              </rust.LetDeclaration>
+              <hbr />
+              <rust.LetDeclaration name={namekey("pets")}>
+                <rust.MemberExpression>
+                  <rust.MemberExpression.Part id="client" />
+                  <rust.MemberExpression.Part id="list_pets" args={[]} await try />
+                </rust.MemberExpression>
+              </rust.LetDeclaration>
+              <hbr />
+              <rust.MacroCall name="println">{'"Found {} pets", pets.len()'}</rust.MacroCall>;
+              <hbr />
+              Ok(())
+            </rust.FunctionDeclaration>
           </rust.SourceFile>
         </rust.SourceDirectory>
       </rust.CrateDirectory>

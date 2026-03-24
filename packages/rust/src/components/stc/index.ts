@@ -1,7 +1,6 @@
 import * as core from "@alloy-js/core";
 import * as base from "../index.js";
 
-export const Attribute = core.stc(base.Attribute);
 export const InnerAttribute = core.stc(base.InnerAttribute);
 export const Cfg = core.stc(base.Cfg);
 export const CfgAttr = core.stc(base.CfgAttr);

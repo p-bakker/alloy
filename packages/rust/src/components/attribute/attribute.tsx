@@ -1,7 +1,18 @@
-import { Children } from "@alloy-js/core";
+import { Children, Show } from "@alloy-js/core";
 
 export interface AttributeProps {
   children: Children;
+}
+
+/**
+ * @internal
+ * Renders an `attributes` prop (string or string[]) as `#[...]` attributes.
+ * Used internally by declaration components.
+ */
+export function RenderAttributes(props: { attributes?: string | string[] }) {
+  if (!props.attributes) return null;
+  const attrs = typeof props.attributes === "string" ? [props.attributes] : props.attributes;
+  return <>{attrs.map((a) => <Attribute>{a}</Attribute>)}</>;
 }
 
 /**

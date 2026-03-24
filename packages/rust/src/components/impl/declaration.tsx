@@ -11,12 +11,15 @@ import {
   TypeParameterProps,
   TypeParameters,
 } from "../parameters/typeparameters.jsx";
+import { RenderAttributes } from "../attribute/attribute.js";
 
 export interface ImplBlockProps {
   type: Children;
   trait?: Children;
   typeParameters?: TypeParameterProps[];
   lifetimes?: string[];
+  /** Outer attributes rendered before the impl block. */
+  attributes?: string | string[];
   children?: Children;
 }
 
@@ -40,6 +43,7 @@ export function ImplBlock(props: ImplBlockProps) {
 
   return (
     <Scope value={implScope}>
+      <RenderAttributes attributes={props.attributes} />
       impl
       <TypeParameters parameters={props.typeParameters} lifetimes={props.lifetimes} />
       {props.trait ?

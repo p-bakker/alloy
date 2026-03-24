@@ -13,6 +13,7 @@ import { createTypeSymbol, createEnumVariantSymbol } from "../../symbols/factori
 import { RustVisibility } from "../../symbols/rust.js";
 import { renderVisibility } from "../visibility/visibility.js";
 import { DocComment } from "../doc/comment.js";
+import { RenderAttributes } from "../attribute/attribute.js";
 import { Name } from "../Name.js";
 import {
   TypeParameterProps,
@@ -25,6 +26,8 @@ export interface EnumDeclarationProps {
   visibility?: RustVisibility;
   typeParameters?: TypeParameterProps[];
   lifetimes?: string[];
+  /** Outer attributes rendered before the enum (e.g. `"derive(Debug)"`). */
+  attributes?: string | string[];
   doc?: Children;
   children?: Children;
 }
@@ -55,6 +58,7 @@ export function EnumDeclaration(props: EnumDeclarationProps) {
 
   return (
     <>
+      <RenderAttributes attributes={props.attributes} />
       <Show when={Boolean(props.doc)}>
         <DocComment children={props.doc} />
         <hbr />
@@ -71,6 +75,8 @@ export function EnumDeclaration(props: EnumDeclarationProps) {
 export interface EnumVariantProps {
   name: string | Namekey;
   refkey?: Refkey;
+  /** Outer attributes rendered before the variant. */
+  attributes?: string | string[];
   doc?: Children;
 }
 
@@ -84,6 +90,7 @@ export function EnumVariant(props: EnumVariantProps) {
 
   return (
     <Declaration symbol={symbol}>
+      <RenderAttributes attributes={props.attributes} />
       <Show when={Boolean(props.doc)}>
         <DocComment children={props.doc} />
         <hbr />
@@ -97,6 +104,8 @@ export interface TupleVariantProps {
   name: string | Namekey;
   types: Children[];
   refkey?: Refkey;
+  /** Outer attributes rendered before the variant. */
+  attributes?: string | string[];
   doc?: Children;
 }
 
@@ -110,6 +119,7 @@ export function TupleVariant(props: TupleVariantProps) {
 
   return (
     <Declaration symbol={symbol}>
+      <RenderAttributes attributes={props.attributes} />
       <Show when={Boolean(props.doc)}>
         <DocComment children={props.doc} />
         <hbr />
@@ -122,6 +132,8 @@ export function TupleVariant(props: TupleVariantProps) {
 export interface StructVariantProps {
   name: string | Namekey;
   refkey?: Refkey;
+  /** Outer attributes rendered before the variant. */
+  attributes?: string | string[];
   doc?: Children;
   children?: Children;
 }
@@ -138,6 +150,7 @@ export function StructVariant(props: StructVariantProps) {
 
   return (
     <Declaration symbol={symbol}>
+      <RenderAttributes attributes={props.attributes} />
       <Show when={Boolean(props.doc)}>
         <DocComment children={props.doc} />
         <hbr />
