@@ -318,7 +318,7 @@ const output = render(
           </rust.ImplBlock>
 
           {/* Static assertions: PetstoreClient is Send + Sync */}
-          <rust.ConstDeclaration>
+          <rust.ConstDeclaration attributes="allow(dead_code)">
             <rust.Block>
               <List doubleHardline>
                 <rust.FunctionDeclaration
