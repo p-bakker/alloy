@@ -133,6 +133,7 @@ dist
 
 # Don't commit generated files
 sample-output/
+alloy-output/
 
 # API Extractor output
 packages/*/temp
@@ -142,4 +143,5 @@ packages/*/tsdoc-metadata.json
 packages/docs/src/content/docs/reference
 packages/docs/dist-build
 
-alloy-output/
+# Agent instructions (local, environment-specific)
+AGENTS.md
