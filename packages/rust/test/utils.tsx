@@ -2,6 +2,7 @@ import { execSync } from "child_process";
 import { writeFileSync, readFileSync, unlinkSync, mkdtempSync } from "fs";
 import { join } from "path";
 import { tmpdir } from "os";
+import { DEFAULT_EDITION } from "../src/scopes/contexts.js";
 import {
   Children,
   ContentOutputFile,
@@ -30,7 +31,7 @@ export async function assertRustfmtIdempotent(
   source: string,
   options?: { edition?: "2015" | "2018" | "2021" | "2024" },
 ): Promise<void> {
-  const edition = options?.edition ?? "2021";
+  const edition = options?.edition ?? DEFAULT_EDITION;
   const dir = mkdtempSync(join(tmpdir(), "rustfmt-"));
   const tmpFile = join(dir, "test.rs");
   writeFileSync(tmpFile, source);

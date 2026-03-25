@@ -13,7 +13,9 @@ import { Name } from "../Name.jsx";
 export interface FunctionParameterProps {
   name: string | Namekey;
   type: Children;
-  mutable?: boolean;
+  mut?: boolean;
+  borrow?: boolean;
+  lifetime?: string;
   refkey?: Refkey;
 }
 
@@ -25,9 +27,15 @@ export function FunctionParameter(props: FunctionParameterProps) {
     type: TypeSlot.firstSymbol,
   });
 
+  // Build the type prefix: &'a mut T, &T, &mut T, mut T, etc.
+  let typePrefix = "";
+  if (props.borrow) typePrefix += "&";
+  if (props.lifetime) typePrefix += `'${props.lifetime} `;
+  if (props.mut) typePrefix += "mut ";
+
   return (
     <Declaration symbol={memberSymbol}>
-      {props.mutable ? "mut " : ""}<Name />: <TypeSlot>{props.type}</TypeSlot>
+      <Name />: {typePrefix}<TypeSlot>{props.type}</TypeSlot>
     </Declaration>
   );
 }

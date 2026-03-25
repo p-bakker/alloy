@@ -2,6 +2,7 @@ import { OutputScope, createScope, useScope } from "@alloy-js/core";
 import type { CrateSymbol } from "../symbols/crate.js";
 import { RustModuleScope } from "./module.js";
 import { RustNamedTypeScope } from "./named-type.js";
+import { RustSourceFileScope } from "./source-file.js";
 
 export class RustCrateScope extends RustNamedTypeScope {
   constructor(
@@ -54,4 +55,43 @@ export function useCrate() {
   }
 
   throw new Error("A crate is not in scope");
+}
+
+/**
+ * Collect all external crate names referenced across source files in a crate scope.
+ * Walks `uses` (CrateSymbol keys) and `extraUses` (paths like `serde::{Serialize}`)
+ * to build a deduplicated set of external crate names.
+ */
+export function collectExternalCrates(crateScope: RustCrateScope): Set<string> {
+  const crates = new Set<string>();
+
+  function walk(scope: OutputScope) {
+    if (scope instanceof RustSourceFileScope) {
+      // uses: Map<CrateSymbol, RustSymbol> — keys are external crate symbols
+      for (const crateSymbol of scope.uses.keys()) {
+        if (!crateSymbol.builtin) {
+          crates.add(crateSymbol.name);
+        }
+      }
+
+      // extraUses: Map<string, { path: string }> — paths like "serde::{Serialize, Deserialize}"
+      for (const record of scope.extraUses.values()) {
+        const path = record.path;
+        // Skip intra-crate references
+        if (path.startsWith("crate::")) continue;
+        // Extract the first segment (crate name) before "::"
+        const sep = path.indexOf("::");
+        if (sep > 0) {
+          crates.add(path.slice(0, sep));
+        }
+      }
+    }
+
+    for (const child of scope.children) {
+      walk(child);
+    }
+  }
+
+  walk(crateScope);
+  return crates;
 }

@@ -6,11 +6,28 @@ import { RustNamedTypeScope } from "./named-type.js";
 import { RustImplScope } from "./impl.js";
 
 export type RustEdition = "2015" | "2018" | "2021" | "2024";
+export const DEFAULT_EDITION: RustEdition = "2024";
 
-export const CrateEditionContext = createContext<RustEdition>("2021", "CrateEdition");
+export interface CrateIdentity {
+  name: string;
+  edition: RustEdition;
+}
+
+export const CrateIdentityContext = createContext<CrateIdentity>(
+  undefined as any,
+  "CrateIdentity",
+);
+
+export function useCrateIdentity(): CrateIdentity | undefined {
+  return useContext(CrateIdentityContext);
+}
+
+export const CrateEditionContext = createContext<RustEdition>(DEFAULT_EDITION, "CrateEdition");
 
 export function useCrateEdition(): RustEdition {
-  return useContext(CrateEditionContext) ?? "2021";
+  const identity = useContext(CrateIdentityContext);
+  if (identity) return identity.edition;
+  return useContext(CrateEditionContext) ?? DEFAULT_EDITION;
 }
 
 export function useRustScope() {

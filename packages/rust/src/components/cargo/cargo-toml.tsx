@@ -1,7 +1,19 @@
 import {
   SourceFile as CoreSourceFile,
+  useContext,
+  useScope,
   type Children,
+  type OutputScope,
 } from "@alloy-js/core";
+import {
+  CrateIdentityContext,
+  DEFAULT_EDITION,
+} from "../../scopes/contexts.js";
+import {
+  collectExternalCrates,
+  RustCrateScope,
+} from "../../scopes/crate.js";
+import { getCrateMetadata } from "../../create-crate.js";
 
 export interface CargoTomlDependencySpec {
   version?: string;
@@ -24,7 +36,7 @@ export interface CargoTomlLibTarget {
 }
 
 export interface CargoTomlProps {
-  name: string;
+  name?: string;
   version?: string;
   edition?: string;
   authors?: string[];
@@ -128,7 +140,7 @@ function renderLibSection(lib: CargoTomlLibTarget): string {
   return lines.join("\n");
 }
 
-function serializeCargoToml(props: CargoTomlProps): string {
+function serializeCargoToml(props: CargoTomlProps & { name: string }): string {
   const sections: string[] = [];
 
   // [package] section
@@ -136,7 +148,7 @@ function serializeCargoToml(props: CargoTomlProps): string {
   packageLines.push("[package]");
   packageLines.push(renderKeyValue("name", props.name));
   packageLines.push(renderKeyValue("version", props.version ?? "0.1.0"));
-  packageLines.push(renderKeyValue("edition", props.edition ?? "2021"));
+  packageLines.push(renderKeyValue("edition", props.edition ?? DEFAULT_EDITION));
   if (props.authors && props.authors.length > 0) {
     packageLines.push(`authors = ${tomlArray(props.authors)}`);
   }
@@ -186,7 +198,38 @@ function serializeCargoToml(props: CargoTomlProps): string {
 }
 
 export function CargoToml(props: CargoTomlProps) {
-  const tomlContent = serializeCargoToml(props);
+  const identity = useContext(CrateIdentityContext);
+
+  // Resolve name: prop > context > error
+  const name = resolveWithConflictCheck("name", props.name, identity?.name);
+  if (!name) {
+    throw new Error(
+      "CargoToml requires a name — either provide it as a prop or use CargoToml within a CrateDirectory.",
+    );
+  }
+
+  // Resolve edition: prop > context > default
+  const edition = resolveWithConflictCheck("edition", props.edition, identity?.edition) ?? DEFAULT_EDITION;
+
+  const resolvedProps = { ...props, name, edition };
+
+  // Find the module scope for auto-deriving dependencies
+  const moduleScope = useScope();
+
+  // Use a reactive function so the content re-evaluates after sibling
+  // SourceDirectory renders and populates source file scopes with use data.
+  const tomlContent = () => {
+    // Auto-derive dependencies from crate usage
+    const autoDeps = deriveAutoDepedencies(moduleScope);
+
+    // Merge: auto-derived deps first, then explicit props.dependencies override
+    let mergedDeps = resolvedProps.dependencies;
+    if (Object.keys(autoDeps).length > 0) {
+      mergedDeps = { ...autoDeps, ...resolvedProps.dependencies };
+    }
+
+    return serializeCargoToml({ ...resolvedProps, dependencies: mergedDeps });
+  };
 
   return (
     <CoreSourceFile path="Cargo.toml" filetype="toml">
@@ -194,4 +237,52 @@ export function CargoToml(props: CargoTomlProps) {
       {props.children}
     </CoreSourceFile>
   );
+}
+
+function resolveWithConflictCheck<T>(
+  field: string,
+  prop: T | undefined,
+  context: T | undefined,
+): T | undefined {
+  if (prop !== undefined && context !== undefined && prop !== context) {
+    throw new Error(
+      `CargoToml "${field}" prop (${JSON.stringify(prop)}) conflicts with CrateDirectory value (${JSON.stringify(context)}). ` +
+        `Remove the prop from CargoToml — CrateDirectory is the source of truth.`,
+    );
+  }
+  return prop ?? context;
+}
+
+function findCrateScopeInChildren(scope: OutputScope | undefined): RustCrateScope | undefined {
+  if (!scope) return undefined;
+  for (const child of scope.children) {
+    if (child instanceof RustCrateScope) {
+      return child;
+    }
+  }
+  return undefined;
+}
+
+function deriveAutoDepedencies(
+  moduleScope: OutputScope | undefined,
+): Record<string, string | CargoTomlDependencySpec> {
+  const deps: Record<string, string | CargoTomlDependencySpec> = {};
+
+  const crateScope = findCrateScopeInChildren(moduleScope);
+  if (!crateScope) return deps;
+
+  const usedCrates = collectExternalCrates(crateScope);
+
+  for (const crateName of usedCrates) {
+    const metadata = getCrateMetadata(crateName);
+    if (metadata) {
+      const spec: CargoTomlDependencySpec = { version: metadata.version };
+      if (metadata.features?.length) spec.features = metadata.features;
+      if (metadata.defaultFeatures === false) spec.defaultFeatures = false;
+      if (metadata.optional) spec.optional = true;
+      deps[crateName] = spec;
+    }
+  }
+
+  return deps;
 }

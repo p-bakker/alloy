@@ -16,6 +16,7 @@ import {
   RestApiModelReference,
   RestApiOperation,
 } from "./schema.js";
+import { reqwest } from "./crates.js";
 
 // ── Refkeys for model structs ─────────────────────────────────────────────
 
@@ -96,12 +97,8 @@ const output = render(
   <Output namePolicy={rust.createRustNamePolicy()}>
     <rust.CrateDirectory name="petstore-client" edition="2024">
       <rust.CargoToml
-        name="petstore-client"
         version="0.1.0"
-        edition="2024"
         dependencies={{
-          serde: { version: "1.0", features: ["derive"] },
-          reqwest: { version: "0.12", defaultFeatures: false, features: ["json", "rustls-tls"] },
           tokio: { version: "1", features: ["rt-multi-thread", "macros"] },
         }}
       />
@@ -143,7 +140,7 @@ const output = render(
             <rust.Derive traits={["Debug"]} />
             <rust.EnumDeclaration name={namekey("PetstoreError")} visibility="pub">
               <List>
-                <rust.TupleVariant name={namekey("Http")} types={["reqwest::Error"]} />
+                <rust.TupleVariant name={namekey("Http")} types={[reqwest.Error]} />
                 <rust.StructVariant name={namekey("Api")}>
                   <List>
                     <rust.StructField name={namekey("status")} type="u16" />
@@ -154,12 +151,12 @@ const output = render(
             </rust.EnumDeclaration>
           </>
 
-          <rust.ImplBlock type="PetstoreError" trait="std::fmt::Display">
+          <rust.ImplBlock type="PetstoreError" trait={rust.std.fmt.Display}>
             <rust.FunctionDeclaration
               name={namekey("fmt")}
               selfParam="&self"
-              parameters={[{ name: namekey("f"), type: "&mut std::fmt::Formatter<'_>" }]}
-              returns="std::fmt::Result"
+              parameters={[{ name: namekey("f"), type: <>{rust.std.fmt.Formatter}{"<'_>"}</>, borrow: true, mut: true }]}
+              returns={rust.std.fmt.Result}
             >
               <rust.MatchExpression expr="self">
                 <rust.MatchArm pattern="PetstoreError::Http(e)">
@@ -172,7 +169,7 @@ const output = render(
             </rust.FunctionDeclaration>
           </rust.ImplBlock>
 
-          <rust.ImplBlock type="PetstoreError" trait="std::error::Error">
+          <rust.ImplBlock type="PetstoreError" trait={rust.std.error.Error}>
             <rust.FunctionDeclaration
               name={namekey("source")}
               selfParam="&self"
@@ -185,10 +182,10 @@ const output = render(
             </rust.FunctionDeclaration>
           </rust.ImplBlock>
 
-          <rust.ImplBlock type="PetstoreError" trait={"From<reqwest::Error>"}>
+          <rust.ImplBlock type="PetstoreError" trait={<rust.From>{reqwest.Error}</rust.From>}>
             <rust.FunctionDeclaration
               name={namekey("from")}
-              parameters={[{ name: namekey("err"), type: "reqwest::Error" }]}
+              parameters={[{ name: namekey("err"), type: reqwest.Error }]}
               returns="Self"
             >
               PetstoreError::Http(err)
@@ -200,7 +197,7 @@ const output = render(
             <rust.StructDeclaration name={clientKey} visibility="pub">
               <List>
                 <rust.StructField name={baseUrlFieldKey} type="String" />
-                <rust.StructField name={clientFieldKey} type="reqwest::Client" />
+                <rust.StructField name={clientFieldKey} type={reqwest.Client} />
               </List>
             </rust.StructDeclaration>
           </>
@@ -212,7 +209,7 @@ const output = render(
               parameters={[
                 { name: baseUrlFieldKey, type: "&str" },
               ]}
-              returns={<rust.Result ok={clientKey} err="reqwest::Error" />}
+              returns={<rust.Result ok={clientKey} err={reqwest.Error} />}
             >
               Ok(<rust.StructExpression type={clientKey}>
                 <List>
@@ -225,7 +222,7 @@ const output = render(
                   </rust.StructFieldExpression>
                   <rust.StructFieldExpression name="client">
                     <rust.MemberExpression>
-                      <rust.MemberExpression.Part>reqwest::Client::builder()</rust.MemberExpression.Part>
+                      <rust.MemberExpression.Part>{reqwest.Client}::builder()</rust.MemberExpression.Part>
                       <rust.MemberExpression.Part id="timeout" args={[<>std::time::Duration::from_secs(30)</>]} />
                       <rust.MemberExpression.Part id="build" args={[]} try />
                     </rust.MemberExpression>

@@ -179,6 +179,8 @@ function createSymbolFromDescriptor(
   lazyMemberInitializer: () => void,
 ): RustSymbol {
   const ownerSymbol = context.ownerSymbol(binder) as RustSymbol;
+  // All library symbols (builtins and external crates) are public
+  const visibility = "pub" as const;
 
   if (ownerSymbol === null && descriptor.kind !== "crate") {
     throw new Error(
@@ -195,7 +197,7 @@ function createSymbolFromDescriptor(
           binder,
           refkeys: refkey(),
           lazyMemberInitializer,
-          path: (descriptor as CrateDescriptor<any>).path,
+          path: (descriptor as CrateDescriptor<any>).path ?? name,
           builtin: context.builtin,
         });
       }
@@ -232,6 +234,7 @@ function createSymbolFromDescriptor(
           binder,
           refkeys: refkey(),
           lazyMemberInitializer,
+          visibility,
         },
       );
     case "function":
@@ -243,6 +246,7 @@ function createSymbolFromDescriptor(
       return createSymbol(FunctionSymbol, namekey(name), ownerSymbol.members, {
         binder,
         refkeys: refkey(),
+        visibility,
       });
     case "field":
       if (!(ownerSymbol instanceof NamedTypeSymbol)) {
@@ -258,6 +262,7 @@ function createSymbolFromDescriptor(
         {
           binder,
           refkeys: refkey(),
+          visibility,
           type:
             descriptor.type === undefined ? undefined
             : typeof descriptor.type === "function" ?
@@ -275,6 +280,7 @@ function createSymbolFromDescriptor(
       return createSymbol(RustSymbol, namekey(name), ownerSymbol.members, {
         binder,
         refkeys: refkey(),
+        visibility,
         type:
           descriptor.type === undefined ? undefined
           : typeof descriptor.type === "function" ?

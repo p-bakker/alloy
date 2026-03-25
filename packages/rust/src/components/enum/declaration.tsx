@@ -2,6 +2,7 @@ import {
   Block,
   Children,
   Declaration,
+  List,
   Namekey,
   Refkey,
   Scope,
@@ -124,7 +125,7 @@ export function TupleVariant(props: TupleVariantProps) {
         <DocComment children={props.doc} />
         <hbr />
       </Show>
-      <Name />({props.types.join(", ")}),
+      <Name />(<List comma space>{props.types}</List>),
     </Declaration>
   );
 }

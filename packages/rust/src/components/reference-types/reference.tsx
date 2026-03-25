@@ -60,6 +60,17 @@ export function Result(props: ResultProps) {
   return <>Result&lt;{props.ok}, {props.err}&gt;</>;
 }
 
+export interface FromProps {
+  children: Children;
+}
+
+/**
+ * A Rust From<T> trait.
+ */
+export function From(props: FromProps) {
+  return <>From&lt;{props.children}&gt;</>;
+}
+
 export interface ArcProps {
   children: Children;
 }

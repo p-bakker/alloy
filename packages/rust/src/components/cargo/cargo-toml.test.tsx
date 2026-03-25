@@ -2,6 +2,7 @@ import { Output, render } from "@alloy-js/core";
 import { describe, expect, it } from "vitest";
 import { findFile } from "../../../test/utils.js";
 import { CargoToml } from "./cargo-toml.js";
+import { CrateDirectory } from "../CrateDirectory.js";
 
 function renderCargoToml(props: Parameters<typeof CargoToml>[0]): string {
   const res = render(
@@ -16,7 +17,7 @@ describe("CargoToml", () => {
   it("renders a basic package with name, version, and edition", () => {
     const contents = renderCargoToml({ name: "my-crate" });
     expect(contents).toBe(
-      `[package]\nname = "my-crate"\nversion = "0.1.0"\nedition = "2021"\n`,
+      `[package]\nname = "my-crate"\nversion = "0.1.0"\nedition = "2024"\n`,
     );
   });
 
@@ -185,5 +186,68 @@ describe("CargoToml", () => {
     expect(contents).toContain(
       `my-lib = { version = "0.1.0", path = "../my-lib" }`,
     );
+  });
+
+  // --- CrateIdentityContext integration ---
+
+  it("reads name and edition from CrateDirectory context", () => {
+    const res = render(
+      <Output>
+        <CrateDirectory name="ctx-crate" edition="2024">
+          <CargoToml version="1.0.0" />
+        </CrateDirectory>
+      </Output>,
+    );
+    const contents = findFile(res, "Cargo.toml").contents;
+    expect(contents).toContain('name = "ctx-crate"');
+    expect(contents).toContain('edition = "2024"');
+    expect(contents).toContain('version = "1.0.0"');
+  });
+
+  it("allows matching name/edition on both CrateDirectory and CargoToml", () => {
+    const res = render(
+      <Output>
+        <CrateDirectory name="my-crate" edition="2024">
+          <CargoToml name="my-crate" edition="2024" />
+        </CrateDirectory>
+      </Output>,
+    );
+    const contents = findFile(res, "Cargo.toml").contents;
+    expect(contents).toContain('name = "my-crate"');
+    expect(contents).toContain('edition = "2024"');
+  });
+
+  it("throws on conflicting name between CrateDirectory and CargoToml", () => {
+    expect(() =>
+      render(
+        <Output>
+          <CrateDirectory name="crate-a">
+            <CargoToml name="crate-b" />
+          </CrateDirectory>
+        </Output>,
+      ),
+    ).toThrow(/conflicts with CrateDirectory/);
+  });
+
+  it("throws on conflicting edition between CrateDirectory and CargoToml", () => {
+    expect(() =>
+      render(
+        <Output>
+          <CrateDirectory name="my-crate" edition="2024">
+            <CargoToml edition="2018" />
+          </CrateDirectory>
+        </Output>,
+      ),
+    ).toThrow(/conflicts with CrateDirectory/);
+  });
+
+  it("throws when no name is available from props or context", () => {
+    expect(() =>
+      render(
+        <Output>
+          <CargoToml version="1.0.0" />
+        </Output>,
+      ),
+    ).toThrow(/requires a name/);
   });
 });

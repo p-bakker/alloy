@@ -2,9 +2,17 @@ import { OutputSymbolOptions, createSymbol } from "@alloy-js/core";
 import { join } from "pathe";
 import { NamedTypeSymbol } from "./named-type.js";
 
+export interface CrateCargoMetadata {
+  version: string;
+  features?: string[];
+  defaultFeatures?: boolean;
+  optional?: boolean;
+}
+
 export interface CrateSymbolOptions extends OutputSymbolOptions {
   path?: string;
   builtin?: boolean;
+  cargoMetadata?: CrateCargoMetadata;
 }
 
 /**
@@ -29,6 +37,7 @@ export class CrateSymbol extends NamedTypeSymbol {
       this.#fullyQualifiedName = this.#path;
     }
     this.#builtin = options?.builtin || parentCrate?.builtin || false;
+    this.#cargoMetadata = options?.cargoMetadata;
   }
 
   #path: string;
@@ -40,6 +49,11 @@ export class CrateSymbol extends NamedTypeSymbol {
   #builtin: boolean;
   get builtin() {
     return this.#builtin;
+  }
+
+  #cargoMetadata?: CrateCargoMetadata;
+  get cargoMetadata(): CrateCargoMetadata | undefined {
+    return this.#cargoMetadata;
   }
 
   copy() {

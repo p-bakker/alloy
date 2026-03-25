@@ -16,6 +16,7 @@ import {
   RestApiModelReference,
   RestApiOperation,
 } from "../src/schema.js";
+import { reqwest } from "../src/crates.js";
 
 function toSnakeCase(s: string): string {
   return s.replace(/([a-z0-9])([A-Z])/g, "$1_$2").toLowerCase();
@@ -84,12 +85,8 @@ function renderOutput() {
     <Output namePolicy={rust.createRustNamePolicy()}>
       <rust.CrateDirectory name="petstore-client" edition="2024">
         <rust.CargoToml
-          name="petstore-client"
           version="0.1.0"
-          edition="2024"
           dependencies={{
-            serde: { version: "1.0", features: ["derive"] },
-            reqwest: { version: "0.12", defaultFeatures: false, features: ["json", "rustls-tls"] },
             tokio: { version: "1", features: ["rt-multi-thread", "macros"] },
           }}
         />
@@ -129,7 +126,7 @@ function renderOutput() {
               <rust.Derive traits={["Debug"]} />
               <rust.EnumDeclaration name={namekey("PetstoreError")} visibility="pub">
                 <List>
-                  <rust.TupleVariant name={namekey("Http")} types={["reqwest::Error"]} />
+                  <rust.TupleVariant name={namekey("Http")} types={[reqwest.Error]} />
                   <rust.StructVariant name={namekey("Api")}>
                     <List>
                       <rust.StructField name={namekey("status")} type="u16" />
@@ -140,12 +137,12 @@ function renderOutput() {
               </rust.EnumDeclaration>
             </>
 
-            <rust.ImplBlock type="PetstoreError" trait="std::fmt::Display">
+            <rust.ImplBlock type="PetstoreError" trait={rust.std.fmt.Display}>
               <rust.FunctionDeclaration
                 name={namekey("fmt")}
                 selfParam="&self"
-                parameters={[{ name: namekey("f"), type: "&mut std::fmt::Formatter<'_>" }]}
-                returns="std::fmt::Result"
+                parameters={[{ name: namekey("f"), type: <>{rust.std.fmt.Formatter}{"<'_>"}</>, borrow: true, mut: true }]}
+                returns={rust.std.fmt.Result}
               >
                 <rust.MatchExpression expr="self">
                   <rust.MatchArm pattern="PetstoreError::Http(e)">
@@ -158,7 +155,7 @@ function renderOutput() {
               </rust.FunctionDeclaration>
             </rust.ImplBlock>
 
-            <rust.ImplBlock type="PetstoreError" trait="std::error::Error">
+            <rust.ImplBlock type="PetstoreError" trait={rust.std.error.Error}>
               <rust.FunctionDeclaration
                 name={namekey("source")}
                 selfParam="&self"
@@ -171,10 +168,10 @@ function renderOutput() {
               </rust.FunctionDeclaration>
             </rust.ImplBlock>
 
-            <rust.ImplBlock type="PetstoreError" trait={"From<reqwest::Error>"}>
+            <rust.ImplBlock type="PetstoreError" trait={<rust.From>{reqwest.Error}</rust.From>}>
               <rust.FunctionDeclaration
                 name={namekey("from")}
-                parameters={[{ name: namekey("err"), type: "reqwest::Error" }]}
+                parameters={[{ name: namekey("err"), type: reqwest.Error }]}
                 returns="Self"
               >
                 PetstoreError::Http(err)
@@ -186,7 +183,7 @@ function renderOutput() {
               <rust.StructDeclaration name={clientKey} visibility="pub">
                 <List>
                   <rust.StructField name={baseUrlFieldKey} type="String" />
-                  <rust.StructField name={clientFieldKey} type="reqwest::Client" />
+                  <rust.StructField name={clientFieldKey} type={reqwest.Client} />
                 </List>
               </rust.StructDeclaration>
             </>
@@ -198,7 +195,7 @@ function renderOutput() {
                 parameters={[
                   { name: baseUrlFieldKey, type: "&str" },
                 ]}
-                returns={<rust.Result ok={clientKey} err="reqwest::Error" />}
+                returns={<rust.Result ok={clientKey} err={reqwest.Error} />}
               >
                 Ok(<rust.StructExpression type={clientKey}>
                   <List>
@@ -211,7 +208,7 @@ function renderOutput() {
                     </rust.StructFieldExpression>
                     <rust.StructFieldExpression name="client">
                       <rust.MemberExpression>
-                        <rust.MemberExpression.Part>reqwest::Client::builder()</rust.MemberExpression.Part>
+                        <rust.MemberExpression.Part>{reqwest.Client}::builder()</rust.MemberExpression.Part>
                         <rust.MemberExpression.Part id="timeout" args={[<>std::time::Duration::from_secs(30)</>]} />
                         <rust.MemberExpression.Part id="build" args={[]} try />
                       </rust.MemberExpression>
@@ -421,8 +418,10 @@ describe("rust-client-emitter", () => {
     expect(client).toContain("pub enum PetstoreError");
     expect(client).toContain("Http(reqwest::Error)");
     expect(client).toContain("Api {");
-    expect(client).toContain("impl std::fmt::Display for PetstoreError");
-    expect(client).toContain("impl std::error::Error for PetstoreError");
+    expect(client).toContain("use std::fmt;");
+    expect(client).toContain("use std::error;");
+    expect(client).toContain("impl fmt::Display for PetstoreError");
+    expect(client).toContain("impl error::Error for PetstoreError");
     expect(client).toContain("impl From<reqwest::Error> for PetstoreError");
   });
 

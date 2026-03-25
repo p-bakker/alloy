@@ -21,6 +21,10 @@ export const fmt = createModule(
         kind: "struct",
         members: {},
       },
+      Result: {
+        kind: "type",
+        members: {},
+      },
     },
   } satisfies StrictDescriptor,
   true,
