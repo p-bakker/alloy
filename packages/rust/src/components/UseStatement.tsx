@@ -20,6 +20,11 @@ export function UseStatements(props: UseStatementsProps) {
 
     for (const [crate, _sym] of props.records) {
       const importPath = crate.fullyQualifiedName.replace(/\//g, "::");
+      // Skip bare crate imports (e.g., `use reqwest;`) for external crates —
+      // in Rust 2018+ editions, external crate names are already in scope.
+      if (!crate.builtin && !importPath.includes("::")) {
+        continue;
+      }
       if (crate.builtin) {
         std.push({ path: importPath });
       } else if (moduleName && importPath.startsWith(moduleName.replace(/\//g, "::"))) {
