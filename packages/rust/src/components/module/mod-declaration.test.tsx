@@ -70,7 +70,7 @@ describe("ModBlock", () => {
         fn test_it() {"{}"}
       </ModBlock>,
     );
-    expect(contents.trim()).toBe("mod tests {\n  fn test_it() {}\n}");
+    expect(contents.trim()).toBe("mod tests {\n    fn test_it() {}\n}");
   });
 
   it("renders a pub mod block with children", () => {
@@ -79,7 +79,7 @@ describe("ModBlock", () => {
         fn help() {"{}"}
       </ModBlock>,
     );
-    expect(contents.trim()).toBe("pub mod helpers {\n  fn help() {}\n}");
+    expect(contents.trim()).toBe("pub mod helpers {\n    fn help() {}\n}");
   });
 });
 
@@ -91,7 +91,7 @@ describe("TestModule", () => {
       </TestModule>,
     );
     expect(contents.trim()).toBe(
-      "#[cfg(test)]\nmod tests {\n  fn test_it() {}\n}",
+      "#[cfg(test)]\nmod tests {\n    fn test_it() {}\n}",
     );
   });
 });

@@ -12,7 +12,7 @@ describe("IfExpression", () => {
       </TestCrate>,
     ).toRenderTo(`
       if x > 0 {
-        "positive"
+          "positive"
       }
     `);
   });
@@ -26,9 +26,9 @@ describe("IfExpression", () => {
       </TestCrate>,
     ).toRenderTo(`
       if x > 0 {
-        "positive"
+          "positive"
       } else {
-        "non-positive"
+          "non-positive"
       }
     `);
   });
@@ -44,7 +44,7 @@ describe("IfLetExpression", () => {
       </TestCrate>,
     ).toRenderTo(`
       if let Some(val) = opt {
-        val
+          val
       }
     `);
   });
@@ -58,9 +58,9 @@ describe("IfLetExpression", () => {
       </TestCrate>,
     ).toRenderTo(`
       if let Some(val) = opt {
-        val
+          val
       } else {
-        0
+          0
       }
     `);
   });

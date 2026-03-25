@@ -23,7 +23,7 @@ describe("MacroRules", () => {
       </TestCrate>,
     ).toRenderTo(`
       macro_rules! my_vec {
-        () => {Vec::new()};
+          () => {Vec::new()};
       }
     `);
   });

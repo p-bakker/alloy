@@ -22,7 +22,7 @@ describe("StructDeclaration", () => {
       </TestCrate>,
     ).toRenderTo(`
       struct Wrapper {
-        value: i32,
+          value: i32,
       }
     `);
   });
@@ -38,8 +38,8 @@ describe("StructDeclaration", () => {
       </TestCrate>,
     ).toRenderTo(`
       struct Person {
-        name: String,
-        age: u32,
+          name: String,
+          age: u32,
       }
     `);
   });
@@ -55,8 +55,8 @@ describe("StructDeclaration", () => {
       </TestCrate>,
     ).toRenderTo(`
       struct Person {
-        pub name: String,
-        pub age: u32,
+          pub name: String,
+          pub age: u32,
       }
     `);
   });

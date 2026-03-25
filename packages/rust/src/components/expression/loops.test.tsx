@@ -12,7 +12,7 @@ describe("ForLoop", () => {
       </TestCrate>,
     ).toRenderTo(`
       for item in items.iter() {
-        println!("{}", item)
+          println!("{}", item)
       }
     `);
   });
@@ -26,7 +26,7 @@ describe("ForLoop", () => {
       </TestCrate>,
     ).toRenderTo(`
       for (key, value) in map.iter() {
-        println!("{}: {}", key, value)
+          println!("{}: {}", key, value)
       }
     `);
   });
@@ -42,7 +42,7 @@ describe("WhileLoop", () => {
       </TestCrate>,
     ).toRenderTo(`
       while count > 0 {
-        count -= 1
+          count -= 1
       }
     `);
   });
@@ -58,7 +58,7 @@ describe("WhileLetLoop", () => {
       </TestCrate>,
     ).toRenderTo(`
       while let Some(val) = stack.pop() {
-        println!("{}", val)
+          println!("{}", val)
       }
     `);
   });
@@ -74,7 +74,7 @@ describe("Loop", () => {
       </TestCrate>,
     ).toRenderTo(`
       loop {
-        break
+          break
       }
     `);
   });
@@ -88,7 +88,7 @@ describe("Loop", () => {
       </TestCrate>,
     ).toRenderTo(`
       'outer: loop {
-        break 'outer
+          break 'outer
       }
     `);
   });

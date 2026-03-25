@@ -29,7 +29,7 @@ describe("FunctionDeclaration", () => {
       </TestCrate>,
     ).toRenderTo(`
       fn add(a: i32, b: i32) -> i32 {
-        a + b
+          a + b
       }
     `);
   });
@@ -68,7 +68,7 @@ describe("FunctionDeclaration", () => {
       </TestCrate>,
     ).toRenderTo(`
       fn identity<T>(value: T) -> T {
-        value
+          value
       }
     `);
   });

@@ -14,7 +14,7 @@ describe("WhereClause", () => {
     const result = renderInCrate(
       <WhereClause constraints={[{ type: "T", bounds: "Display" }]} />,
     );
-    expect(result).toBe("where\n  T: Display,");
+    expect(result).toBe("where\n    T: Display,");
   });
 
   it("renders multiple bounds on the same type", () => {
@@ -23,7 +23,7 @@ describe("WhereClause", () => {
         constraints={[{ type: "T", bounds: "Display + Debug" }]}
       />,
     );
-    expect(result).toBe("where\n  T: Display + Debug,");
+    expect(result).toBe("where\n    T: Display + Debug,");
   });
 
   it("renders multiple types with bounds", () => {
@@ -35,7 +35,7 @@ describe("WhereClause", () => {
         ]}
       />,
     );
-    expect(result).toBe("where\n  T: Display + Debug,\n  U: Clone,");
+    expect(result).toBe("where\n    T: Display + Debug,\n    U: Clone,");
   });
 
   it("returns null for empty constraints", () => {

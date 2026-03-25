@@ -13,6 +13,7 @@ import {
 } from "@alloy-js/core";
 import { join } from "pathe";
 import { useCrate } from "../scopes/crate.js";
+import { useRustFormatOptions } from "../scopes/format-options.js";
 import {
   ExtraUseRecords,
   ModuleRecords,
@@ -37,12 +38,14 @@ export function SourceFile(props: SourceFileProps) {
   const currentDir = directoryContext.path;
   const path: string = join(currentDir, props.path);
   const scope = createScope(RustSourceFileScope, path, crate);
+  const opts = useRustFormatOptions();
 
   return (
     <CoreSourceFile
       path={props.path}
       filetype="rs"
       reference={Reference}
+      {...opts}
     >
       <Show when={Boolean(props.header)}>
         {props.header}

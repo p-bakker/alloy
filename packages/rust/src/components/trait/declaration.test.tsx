@@ -27,9 +27,9 @@ describe("TraitDeclaration", () => {
       </TestCrate>,
     ).toRenderTo(`
       trait Animal {
-        fn name(&self) -> &str;
+          fn name(&self) -> &str;
 
-        fn sound(&self) -> String;
+          fn sound(&self) -> String;
       }
     `);
   });
@@ -66,9 +66,9 @@ describe("TraitDeclaration", () => {
       </TestCrate>,
     ).toRenderTo(`
       trait Greeter {
-        fn greet(&self) -> String {
-          String::from("hello")
-        }
+          fn greet(&self) -> String {
+              String::from("hello")
+          }
       }
     `);
   });

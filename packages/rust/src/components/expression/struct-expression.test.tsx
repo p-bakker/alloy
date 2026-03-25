@@ -16,8 +16,8 @@ describe("StructExpression", () => {
       </TestCrate>,
     ).toRenderTo(`
       Person {
-        name,
-        age,
+          name,
+          age,
       }
     `);
   });
@@ -34,8 +34,8 @@ describe("StructExpression", () => {
       </TestCrate>,
     ).toRenderTo(`
       Person {
-        name: name.to_string(),
-        age: 42,
+          name: name.to_string(),
+          age: 42,
       }
     `);
   });
@@ -52,8 +52,8 @@ describe("StructExpression", () => {
       </TestCrate>,
     ).toRenderTo(`
       Config {
-        host,
-        port: 8080,
+          host,
+          port: 8080,
       }
     `);
   });

@@ -30,9 +30,9 @@ describe("ImplBlock", () => {
       </TestCrate>,
     ).toRenderTo(`
       impl Person {
-        pub fn new(name: String) -> Self {
-          Self { name }
-        }
+          pub fn new(name: String) -> Self {
+              Self { name }
+          }
       }
     `);
   });

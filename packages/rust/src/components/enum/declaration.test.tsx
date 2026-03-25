@@ -19,9 +19,9 @@ describe("EnumDeclaration", () => {
       </TestCrate>,
     ).toRenderTo(`
       enum Color {
-        Red,
-        Green,
-        Blue,
+          Red,
+          Green,
+          Blue,
       }
     `);
   });
@@ -36,8 +36,8 @@ describe("EnumDeclaration", () => {
       </TestCrate>,
     ).toRenderTo(`
       enum IpAddr {
-        V4(u8, u8, u8, u8),
-        V6(String),
+          V4(u8, u8, u8, u8),
+          V6(String),
       }
     `);
   });
@@ -55,10 +55,10 @@ describe("EnumDeclaration", () => {
       </TestCrate>,
     ).toRenderTo(`
       enum Message {
-        Move {
-          x: i32,
-          y: i32,
-        },
+          Move {
+              x: i32,
+              y: i32,
+          },
       }
     `);
   });
@@ -78,12 +78,12 @@ describe("EnumDeclaration", () => {
       </TestCrate>,
     ).toRenderTo(`
       enum Message {
-        Quit,
-        Echo(String),
-        Move {
-          x: i32,
-          y: i32,
-        },
+          Quit,
+          Echo(String),
+          Move {
+              x: i32,
+              y: i32,
+          },
       }
     `);
   });

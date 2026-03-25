@@ -17,8 +17,8 @@ describe("MatchExpression", () => {
       </TestCrate>,
     ).toRenderTo(`
       match x {
-        1 => "one",
-        _ => "other",
+          1 => "one",
+          _ => "other",
       }
     `);
   });
@@ -37,8 +37,8 @@ describe("MatchExpression", () => {
       </TestCrate>,
     ).toRenderTo(`
       match x {
-        n if n > 0 => "positive",
-        _ => "non-positive",
+          n if n > 0 => "positive",
+          _ => "non-positive",
       }
     `);
   });
@@ -57,8 +57,8 @@ describe("MatchExpression", () => {
       </TestCrate>,
     ).toRenderTo(`
       match opt {
-        Some(val) => val,
-        None => 0,
+          Some(val) => val,
+          None => 0,
       }
     `);
   });
