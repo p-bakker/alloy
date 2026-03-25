@@ -221,10 +221,10 @@ function renderExample() {
                 returns={<rust.Vec>char</rust.Vec>}
               >
                 <rust.MemberExpression>
-                  <rust.MemberExpression.Part id="self" />
-                  <rust.MemberExpression.Part id={nameFieldRef} />
-                  <rust.MemberExpression.Part id="chars" args={[]} />
-                  <rust.MemberExpression.Part id="collect" args={[]} />
+                  <rust.MemberExpression.Property id="self" />
+                  <rust.MemberExpression.Property id={nameFieldRef} />
+                  <rust.MemberExpression.Method id="chars" args />
+                  <rust.MemberExpression.Method id="collect" args />
                 </rust.MemberExpression>
               </rust.FunctionDeclaration>
             </rust.ImplBlock>
@@ -257,16 +257,16 @@ function renderExample() {
             >
               <rust.LetDeclaration name={namekey("trimmed")}>
                 <rust.MemberExpression>
-                  <rust.MemberExpression.Part id="input" />
-                  <rust.MemberExpression.Part id="trim" args={[]} />
+                  <rust.MemberExpression.Property id="input" />
+                  <rust.MemberExpression.Method id="trim" args />
                 </rust.MemberExpression>
               </rust.LetDeclaration>
               <hbr />
               <rust.LetDeclaration name={namekey("count")}>
                 <rust.TryExpression>
                   <rust.MemberExpression>
-                    <rust.MemberExpression.Part id="trimmed" />
-                    <rust.MemberExpression.Part id="parse" args={[]} turbofish="usize" />
+                    <rust.MemberExpression.Property id="trimmed" />
+                    <rust.MemberExpression.Method id="parse" args turbofish="usize" />
                   </rust.MemberExpression>
                 </rust.TryExpression>
               </rust.LetDeclaration>
@@ -281,14 +281,14 @@ function renderExample() {
               returns={<rust.Vec>String</rust.Vec>}
             >
               <rust.MemberExpression>
-                <rust.MemberExpression.Part id="people" />
-                <rust.MemberExpression.Part id="iter" args={[]} />
-                <rust.MemberExpression.Part id="map" args={[
+                <rust.MemberExpression.Property id="people" />
+                <rust.MemberExpression.Method id="iter" args />
+                <rust.MemberExpression.Method id="map" args={[
                   <rust.ClosureExpression params={[{ name: "s" }]}>
                     <rust.FunctionCall name="to_uppercase" receiver="s" args={[]} />
                   </rust.ClosureExpression>
                 ]} />
-                <rust.MemberExpression.Part id="collect" args={[]} />
+                <rust.MemberExpression.Method id="collect" args />
               </rust.MemberExpression>
             </rust.FunctionDeclaration>
 
@@ -299,14 +299,14 @@ function renderExample() {
               returns={<rust.Vec>String</rust.Vec>}
             >
               <rust.MemberExpression>
-                <rust.MemberExpression.Part id="items" />
-                <rust.MemberExpression.Part id="iter" args={[]} />
-                <rust.MemberExpression.Part id="map" args={[
+                <rust.MemberExpression.Property id="items" />
+                <rust.MemberExpression.Method id="iter" args />
+                <rust.MemberExpression.Method id="map" args={[
                   <rust.ClosureExpression params={[{ name: "item" }]}>
                     <rust.MacroCall name="format">{"\"item: {}\", item"}</rust.MacroCall>
                   </rust.ClosureExpression>
                 ]} />
-                <rust.MemberExpression.Part id="collect" args={[]} />
+                <rust.MemberExpression.Method id="collect" args />
               </rust.MemberExpression>
             </rust.FunctionDeclaration>
 
@@ -372,10 +372,10 @@ function renderExample() {
               returns="&str"
             >
               <rust.MemberExpression>
-                <rust.MemberExpression.Part id="s" />
-                <rust.MemberExpression.Part id="split_whitespace" args={[]} />
-                <rust.MemberExpression.Part id="next" args={[]} />
-                <rust.MemberExpression.Part id="unwrap_or" args={[<>""</>]} />
+                <rust.MemberExpression.Property id="s" />
+                <rust.MemberExpression.Method id="split_whitespace" args />
+                <rust.MemberExpression.Method id="next" args />
+                <rust.MemberExpression.Method id="unwrap_or" args={[<>""</>]} />
               </rust.MemberExpression>
             </rust.FunctionDeclaration>
 

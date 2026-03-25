@@ -201,16 +201,16 @@ function renderOutput() {
                   <List>
                     <rust.StructFieldExpression name={baseUrlFieldKey}>
                       <rust.MemberExpression>
-                        <rust.MemberExpression.Part id={baseUrlFieldKey} />
-                        <rust.MemberExpression.Part id="trim_end_matches" args={[<>'/'</>]} />
-                        <rust.MemberExpression.Part id="to_string" args={[]} />
+                        <rust.MemberExpression.Property id={baseUrlFieldKey} />
+                        <rust.MemberExpression.Method id="trim_end_matches" args={[<>'/'</>]} />
+                        <rust.MemberExpression.Method id="to_string" args />
                       </rust.MemberExpression>
                     </rust.StructFieldExpression>
                     <rust.StructFieldExpression name="client">
                       <rust.MemberExpression>
-                        <rust.MemberExpression.Part>{reqwest.Client}::builder()</rust.MemberExpression.Part>
-                        <rust.MemberExpression.Part id="timeout" args={[<>std::time::Duration::from_secs(30)</>]} />
-                        <rust.MemberExpression.Part id="build" args={[]} try />
+                        <rust.MemberExpression.Property>{reqwest.Client}::builder()</rust.MemberExpression.Property>
+                        <rust.MemberExpression.Method id="timeout" args={[<>std::time::Duration::from_secs(30)</>]} />
+                        <rust.MemberExpression.Method id="build" args try />
                       </rust.MemberExpression>
                     </rust.StructFieldExpression>
                   </List>
@@ -260,13 +260,13 @@ function renderOutput() {
                   // Build the HTTP request chain
                   const httpRequest = (
                     <rust.MemberExpression>
-                      <rust.MemberExpression.Part id="self" />
-                      <rust.MemberExpression.Part id="client" />
+                      <rust.MemberExpression.Property id="self" />
+                      <rust.MemberExpression.Property id="client" />
                       {op.verb === "post"
-                        ? <><rust.MemberExpression.Part id="post" args={[<>&url</>]} /><rust.MemberExpression.Part id="json" args={[<>body</>]} /></>
-                        : <rust.MemberExpression.Part id="get" args={[<>&url</>]} />
+                        ? <><rust.MemberExpression.Method id="post" args={[<>&url</>]} /><rust.MemberExpression.Method id="json" args={[<>body</>]} /></>
+                        : <rust.MemberExpression.Method id="get" args={[<>&url</>]} />
                       }
-                      <rust.MemberExpression.Part id="send" args={[]} await try />
+                      <rust.MemberExpression.Method id="send" args await try />
                     </rust.MemberExpression>
                   );
 
@@ -293,8 +293,8 @@ function renderOutput() {
                       </Block>
                       <hbr />
                       Ok(<rust.MemberExpression>
-                        <rust.MemberExpression.Part id="response" />
-                        <rust.MemberExpression.Part id="json" args={[]} await try />
+                        <rust.MemberExpression.Property id="response" />
+                        <rust.MemberExpression.Method id="json" args await try />
                       </rust.MemberExpression>)
                     </rust.FunctionDeclaration>
                   );
@@ -345,8 +345,8 @@ function renderOutput() {
               <hbr />
               <rust.LetDeclaration name={namekey("pets")}>
                 <rust.MemberExpression>
-                  <rust.MemberExpression.Part id="client" />
-                  <rust.MemberExpression.Part id="list_pets" args={[]} await try />
+                  <rust.MemberExpression.Property id="client" />
+                  <rust.MemberExpression.Method id="list_pets" args await try />
                 </rust.MemberExpression>
               </rust.LetDeclaration>
               <hbr />
