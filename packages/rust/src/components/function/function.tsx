@@ -28,6 +28,10 @@ import {
 } from "../parameters/typeparameters.jsx";
 import { elideLifetimeAnnotations } from "../../utils/lifetime-elision.js";
 import { RenderAttributes } from "../attribute/attribute.js";
+import {
+  WhereClause,
+  WhereClauseConstraint,
+} from "../parameters/where-clause.jsx";
 
 export interface FunctionProps {
   name: string | Namekey;
@@ -60,6 +64,10 @@ export interface FunctionProps {
    * explicit lifetime annotations when the compiler can infer them.
    */
   elideLifetimes?: boolean;
+  /**
+   * Where clause constraints rendered between the signature and the body.
+   */
+  whereClause?: WhereClauseConstraint[];
   children?: Children;
 }
 
@@ -118,7 +126,8 @@ export function FunctionDeclaration(props: FunctionProps) {
         {props.returns ?
           <> -&gt; {props.returns}</>
         : null}
-        {" "}
+        {props.whereClause ? <WhereClause constraints={props.whereClause} /> : null}
+        {props.whereClause ? <hbr /> : " "}
         {!props.children ?
           "{}"
         : <Block><StatementList>{props.children}</StatementList></Block>}

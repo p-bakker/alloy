@@ -79,12 +79,10 @@ describeRustfmt("rustfmt conformance", () => {
         name="print_all"
         typeParameters={[{ name: "T" }]}
         parameters={[{ name: "items", type: "&[T]" }]}
+        whereClause={[
+          { type: "T", bounds: "std::fmt::Display + std::fmt::Debug" },
+        ]}
       >
-        <rust.WhereClause
-          constraints={[
-            { type: "T", bounds: "std::fmt::Display + std::fmt::Debug" },
-          ]}
-        />
         <ForLoop pattern="item" iter="items">
           println!("{"{"}:{"}"}",{" "}item);
         </ForLoop>
