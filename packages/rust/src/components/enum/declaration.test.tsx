@@ -13,9 +13,7 @@ describe("EnumDeclaration", () => {
       <TestCrate>
         <EnumDeclaration name="Color">
           <EnumVariant name="Red" />
-          <hbr />
           <EnumVariant name="Green" />
-          <hbr />
           <EnumVariant name="Blue" />
         </EnumDeclaration>
       </TestCrate>,
@@ -33,7 +31,6 @@ describe("EnumDeclaration", () => {
       <TestCrate>
         <EnumDeclaration name="IpAddr">
           <TupleVariant name="V4" types={["u8", "u8", "u8", "u8"]} />
-          <hbr />
           <TupleVariant name="V6" types={["String"]} />
         </EnumDeclaration>
       </TestCrate>,
@@ -71,9 +68,7 @@ describe("EnumDeclaration", () => {
       <TestCrate>
         <EnumDeclaration name="Message">
           <EnumVariant name="Quit" />
-          <hbr />
           <TupleVariant name="Echo" types={["String"]} />
-          <hbr />
           <StructVariant name="Move">
             {"x: i32,"}
             <hbr />

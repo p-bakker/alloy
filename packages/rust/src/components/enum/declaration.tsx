@@ -49,7 +49,7 @@ export function EnumDeclaration(props: EnumDeclarationProps) {
       return (
         <>
           {" "}
-          <Block>{props.children}</Block>
+          <Block><List hardline>{props.children}</List></Block>
         </>
       );
     } else {
