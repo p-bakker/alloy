@@ -608,6 +608,7 @@ const output = render(
 
             {/* make_greeting macro */}
             <rust.FunctionDeclaration attributes="test" name={namekey("test_make_greeting")}>
+              {"use crate::make_greeting;"}<hbr />
               <rust.MacroCall name="assert_eq">{"make_greeting!(\"World\"), \"Welcome, World!\""}</rust.MacroCall>;
             </rust.FunctionDeclaration>
 
