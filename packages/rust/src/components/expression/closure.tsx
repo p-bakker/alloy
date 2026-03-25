@@ -1,4 +1,5 @@
 import { Block, Children, For } from "@alloy-js/core";
+import { StatementList } from "../StatementList.js";
 
 export interface ClosureParam {
   name: string;
@@ -25,6 +26,6 @@ export function ClosureExpression(props: ClosureExpressionProps) {
     {props.move ? "move " : null}
     |{paramsContent}|
     {props.returns ? <> -&gt; {props.returns}</> : null}
-    {props.returns ? <> <Block inline>{props.children}</Block></> : <> {props.children}</>}
+    {props.returns ? <> <Block inline><StatementList>{props.children}</StatementList></Block></> : <> {props.children}</>}
   </>;
 }

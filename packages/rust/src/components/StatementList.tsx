@@ -1,4 +1,5 @@
 import {
+  Block,
   Children,
   childrenArray,
   isComponentCreator,
@@ -53,6 +54,8 @@ const statementComponents = new Set([
   IfExpression,
   IfLetExpression,
   MatchExpression,
+  // Bare block (e.g. raw `if cond ` + <Block>)
+  Block,
 ]);
 
 /**

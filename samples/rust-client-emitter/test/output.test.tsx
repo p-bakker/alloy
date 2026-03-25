@@ -285,10 +285,23 @@ function renderOutput() {
                       <rust.LetDeclaration name={namekey("response")}>
                         {httpRequest}
                       </rust.LetDeclaration>
-                      {`if !response.status().is_success() `}
-                      <Block>
-                        {`let status = response.status().as_u16();\nlet message = response.text().await.unwrap_or_default();\nreturn Err(PetstoreError::Api { status, message });`}
-                      </Block>
+                      <rust.IfExpression condition="!response.status().is_success()">
+                        <rust.LetDeclaration name={namekey("status")}>
+                          <rust.MemberExpression>
+                            <rust.MemberExpression.Property id="response" />
+                            <rust.MemberExpression.Method id="status" args />
+                            <rust.MemberExpression.Method id="as_u16" args />
+                          </rust.MemberExpression>
+                        </rust.LetDeclaration>
+                        <rust.LetDeclaration name={namekey("message")}>
+                          <rust.MemberExpression>
+                            <rust.MemberExpression.Property id="response" />
+                            <rust.MemberExpression.Method id="text" args await />
+                            <rust.MemberExpression.Method id="unwrap_or_default" args />
+                          </rust.MemberExpression>
+                        </rust.LetDeclaration>
+                        {"return Err(PetstoreError::Api { status, message });"}
+                      </rust.IfExpression>
                       Ok(<rust.MemberExpression>
                         <rust.MemberExpression.Property id="response" />
                         <rust.MemberExpression.Method id="json" args await try />

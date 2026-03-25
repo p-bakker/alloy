@@ -1,4 +1,5 @@
 import { Block, Children } from "@alloy-js/core";
+import { StatementList } from "../StatementList.js";
 
 export interface IfExpressionProps {
   condition: Children;
@@ -8,8 +9,8 @@ export interface IfExpressionProps {
 
 export function IfExpression(props: IfExpressionProps) {
   return <>
-    if {props.condition} <Block inline>{props.children}</Block>
-    {props.else ? <> else <Block inline>{props.else}</Block></> : null}
+    if {props.condition} <Block inline><StatementList>{props.children}</StatementList></Block>
+    {props.else ? <> else <Block inline><StatementList>{props.else}</StatementList></Block></> : null}
   </>;
 }
 
@@ -22,7 +23,7 @@ export interface IfLetExpressionProps {
 
 export function IfLetExpression(props: IfLetExpressionProps) {
   return <>
-    if let {props.pattern} = {props.expr} <Block inline>{props.children}</Block>
-    {props.else ? <> else <Block inline>{props.else}</Block></> : null}
+    if let {props.pattern} = {props.expr} <Block inline><StatementList>{props.children}</StatementList></Block>
+    {props.else ? <> else <Block inline><StatementList>{props.else}</StatementList></Block></> : null}
   </>;
 }
