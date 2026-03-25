@@ -1,4 +1,4 @@
-import { Block, Children } from "@alloy-js/core";
+import { Children, Indent } from "@alloy-js/core";
 import { StatementList } from "../StatementList.js";
 
 export interface IfExpressionProps {
@@ -7,11 +7,21 @@ export interface IfExpressionProps {
   else?: Children;
 }
 
-export function IfExpression(props: IfExpressionProps) {
+function InlineBlock(props: { children: Children }) {
   return <>
-    if {props.condition} <Block inline><StatementList>{props.children}</StatementList></Block>
-    {props.else ? <> else <Block inline><StatementList>{props.else}</StatementList></Block></> : null}
+    {"{"}
+    <Indent line trailingBreak>
+      <StatementList>{props.children}</StatementList>
+    </Indent>
+    {"}"}
   </>;
+}
+
+export function IfExpression(props: IfExpressionProps) {
+  return <group>
+    if {props.condition} <InlineBlock>{props.children}</InlineBlock>
+    {props.else ? <> else <InlineBlock>{props.else}</InlineBlock></> : null}
+  </group>;
 }
 
 export interface IfLetExpressionProps {
@@ -22,8 +32,8 @@ export interface IfLetExpressionProps {
 }
 
 export function IfLetExpression(props: IfLetExpressionProps) {
-  return <>
-    if let {props.pattern} = {props.expr} <Block inline><StatementList>{props.children}</StatementList></Block>
-    {props.else ? <> else <Block inline><StatementList>{props.else}</StatementList></Block></> : null}
-  </>;
+  return <group>
+    if let {props.pattern} = {props.expr} <InlineBlock>{props.children}</InlineBlock>
+    {props.else ? <> else <InlineBlock>{props.else}</InlineBlock></> : null}
+  </group>;
 }
