@@ -261,7 +261,7 @@ function renderExample() {
                   <rust.MemberExpression.Method id="trim" args />
                 </rust.MemberExpression>
               </rust.LetDeclaration>
-              <hbr />
+
               <rust.LetDeclaration name={namekey("count")}>
                 <rust.TryExpression>
                   <rust.MemberExpression>
@@ -270,7 +270,7 @@ function renderExample() {
                   </rust.MemberExpression>
                 </rust.TryExpression>
               </rust.LetDeclaration>
-              <hbr />
+
               Ok(count)
             </rust.FunctionDeclaration>
 
@@ -319,11 +319,11 @@ function renderExample() {
               <rust.LetDeclaration name={namekey("result")} mutable>
                 {"Vec::new()"}
               </rust.LetDeclaration>
-              <hbr />
+
               <rust.WhileLetLoop pattern="Some(val)" expr="data.pop()">
                 {"result.push(val);"}
               </rust.WhileLetLoop>
-              <hbr />
+
               result
             </rust.FunctionDeclaration>
 
@@ -333,10 +333,10 @@ function renderExample() {
               returns="u32"
             >
               <rust.LetDeclaration name={namekey("attempts")} mutable>0u32</rust.LetDeclaration>
-              <hbr />
+
               <rust.Loop label="retry">
                 <AssignmentStatement target="attempts" op="+=">1</AssignmentStatement>
-                <hbr />
+  
                 <rust.IfExpression condition={<BinaryExpression left="attempts" op=">=" right="3" />}>
                   {"break 'retry attempts;"}
                 </rust.IfExpression>
@@ -359,7 +359,7 @@ function renderExample() {
               returns="String"
             >
               <rust.LetDeclaration name={namekey("numbers")}><rust.MacroCall name="vec" delimiter={"["}>1, 2, 3</rust.MacroCall></rust.LetDeclaration>
-              <hbr />
+
               <rust.MacroCall name="format">{"\"count: {}\", numbers.len()"}</rust.MacroCall>
             </rust.FunctionDeclaration>
           </rust.SourceFile>
@@ -404,7 +404,7 @@ function renderExample() {
               <rust.LetDeclaration pattern={<rust.TuplePattern>{["x", "y"]}</rust.TuplePattern>}>
                 pair
               </rust.LetDeclaration>
-              <hbr />
+
               (y, x)
             </rust.FunctionDeclaration>
 
@@ -417,7 +417,7 @@ function renderExample() {
               <rust.LetDeclaration pattern={<rust.StructPattern type="crate::models::Person" fields={[{ name: "name" }, { name: "age" }]} />}>
                 <rust.FunctionCall name="clone" receiver="person" args={[]} />
               </rust.LetDeclaration>
-              <hbr />
+
               <rust.MacroCall name="format">{'"{} is {} years old", name, age'}</rust.MacroCall>
             </rust.FunctionDeclaration>
 
@@ -478,25 +478,25 @@ function renderExample() {
                 <rust.LetDeclaration name={namekey("p")}>
                   {"crate::models::Person::new(\"Alice\".to_string(), 30)"}
                 </rust.LetDeclaration>
-                <hbr />
+  
                 <rust.MacroCall name="assert_eq">{"p.name, \"Alice\""}</rust.MacroCall>;
-                <hbr />
+  
                 <rust.MacroCall name="assert_eq">{"p.age, 30"}</rust.MacroCall>;
               </rust.FunctionDeclaration>
 
               <rust.FunctionDeclaration attributes="test" name={namekey("test_describe_age")}>
                 <rust.MacroCall name="assert_eq">{"crate::models::Person::new(\"A\".to_string(), 10).describe_age(), \"child\""}</rust.MacroCall>;
-                <hbr />
+  
                 <rust.MacroCall name="assert_eq">{"crate::models::Person::new(\"A\".to_string(), 15).describe_age(), \"teenager\""}</rust.MacroCall>;
-                <hbr />
+  
                 <rust.MacroCall name="assert_eq">{"crate::models::Person::new(\"A\".to_string(), 30).describe_age(), \"adult\""}</rust.MacroCall>;
-                <hbr />
+  
                 <rust.MacroCall name="assert_eq">{"crate::models::Person::new(\"A\".to_string(), 70).describe_age(), \"senior\""}</rust.MacroCall>;
               </rust.FunctionDeclaration>
 
               <rust.FunctionDeclaration attributes="test" name={namekey("test_is_adult")}>
                 <rust.MacroCall name="assert">{"!crate::models::Person::new(\"A\".to_string(), 17).is_adult()"}</rust.MacroCall>;
-                <hbr />
+  
                 <rust.MacroCall name="assert">{"crate::models::Person::new(\"A\".to_string(), 18).is_adult()"}</rust.MacroCall>;
               </rust.FunctionDeclaration>
 
@@ -506,13 +506,13 @@ function renderExample() {
 
               <rust.FunctionDeclaration attributes="test" name={namekey("test_first_word")}>
                 <rust.MacroCall name="assert_eq">{"crate::utils::first_word(\"hello world\"), \"hello\""}</rust.MacroCall>;
-                <hbr />
+  
                 <rust.MacroCall name="assert_eq">{"crate::utils::first_word(\"\"), \"\""}</rust.MacroCall>;
               </rust.FunctionDeclaration>
 
               <rust.FunctionDeclaration attributes="test" name={namekey("test_parse_count")}>
                 <rust.MacroCall name="assert_eq">{"crate::client::parse_count(\"  42  \").unwrap(), 42"}</rust.MacroCall>;
-                <hbr />
+  
                 <rust.MacroCall name="assert">{"crate::client::parse_count(\"abc\").is_err()"}</rust.MacroCall>;
               </rust.FunctionDeclaration>
 
@@ -520,7 +520,7 @@ function renderExample() {
                 <rust.LetDeclaration name={namekey("input")}>
                   {"vec![\"a\".to_string(), \"b\".to_string()]"}
                 </rust.LetDeclaration>
-                <hbr />
+  
                 <rust.MacroCall name="assert_eq">{"crate::client::format_all(&input), vec![\"item: a\", \"item: b\"]"}</rust.MacroCall>;
               </rust.FunctionDeclaration>
 
@@ -528,9 +528,9 @@ function renderExample() {
                 <rust.LetDeclaration name={namekey("data")} mutable>
                   {"vec![1, 2, 3]"}
                 </rust.LetDeclaration>
-                <hbr />
+  
                 <rust.MacroCall name="assert_eq">{"crate::client::pop_all(&mut data), vec![3, 2, 1]"}</rust.MacroCall>;
-                <hbr />
+  
                 <rust.MacroCall name="assert">{"data.is_empty()"}</rust.MacroCall>;
               </rust.FunctionDeclaration>
 

@@ -21,15 +21,11 @@ describeRustfmt("rustfmt conformance", () => {
           <hbr />
           <rust.StructField name="y" type="f64" />
         </rust.StructDeclaration>
-        <hbr />
-        <hbr />
         <rust.EnumDeclaration name="Color">
           <rust.EnumVariant name="Red" />
           <rust.EnumVariant name="Green" />
           <rust.EnumVariant name="Blue" />
         </rust.EnumDeclaration>
-        <hbr />
-        <hbr />
         <rust.ImplBlock type="Point">
           <rust.FunctionDeclaration
             name="new"
@@ -39,10 +35,8 @@ describeRustfmt("rustfmt conformance", () => {
             ]}
             returns="Self"
           >
-            Self {"{"} x, y {"}"}
+            {"Self { x, y }"}
           </rust.FunctionDeclaration>
-          <hbr />
-          <hbr />
           <rust.FunctionDeclaration
             name="distance"
             selfParam="&self"
@@ -52,13 +46,9 @@ describeRustfmt("rustfmt conformance", () => {
             ((self.x - other.x).powi(2) + (self.y - other.y).powi(2)).sqrt()
           </rust.FunctionDeclaration>
         </rust.ImplBlock>
-        <hbr />
-        <hbr />
         <rust.TraitDeclaration name="Describable">
           <rust.FunctionDeclaration name="describe" selfParam="&self" returns="String" />
         </rust.TraitDeclaration>
-        <hbr />
-        <hbr />
         <rust.FunctionDeclaration
           name="add"
           parameters={[
@@ -188,7 +178,6 @@ describeRustfmt("rustfmt conformance", () => {
             a + b
           </ClosureExpression>
         </rust.LetDeclaration>
-        <hbr />
         <rust.LetDeclaration name="simple" mutable={false}>
           <ClosureExpression params={[{ name: "x" }]}>
             x + 1
@@ -204,13 +193,11 @@ describeRustfmt("rustfmt conformance", () => {
     const source = toSourceText(
       <rust.FunctionDeclaration name="loop_examples">
         <ForLoop pattern="i" iter="0..10">
-          println!("{"{"}{"}"}", i);
+          {"println!(\"{}\", i);"}
         </ForLoop>
-        <hbr />
         <WhileLoop condition="true">
           break;
         </WhileLoop>
-        <hbr />
         <Loop>
           break;
         </Loop>
@@ -254,8 +241,6 @@ describeRustfmt("rustfmt conformance", () => {
         <rust.ConstDeclaration name="MAX_SIZE" type="usize">
           1024
         </rust.ConstDeclaration>
-        <hbr />
-        <hbr />
         <rust.FunctionDeclaration name="use_const" returns="usize">
           MAX_SIZE
         </rust.FunctionDeclaration>
@@ -269,8 +254,6 @@ describeRustfmt("rustfmt conformance", () => {
     const source = toSourceText(
       <>
         <rust.StructDeclaration name="MyStruct" />
-        <hbr />
-        <hbr />
         <rust.ImplBlock type="MyStruct" trait="std::fmt::Display">
           <rust.FunctionDeclaration
             name="fmt"

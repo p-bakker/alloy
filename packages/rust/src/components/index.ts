@@ -22,6 +22,7 @@ export * from "./reference-types/reference.js";
 export * from "./Reference.js";
 export * from "./SourceDirectory.js";
 export * from "./SourceFile.js";
+export * from "./StatementList.js";
 export * from "./struct/declaration.js";
 export * from "./trait/declaration.js";
 export * from "./type/declaration.js";

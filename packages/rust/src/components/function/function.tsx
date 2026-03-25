@@ -12,6 +12,7 @@ import {
 } from "@alloy-js/core";
 import { useRustScope } from "../../scopes/contexts.js";
 import { createFunctionScope } from "../../scopes/factories.js";
+import { StatementList } from "../StatementList.js";
 import { RustSourceFileScope } from "../../scopes/source-file.js";
 import { createFunctionSymbol } from "../../symbols/factories.js";
 import { RustVisibility } from "../../symbols/rust.js";
@@ -120,7 +121,7 @@ export function FunctionDeclaration(props: FunctionProps) {
         {" "}
         {!props.children ?
           "{}"
-        : <Block>{props.children}</Block>}
+        : <Block><StatementList>{props.children}</StatementList></Block>}
       </Scope>
     </Declaration>
   );

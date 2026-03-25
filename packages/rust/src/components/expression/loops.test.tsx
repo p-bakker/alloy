@@ -7,7 +7,7 @@ describe("ForLoop", () => {
     expect(
       <TestCrate>
         <ForLoop pattern="item" iter="items.iter()">
-          println!("{"{"}{"}"}", item)
+          {"println!(\"{}\", item)"}
         </ForLoop>
       </TestCrate>,
     ).toRenderTo(`
@@ -21,7 +21,7 @@ describe("ForLoop", () => {
     expect(
       <TestCrate>
         <ForLoop pattern="(key, value)" iter="map.iter()">
-          println!("{"{"}{"}"}: {"{"}{"}"}", key, value)
+          {"println!(\"{}: {}\", key, value)"}
         </ForLoop>
       </TestCrate>,
     ).toRenderTo(`
@@ -53,7 +53,7 @@ describe("WhileLetLoop", () => {
     expect(
       <TestCrate>
         <WhileLetLoop pattern="Some(val)" expr="stack.pop()">
-          println!("{"{"}{"}"}", val)
+          {"println!(\"{}\", val)"}
         </WhileLetLoop>
       </TestCrate>,
     ).toRenderTo(`

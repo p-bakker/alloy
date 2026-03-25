@@ -282,16 +282,13 @@ function renderOutput() {
                       <rust.LetDeclaration name={namekey("url")}>
                         <rust.MacroCall name="format">{formatStr}</rust.MacroCall>
                       </rust.LetDeclaration>
-                      <hbr />
                       <rust.LetDeclaration name={namekey("response")}>
                         {httpRequest}
                       </rust.LetDeclaration>
-                      <hbr />
                       {`if !response.status().is_success() `}
                       <Block>
                         {`let status = response.status().as_u16();\nlet message = response.text().await.unwrap_or_default();\nreturn Err(PetstoreError::Api { status, message });`}
                       </Block>
-                      <hbr />
                       Ok(<rust.MemberExpression>
                         <rust.MemberExpression.Property id="response" />
                         <rust.MemberExpression.Method id="json" args await try />
@@ -316,7 +313,6 @@ function renderOutput() {
                   />
                   <rust.FunctionDeclaration name={namekey("assert_all")}>
                     <rust.FunctionCall name="assert_send" turbofish="PetstoreClient" args={[]} />;
-                    <hbr />
                     <rust.FunctionCall name="assert_sync" turbofish="PetstoreClient" args={[]} />;
                   </rust.FunctionDeclaration>
                 </List>
@@ -342,16 +338,13 @@ function renderOutput() {
               <rust.LetDeclaration name={namekey("client")}>
                 petstore_client::PetstoreClient::new("http://localhost:8080")?
               </rust.LetDeclaration>
-              <hbr />
               <rust.LetDeclaration name={namekey("pets")}>
                 <rust.MemberExpression>
                   <rust.MemberExpression.Property id="client" />
                   <rust.MemberExpression.Method id="list_pets" args await try />
                 </rust.MemberExpression>
               </rust.LetDeclaration>
-              <hbr />
               <rust.MacroCall name="println">{'"Found {} pets", pets.len()'}</rust.MacroCall>;
-              <hbr />
               Ok(())
             </rust.FunctionDeclaration>
           </rust.SourceFile>

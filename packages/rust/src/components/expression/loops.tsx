@@ -1,4 +1,5 @@
 import { Block, Children } from "@alloy-js/core";
+import { StatementList } from "../StatementList.js";
 
 export interface ForLoopProps {
   pattern: Children;
@@ -7,7 +8,7 @@ export interface ForLoopProps {
 }
 
 export function ForLoop(props: ForLoopProps) {
-  return <>for {props.pattern} in {props.iter} <Block>{props.children}</Block></>;
+  return <>for {props.pattern} in {props.iter} <Block><StatementList>{props.children}</StatementList></Block></>;
 }
 
 export interface WhileLoopProps {
@@ -16,7 +17,7 @@ export interface WhileLoopProps {
 }
 
 export function WhileLoop(props: WhileLoopProps) {
-  return <>while {props.condition} <Block>{props.children}</Block></>;
+  return <>while {props.condition} <Block><StatementList>{props.children}</StatementList></Block></>;
 }
 
 export interface WhileLetLoopProps {
@@ -26,7 +27,7 @@ export interface WhileLetLoopProps {
 }
 
 export function WhileLetLoop(props: WhileLetLoopProps) {
-  return <>while let {props.pattern} = {props.expr} <Block>{props.children}</Block></>;
+  return <>while let {props.pattern} = {props.expr} <Block><StatementList>{props.children}</StatementList></Block></>;
 }
 
 export interface LoopProps {
@@ -37,6 +38,6 @@ export interface LoopProps {
 export function Loop(props: LoopProps) {
   return <>
     {props.label ? `'${props.label}: ` : null}
-    loop <Block>{props.children}</Block>
+    loop <Block><StatementList>{props.children}</StatementList></Block>
   </>;
 }
