@@ -25,6 +25,6 @@ export function ClosureExpression(props: ClosureExpressionProps) {
     {props.move ? "move " : null}
     |{paramsContent}|
     {props.returns ? <> -&gt; {props.returns}</> : null}
-    {props.returns ? <> <Block>{props.children}</Block></> : <> {props.children}</>}
+    {props.returns ? <> <Block inline>{props.children}</Block></> : <> {props.children}</>}
   </>;
 }
