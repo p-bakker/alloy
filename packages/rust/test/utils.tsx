@@ -56,7 +56,11 @@ export async function assertRustfmtIdempotent(
 export function toSourceText(c: Children, options?: PrintTreeOptions): string {
   const res = render(
     <Output>
-      <rust.SourceFile path="test.rs">{c}</rust.SourceFile>
+      <rust.CrateDirectory name="test-crate">
+        <rust.SourceDirectory path=".">
+          <rust.SourceFile path="test.rs">{c}</rust.SourceFile>
+        </rust.SourceDirectory>
+      </rust.CrateDirectory>
     </Output>,
     options,
   );
