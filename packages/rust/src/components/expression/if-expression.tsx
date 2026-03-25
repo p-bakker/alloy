@@ -8,8 +8,8 @@ export interface IfExpressionProps {
 
 export function IfExpression(props: IfExpressionProps) {
   return <>
-    if {props.condition} <Block>{props.children}</Block>
-    {props.else ? <> else <Block>{props.else}</Block></> : null}
+    if {props.condition} <Block inline>{props.children}</Block>
+    {props.else ? <> else <Block inline>{props.else}</Block></> : null}
   </>;
 }
 

@@ -154,9 +154,7 @@ describe("StatementList", () => {
       </TestCrate>,
     ).toRenderTo(`
       fn example() {
-          if x > 0 {
-              println!("positive");
-          }
+          if x > 0 { println!("positive"); }
           let y = 0;
       }
     `);

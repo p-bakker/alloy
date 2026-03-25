@@ -11,9 +11,7 @@ describe("IfExpression", () => {
         </IfExpression>
       </TestCrate>,
     ).toRenderTo(`
-      if x > 0 {
-          "positive"
-      }
+      if x > 0 { "positive" }
     `);
   });
 
@@ -25,11 +23,7 @@ describe("IfExpression", () => {
         </IfExpression>
       </TestCrate>,
     ).toRenderTo(`
-      if x > 0 {
-          "positive"
-      } else {
-          "non-positive"
-      }
+      if x > 0 { "positive" } else { "non-positive" }
     `);
   });
 });
