@@ -22,7 +22,7 @@ export interface IfLetExpressionProps {
 
 export function IfLetExpression(props: IfLetExpressionProps) {
   return <>
-    if let {props.pattern} = {props.expr} <Block>{props.children}</Block>
-    {props.else ? <> else <Block>{props.else}</Block></> : null}
+    if let {props.pattern} = {props.expr} <Block inline>{props.children}</Block>
+    {props.else ? <> else <Block inline>{props.else}</Block></> : null}
   </>;
 }

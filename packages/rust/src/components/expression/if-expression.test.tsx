@@ -37,9 +37,7 @@ describe("IfLetExpression", () => {
         </IfLetExpression>
       </TestCrate>,
     ).toRenderTo(`
-      if let Some(val) = opt {
-          val
-      }
+      if let Some(val) = opt { val }
     `);
   });
 
@@ -51,11 +49,7 @@ describe("IfLetExpression", () => {
         </IfLetExpression>
       </TestCrate>,
     ).toRenderTo(`
-      if let Some(val) = opt {
-          val
-      } else {
-          0
-      }
+      if let Some(val) = opt { val } else { 0 }
     `);
   });
 });
