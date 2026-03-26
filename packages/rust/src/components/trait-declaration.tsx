@@ -1,4 +1,4 @@
-import type { Children, Refkey } from "@alloy-js/core";
+import type { Children, Namekey, Refkey } from "@alloy-js/core";
 import {
   code,
   Declaration as CoreDeclaration,
@@ -16,7 +16,7 @@ import { TypeParameters, WhereClause } from "./type-parameters.js";
 import { toRustVisibility, toVisibilityPrefix } from "./visibility.js";
 
 export interface TraitDeclarationProps {
-  name: string;
+  name: string | Namekey;
   refkey?: Refkey;
   pub?: boolean;
   pub_crate?: boolean;
