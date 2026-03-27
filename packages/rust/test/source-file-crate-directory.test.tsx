@@ -4,7 +4,7 @@ import { d } from "@alloy-js/core/testing";
 import { describe, expect, it } from "vitest";
 
 import { CrateDirectory } from "../src/components/crate-directory.js";
-import { ModuleDocComment } from "../src/components/doc-comment.js";
+import { InnerDocComment } from "../src/components/doc-comment.js";
 import { ModuleDirectory } from "../src/components/module-directory.js";
 import { SourceFile } from "../src/components/source-file.js";
 import { useCrateContext } from "../src/context/crate-context.js";
@@ -63,7 +63,7 @@ describe("SourceFile", () => {
         <CrateDirectory name="my_crate">
           <SourceFile
             path="lib.rs"
-            headerComment={<ModuleDocComment>Crate docs</ModuleDocComment>}
+            headerComment={<InnerDocComment>Crate docs</InnerDocComment>}
           >
             {code`fn main() {}`}
           </SourceFile>
