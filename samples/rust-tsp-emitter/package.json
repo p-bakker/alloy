@@ -1,0 +1,47 @@
+{
+  "name": "rust-tsp-emitter",
+  "version": "1.0.0",
+  "description": "TypeSpec to Rust emitter with validation — generates Rust structs with serde, validator derives, and runtime validation from TypeSpec constraints",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alloy-framework/alloy.git"
+  },
+  "main": "dist/src/index.js",
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "@alloy-js/core": "workspace:~",
+    "@alloy-js/rust": "workspace:~"
+  },
+  "peerDependencies": {
+    "@typespec/compiler": "^1.2.1",
+    "@typespec/http": "^1.0.1"
+  },
+  "devDependencies": {
+    "@alloy-js/cli": "workspace:~",
+    "@alloy-js/rollup-plugin": "workspace:~",
+    "@typespec/compiler": "^1.2.1",
+    "@typespec/http": "^1.0.1",
+    "@types/node": "catalog:",
+    "concurrently": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "build": "alloy build",
+    "clean": "rimraf dist/ .temp/ tsp-output/",
+    "generate": "alloy build && tsp compile petstore.tsp",
+    "test": "vitest run",
+    "test:watch": "vitest -w",
+    "watch": "alloy build --watch"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/src/index.js",
+      "types": "./dist/src/index.d.ts"
+    }
+  }
+}

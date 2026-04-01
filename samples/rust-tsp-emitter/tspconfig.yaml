@@ -1,0 +1,11 @@
+emit:
+  - rust-tsp-emitter
+
+options:
+  rust-tsp-emitter:
+    crate-name: petstore-models
+    edition: "2024"
+    # rich-types: true (default) uses chrono, url, rust_decimal crates
+    # rich-types: false falls back to String for date/time/url/decimal types
+
+output-dir: "{project-root}/tsp-output"
