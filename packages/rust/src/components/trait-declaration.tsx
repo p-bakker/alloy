@@ -24,6 +24,7 @@ export interface TraitDeclarationProps {
   typeParameters?: TypeParameterProp[];
   supertraits?: Children[];
   whereClause?: Children;
+  attributes?: Children;
   doc?: Children;
   children?: Children;
 }
@@ -45,6 +46,12 @@ export function TraitDeclaration(props: TraitDeclarationProps) {
       {props.doc ? (
         <>
           <DocComment>{props.doc}</DocComment>
+        </>
+      ) : null}
+      {props.attributes ? (
+        <>
+          {props.attributes}
+          <hbr />
         </>
       ) : null}
       <CoreDeclaration symbol={traitSymbol}>

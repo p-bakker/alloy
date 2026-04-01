@@ -11,6 +11,7 @@ export interface StaticDeclarationProps {
   pub_crate?: boolean;
   pub_super?: boolean;
   mutable?: boolean;
+  attributes?: Children;
   type: Children;
   children?: Children;
 }
@@ -27,16 +28,24 @@ export function StaticDeclaration(props: StaticDeclarationProps) {
   const mutabilityPrefix = props.mutable ? "mut " : "";
 
   return (
-    <CoreDeclaration symbol={staticSymbol}>
-      {visibilityPrefix}
-      {"static "}
-      {mutabilityPrefix}
-      {staticSymbol.name}
-      {": "}
-      {props.type}
-      {" = "}
-      {props.children}
-      {";"}
-    </CoreDeclaration>
+    <>
+      {props.attributes ? (
+        <>
+          {props.attributes}
+          <hbr />
+        </>
+      ) : null}
+      <CoreDeclaration symbol={staticSymbol}>
+        {visibilityPrefix}
+        {"static "}
+        {mutabilityPrefix}
+        {staticSymbol.name}
+        {": "}
+        {props.type}
+        {" = "}
+        {props.children}
+        {";"}
+      </CoreDeclaration>
+    </>
   );
 }

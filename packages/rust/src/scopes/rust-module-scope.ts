@@ -1,4 +1,5 @@
 import {
+  type Children,
   type OutputScopeOptions,
   type OutputSpace,
   shallowReactive,
@@ -14,6 +15,7 @@ import { RustScopeBase } from "./rust-scope.js";
 export interface RustModuleDeclaration {
   name: string;
   visibility: RustVisibility;
+  attributes?: Children;
 }
 
 export class RustModuleScope extends RustScopeBase {
@@ -62,13 +64,17 @@ export class RustModuleScope extends RustScopeBase {
     return this.#childModules;
   }
 
-  addChildModule(name: string, visibility: RustVisibility) {
+  addChildModule(
+    name: string,
+    visibility: RustVisibility,
+    attributes?: Children,
+  ) {
     const childModule = this.#childModules.get(name);
     if (childModule) {
       return childModule;
     }
 
-    const declaration = { name, visibility };
+    const declaration = { name, visibility, attributes };
     this.#childModules.set(name, declaration);
     return declaration;
   }

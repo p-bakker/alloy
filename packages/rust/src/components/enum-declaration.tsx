@@ -34,6 +34,7 @@ export interface EnumDeclarationProps {
 export interface EnumVariantProps {
   name: string;
   refkey?: Refkey;
+  attributes?: Children;
   doc?: string;
   kind?: "unit" | "tuple" | "struct";
   fields?: Children[];
@@ -152,6 +153,12 @@ export function EnumVariant(props: EnumVariantProps) {
       {props.doc ? (
         <>
           <DocComment>{props.doc}</DocComment>
+        </>
+      ) : null}
+      {props.attributes ? (
+        <>
+          {props.attributes}
+          <hbr />
         </>
       ) : null}
       {variantSymbol.name}

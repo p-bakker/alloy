@@ -960,19 +960,19 @@ importers:
         version: link:../rollup-plugin
       '@microsoft/api-extractor':
         specifier: 'catalog:'
-        version: 7.58.11(@types/node@26.1.1)
+        version: 7.52.9(@types/node@24.10.9)
       '@rollup/plugin-typescript':
         specifier: 'catalog:'
-        version: 12.3.0(rollup@4.62.2)(tslib@2.8.1)(typescript@7.0.2)
+        version: 12.1.4(rollup@4.46.2)(tslib@2.8.1)(typescript@5.9.3)
       concurrently:
         specifier: 'catalog:'
-        version: 10.0.3
+        version: 9.2.0
       typescript:
         specifier: 'catalog:'
-        version: 7.0.2
+        version: 5.9.3
       vitest:
         specifier: 'catalog:'
-        version: 4.1.10(@types/node@26.1.1)(vite@8.1.5(@types/node@26.1.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.1)(yaml@2.9.0))
+        version: 3.2.4(@types/debug@4.1.12)(@types/node@24.10.9)(esbuild@0.25.8)(jiti@2.6.1)(tsx@4.20.3)(yaml@2.8.0)
 
   packages/trace-cli:
     dependencies:
@@ -1186,34 +1186,6 @@ importers:
       '@typespec/http':
         specifier: 'catalog:'
         version: 1.14.0(@typespec/compiler@1.14.0(@types/node@26.1.1))
-    devDependencies:
-      '@alloy-js/cli':
-        specifier: workspace:~
-        version: link:../../packages/cli
-      '@alloy-js/rollup-plugin':
-        specifier: workspace:~
-        version: link:../../packages/rollup-plugin
-      '@types/node':
-        specifier: 'catalog:'
-        version: 26.1.1
-      concurrently:
-        specifier: 'catalog:'
-        version: 10.0.3
-      typescript:
-        specifier: 'catalog:'
-        version: 7.0.2
-      vitest:
-        specifier: 'catalog:'
-        version: 4.1.10(@types/node@26.1.1)(vite@8.1.5(@types/node@26.1.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.1)(yaml@2.9.0))
-
-  samples/rust-example:
-    dependencies:
-      '@alloy-js/core':
-        specifier: workspace:~
-        version: link:../../packages/core
-      '@alloy-js/rust':
-        specifier: workspace:~
-        version: link:../../packages/rust
     devDependencies:
       '@alloy-js/cli':
         specifier: workspace:~

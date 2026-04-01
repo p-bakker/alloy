@@ -1,4 +1,4 @@
-import { code, memo } from "@alloy-js/core";
+import { type Children, code, memo } from "@alloy-js/core";
 
 import type { RustCrateScope } from "../scopes/rust-crate-scope.js";
 import type { RustModuleScope } from "../scopes/rust-module-scope.js";
@@ -6,6 +6,7 @@ import type { RustModuleScope } from "../scopes/rust-module-scope.js";
 interface ModDeclaration {
   name: string;
   visibility: "pub" | "pub(crate)" | "pub(super)" | undefined;
+  attributes?: Children;
 }
 
 export interface ModDeclarationsProps {
@@ -15,6 +16,12 @@ export interface ModDeclarationsProps {
 function ModDeclarationLine(props: ModDeclaration) {
   return (
     <>
+      {props.attributes ? (
+        <>
+          {props.attributes}
+          <hbr />
+        </>
+      ) : null}
       {props.visibility ? `${props.visibility} ` : ""}
       {code`mod `}
       {props.name}
@@ -40,6 +47,7 @@ export function ModDeclarations(props: ModDeclarationsProps) {
             <ModDeclarationLine
               name={declaration.name}
               visibility={declaration.visibility}
+              attributes={declaration.attributes}
             />
             {index < declarations.length - 1 ? <hbr /> : null}
           </>

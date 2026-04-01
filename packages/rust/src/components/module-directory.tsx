@@ -15,6 +15,7 @@ export interface ModuleDirectoryProps {
   pub?: boolean;
   pub_crate?: boolean;
   pub_super?: boolean;
+  attributes?: Children;
   children?: Children;
 }
 
@@ -34,7 +35,7 @@ export function ModuleDirectory(props: ModuleDirectoryProps) {
   const visibility = toRustVisibility(props);
 
   if (scopeParent) {
-    scopeParent.addChildModule(moduleName, visibility);
+    scopeParent.addChildModule(moduleName, visibility, props.attributes);
   }
 
   const scope = createScope(RustModuleScope, moduleName, scopeParent, {
