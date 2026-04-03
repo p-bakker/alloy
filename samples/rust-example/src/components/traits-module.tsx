@@ -6,6 +6,7 @@ import {
   Reference,
   SourceFile,
   TraitDeclaration,
+  std,
 } from "@alloy-js/rust";
 
 import { resultAliasKey } from "./error-module.js";
@@ -67,7 +68,18 @@ export function TraitsModule(props: TraitsModuleProps) {
           name="Cacheable"
           refkey={cacheableKey}
           pub
-          typeParameters={[{ name: "V", constraint: "Clone + Send + Sync" }]}
+          typeParameters={[
+            {
+              name: "V",
+              constraint: (
+                <>
+                  <Reference refkey={std.clone.Clone} /> +{" "}
+                  <Reference refkey={std.marker.Send} /> +{" "}
+                  <Reference refkey={std.marker.Sync} />
+                </>
+              ),
+            },
+          ]}
         >
           <FunctionDeclaration
             name="cache_key"

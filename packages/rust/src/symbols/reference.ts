@@ -1,6 +1,14 @@
 import type { Refkey } from "@alloy-js/core";
 import { memo, resolve, unresolvedRefkey } from "@alloy-js/core";
 
+import {
+  PRELUDE_TYPES,
+  PRELUDE_TYPES_2015,
+  PRELUDE_TYPES_2018,
+  PRELUDE_TYPES_2021,
+  PRELUDE_TYPES_2024,
+} from "../builtins/prelude.js";
+import { useCrateContext } from "../context/crate-context.js";
 import { isBuiltinCrate } from "../create-crate.js";
 import { useRustScope } from "../scopes/contexts.js";
 import { RustCrateScope } from "../scopes/rust-crate-scope.js";
@@ -8,59 +16,12 @@ import { RustModuleScope } from "../scopes/rust-module-scope.js";
 import type { RustScopeBase } from "../scopes/rust-scope.js";
 import type { RustOutputSymbol } from "./rust-output-symbol.js";
 
-export const PRELUDE_TYPES = new Set<string>([
-  "Option",
-  "Some",
-  "None",
-  "Result",
-  "Ok",
-  "Err",
-  "Vec",
-  "String",
-  "ToString",
-  "Box",
-  "Clone",
-  "Copy",
-  "Default",
-  "Drop",
-  "Eq",
-  "PartialEq",
-  "Ord",
-  "PartialOrd",
-  "Iterator",
-  "IntoIterator",
-  "From",
-  "Into",
-  "TryFrom",
-  "TryInto",
-  "AsRef",
-  "AsMut",
-  "Send",
-  "Sync",
-  "Sized",
-  "Unpin",
-  "ToOwned",
-  "Fn",
-  "FnMut",
-  "FnOnce",
-  "bool",
-  "char",
-  "f32",
-  "f64",
-  "i8",
-  "i16",
-  "i32",
-  "i64",
-  "i128",
-  "isize",
-  "u8",
-  "u16",
-  "u32",
-  "u64",
-  "u128",
-  "usize",
-  "str",
-]);
+const PRELUDE_BY_EDITION: Record<string, Set<string>> = {
+  "2015": PRELUDE_TYPES_2015,
+  "2018": PRELUDE_TYPES_2018,
+  "2021": PRELUDE_TYPES_2021,
+  "2024": PRELUDE_TYPES_2024,
+};
 
 export function ref(
   refkey: Refkey,
@@ -75,6 +36,12 @@ export function ref(
   const resolveResult = resolve<RustScopeBase, RustOutputSymbol>(
     refkey as Refkey,
   );
+
+  // Pick the prelude set for the current crate's edition
+  const crateContext = useCrateContext();
+  const prelude = crateContext
+    ? (PRELUDE_BY_EDITION[crateContext.edition] ?? PRELUDE_TYPES)
+    : PRELUDE_TYPES;
 
   return memo(() => {
     if (resolveResult.value === undefined) {
@@ -99,7 +66,7 @@ export function ref(
       sourceCrate instanceof RustCrateScope &&
       targetCrate === sourceCrate;
 
-    if (PRELUDE_TYPES.has(targetName) && !isLocalSymbol) {
+    if (prelude.has(targetName) && !isLocalSymbol) {
       return [targetName, result.symbol];
     }
 
