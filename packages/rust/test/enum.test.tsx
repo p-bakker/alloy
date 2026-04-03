@@ -79,7 +79,7 @@ describe("EnumDeclaration", () => {
           <SourceFile path="lib.rs">
             <EnumDeclaration
               name="Foo"
-              attributes="#[repr(u8)]"
+              attributes={["#[repr(u8)]"]}
               derives={["Debug", "Clone"]}
             />
           </SourceFile>
@@ -321,7 +321,7 @@ describe("EnumVariant", () => {
             <EnumDeclaration name="Status">
               <EnumVariant
                 name="Active"
-                attributes={<Attribute name="deprecated" />}
+                attributes={[<Attribute name="deprecated" />]}
               />
               <EnumVariant name="Inactive" />
             </EnumDeclaration>
@@ -346,7 +346,9 @@ describe("EnumVariant", () => {
               <EnumVariant
                 name="Red"
                 doc="The red color."
-                attributes={<Attribute name="serde" args={'rename = "red"'} />}
+                attributes={[
+                  <Attribute name="serde" args={'rename = "red"'} />,
+                ]}
               />
             </EnumDeclaration>
           </SourceFile>
@@ -370,7 +372,7 @@ describe("EnumVariant", () => {
               <EnumVariant
                 name="Data"
                 fields={["Vec<u8>"]}
-                attributes={<Attribute name="allow" args="dead_code" />}
+                attributes={[<Attribute name="allow" args="dead_code" />]}
               />
             </EnumDeclaration>
           </SourceFile>

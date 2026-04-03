@@ -25,7 +25,7 @@ export interface StructDeclarationProps {
   pub_crate?: boolean;
   pub_super?: boolean;
   derives?: (string | Refkey)[];
-  attributes?: Children;
+  attributes?: Children[];
   doc?: string;
   typeParameters?: TypeParameterProp[];
   whereClause?: Children;
@@ -42,7 +42,7 @@ export interface FieldProps {
   pub?: boolean;
   pub_crate?: boolean;
   pub_super?: boolean;
-  attributes?: Children;
+  attributes?: Children[];
   doc?: string;
 }
 
@@ -87,9 +87,11 @@ export function StructDeclaration(props: StructDeclarationProps) {
           <DocComment>{props.doc}</DocComment>
         </>
       ) : null}
-      {props.attributes ? (
+      {props.attributes && props.attributes.length > 0 ? (
         <>
-          {props.attributes}
+          <For each={props.attributes} line>
+            {(attr) => attr}
+          </For>
           <hbr />
         </>
       ) : null}
@@ -171,9 +173,11 @@ export function Field(props: FieldProps) {
           <DocComment>{props.doc}</DocComment>
         </>
       ) : null}
-      {props.attributes ? (
+      {props.attributes && props.attributes.length > 0 ? (
         <>
-          {props.attributes}
+          <For each={props.attributes} line>
+            {(attr) => attr}
+          </For>
           <hbr />
         </>
       ) : null}

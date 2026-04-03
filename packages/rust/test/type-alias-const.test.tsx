@@ -152,7 +152,7 @@ describe("TypeAlias", () => {
             <TypeAlias
               name="Result"
               pub
-              attributes={<Attribute name="allow" args="dead_code" />}
+              attributes={[<Attribute name="allow" args="dead_code" />]}
             >
               std::result::Result&lt;T, MyError&gt;
             </TypeAlias>
@@ -283,7 +283,7 @@ describe("ConstDeclaration", () => {
             <ConstDeclaration
               name="MAX"
               type="u32"
-              attributes={<Attribute name="allow" args="dead_code" />}
+              attributes={[<Attribute name="allow" args="dead_code" />]}
             >
               100
             </ConstDeclaration>

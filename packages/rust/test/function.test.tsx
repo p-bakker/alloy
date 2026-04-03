@@ -387,7 +387,7 @@ describe("FunctionDeclaration", () => {
             <FunctionDeclaration
               name="test_it"
               receiver="none"
-              attributes={<Attribute name="test" />}
+              attributes={[<Attribute name="test" />]}
             />
           </SourceFile>
         </CrateDirectory>
@@ -406,7 +406,7 @@ describe("FunctionDeclaration", () => {
             <FunctionDeclaration
               name="run"
               doc="Runs the process."
-              attributes={<Attribute name="inline" />}
+              attributes={[<Attribute name="inline" />]}
             >
               {"todo!()"}
             </FunctionDeclaration>
@@ -431,13 +431,10 @@ describe("FunctionDeclaration", () => {
               name="handler"
               pub
               async
-              attributes={
-                <>
-                  <Attribute name="cfg" args={'feature = "server"'} />
-                  <hbr />
-                  <Attribute name="allow" args="unused_variables" />
-                </>
-              }
+              attributes={[
+                <Attribute name="cfg" args={'feature = "server"'} />,
+                <Attribute name="allow" args="unused_variables" />,
+              ]}
             />
           </SourceFile>
         </CrateDirectory>

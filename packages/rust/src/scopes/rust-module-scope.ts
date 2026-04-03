@@ -15,7 +15,7 @@ import { RustScopeBase } from "./rust-scope.js";
 export interface RustModuleDeclaration {
   name: string;
   visibility: RustVisibility;
-  attributes?: Children;
+  attributes?: Children[];
 }
 
 export class RustModuleScope extends RustScopeBase {
@@ -67,7 +67,7 @@ export class RustModuleScope extends RustScopeBase {
   addChildModule(
     name: string,
     visibility: RustVisibility,
-    attributes?: Children,
+    attributes?: Children[],
   ) {
     const childModule = this.#childModules.get(name);
     if (childModule) {

@@ -1,5 +1,5 @@
 import type { Children, Refkey } from "@alloy-js/core";
-import { Declaration as CoreDeclaration } from "@alloy-js/core";
+import { Declaration as CoreDeclaration, For } from "@alloy-js/core";
 
 import { createStaticSymbol } from "../symbols/factories.js";
 import { toRustVisibility, toVisibilityPrefix } from "./visibility.js";
@@ -11,7 +11,7 @@ export interface StaticDeclarationProps {
   pub_crate?: boolean;
   pub_super?: boolean;
   mutable?: boolean;
-  attributes?: Children;
+  attributes?: Children[];
   type: Children;
   children?: Children;
 }
@@ -29,9 +29,11 @@ export function StaticDeclaration(props: StaticDeclarationProps) {
 
   return (
     <>
-      {props.attributes ? (
+      {props.attributes && props.attributes.length > 0 ? (
         <>
-          {props.attributes}
+          <For each={props.attributes} line>
+            {(attr) => attr}
+          </For>
           <hbr />
         </>
       ) : null}

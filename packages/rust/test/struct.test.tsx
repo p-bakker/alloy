@@ -68,7 +68,7 @@ describe("StructDeclaration", () => {
           <SourceFile path="lib.rs">
             <StructDeclaration
               name="Foo"
-              attributes="#[repr(C)]"
+              attributes={["#[repr(C)]"]}
               derives={["Debug", "Clone"]}
             />
           </SourceFile>
@@ -200,7 +200,7 @@ describe("StructDeclaration", () => {
               name="Foo"
               unit={true}
               doc="Represents foo."
-              attributes="#[repr(C)]"
+              attributes={["#[repr(C)]"]}
               derives={["Debug", "Clone"]}
             />
           </SourceFile>
@@ -307,9 +307,9 @@ describe("Field", () => {
               <Field
                 name="name"
                 type="String"
-                attributes={
-                  <Attribute name="serde" args={'rename = "user_name"'} />
-                }
+                attributes={[
+                  <Attribute name="serde" args={'rename = "user_name"'} />,
+                ]}
               />
               <Field name="age" type="u32" />
             </StructDeclaration>
@@ -335,7 +335,7 @@ describe("Field", () => {
                 name="port"
                 type="u16"
                 doc="The port number."
-                attributes={<Attribute name="serde" args="default" />}
+                attributes={[<Attribute name="serde" args="default" />]}
               />
             </StructDeclaration>
           </SourceFile>

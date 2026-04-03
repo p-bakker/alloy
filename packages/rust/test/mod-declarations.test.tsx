@@ -85,13 +85,11 @@ describe("ModDeclarations", () => {
   });
 
   it("renders attributes on mod declarations from SourceFile", () => {
+    const testAttrs = [<Attribute name="cfg" args="test" />];
     const output = render(
       <Output>
         <CrateDirectory name="my_crate">
-          <SourceFile
-            path="tests.rs"
-            attributes={<Attribute name="cfg" args="test" />}
-          >
+          <SourceFile path="tests.rs" attributes={testAttrs}>
             {code`fn test_it() {}`}
           </SourceFile>
           <SourceFile path="lib.rs">{code`fn main() {}`}</SourceFile>
@@ -107,14 +105,11 @@ describe("ModDeclarations", () => {
   });
 
   it("renders attributes on mod declarations from ModuleDirectory", () => {
+    const testAttrs = [<Attribute name="cfg" args="test" />];
     expect(
       <Output>
         <CrateDirectory name="my_crate">
-          <ModuleDirectory
-            path="tests"
-            pub
-            attributes={<Attribute name="cfg" args="test" />}
-          />
+          <ModuleDirectory path="tests" pub attributes={testAttrs} />
           <SourceFile path="lib.rs">{code`fn main() {}`}</SourceFile>
         </CrateDirectory>
       </Output>,
@@ -128,11 +123,9 @@ describe("ModDeclarations", () => {
   it("renders attributes via addChildModule on scope", () => {
     const crateScope = new RustCrateScope("my_crate");
     const moduleScope = new RustModuleScope("mod.rs", crateScope);
-    moduleScope.addChildModule(
-      "tests",
-      undefined,
+    moduleScope.addChildModule("tests", undefined, [
       <Attribute name="cfg" args="test" />,
-    );
+    ]);
     moduleScope.addChildModule("utils", "pub");
 
     expect(

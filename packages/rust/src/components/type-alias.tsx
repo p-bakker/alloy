@@ -1,5 +1,5 @@
 import type { Children, Refkey } from "@alloy-js/core";
-import { Declaration as CoreDeclaration } from "@alloy-js/core";
+import { Declaration as CoreDeclaration, For } from "@alloy-js/core";
 
 import { createTypeAliasSymbol } from "../symbols/factories.js";
 import type { TypeParameterProp } from "./type-parameters.js";
@@ -12,7 +12,7 @@ export interface TypeAliasProps {
   pub?: boolean;
   pub_crate?: boolean;
   pub_super?: boolean;
-  attributes?: Children;
+  attributes?: Children[];
   typeParameters?: TypeParameterProp[];
   children?: Children;
 }
@@ -28,9 +28,11 @@ export function TypeAlias(props: TypeAliasProps) {
 
   return (
     <>
-      {props.attributes ? (
+      {props.attributes && props.attributes.length > 0 ? (
         <>
-          {props.attributes}
+          <For each={props.attributes} line>
+            {(attr) => attr}
+          </For>
           <hbr />
         </>
       ) : null}
