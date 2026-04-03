@@ -43,22 +43,25 @@ Each symbol has:
 
 ## Usage
 
-```ts
+```tsx
 import { std, core, alloc } from "@alloy-js/rust";
 
-// Normal crate — use std
-<Reference refkey={std.fmt.Display} />             // → use std::fmt::Display;
-<Reference refkey={std.collections.HashMap} />     // → use std::collections::HashMap;
+// Use directly as JSX children or in props — no <Reference> wrapper needed
+<Field type={std.fmt.Display} />                   // → use std::fmt::Display;
+<Field type={std.collections.HashMap} />           // → use std::collections::HashMap;
+
+// Composing generic types
+<Field type={<>{"Option<"}{std.time.Duration}{">"}</>} />
 
 // Access member refkeys
 std.collections.HashMap.insert   // Refkey for the insert method
 std.collections.HashMap.new      // Refkey for the new associated function
 
 // #![no_std] — use core directly
-<Reference refkey={core.fmt.Display} />            // → use core::fmt::Display;
+<Field type={core.fmt.Display} />                  // → use core::fmt::Display;
 
 // #![no_std] + alloc
-<Reference refkey={alloc.vec.Vec} />               // → use alloc::vec::Vec;
+<Field type={alloc.vec.Vec} />                     // → use alloc::vec::Vec;
 ```
 
 ### Edition-aware preludes
