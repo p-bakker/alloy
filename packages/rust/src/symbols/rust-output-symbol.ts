@@ -188,4 +188,8 @@ export class RustOutputSymbol extends OutputSymbol {
   get members() {
     return this.memberSpaceFor("members")!;
   }
+
+  get isInstanceMemberSymbol(): boolean {
+    return this.symbolKind === "field";
+  }
 }
