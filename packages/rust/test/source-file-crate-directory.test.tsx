@@ -89,7 +89,7 @@ describe("SourceFile", () => {
 
       moduleScopeName = parentScope?.name ?? "";
       moduleScopeValues = [...(parentScope?.childModules.values() ?? [])]
-        .map((entry) => `${entry.name}:${entry.visibility ?? "none"}`)
+        .map((entry) => `${entry.name}:${entry.pub ?? "none"}`)
         .sort()
         .join("|");
 
@@ -100,11 +100,11 @@ describe("SourceFile", () => {
       <Output>
         <CrateDirectory name="my_crate">
           <ModuleDirectory path="net">
-            <SourceFile path="client.rs" pub_super={true}>
+            <SourceFile path="client.rs" pub="super">
               <ModuleVisibilityCapture />
               {code`fn client() {}`}
             </SourceFile>
-            <SourceFile path="server.rs" pub_crate={true} pub_super={true}>
+            <SourceFile path="server.rs" pub="crate">
               <ModuleVisibilityCapture />
               {code`fn server() {}`}
             </SourceFile>
@@ -114,7 +114,7 @@ describe("SourceFile", () => {
     );
 
     expect(moduleScopeName).toBe("net");
-    expect(moduleScopeValues).toBe("client:pub(super)|server:pub(crate)");
+    expect(moduleScopeValues).toBe("client:super|server:crate");
   });
 });
 

@@ -59,11 +59,11 @@ describe("TypeAlias", () => {
               String
             </TypeAlias>
             <hbr />
-            <TypeAlias name="CrateAlias" pub_crate={true}>
+            <TypeAlias name="CrateAlias" pub="crate">
               usize
             </TypeAlias>
             <hbr />
-            <TypeAlias name="ParentAlias" pub_super={true}>
+            <TypeAlias name="ParentAlias" pub="super">
               u32
             </TypeAlias>
           </SourceFile>
@@ -103,7 +103,7 @@ describe("TypeAlias", () => {
       <Output>
         <CrateDirectory name="my_crate">
           <SourceFile path="lib.rs">
-            <TypeAlias name="ResponseValue" refkey={alias} pub_crate={true}>
+            <TypeAlias name="ResponseValue" refkey={alias} pub="crate">
               String
             </TypeAlias>
             <hbr />
@@ -120,17 +120,12 @@ describe("TypeAlias", () => {
     `);
   });
 
-  it("applies visibility precedence for type aliases", () => {
+  it("applies pub visibility for type aliases", () => {
     expect(
       <Output>
         <CrateDirectory name="my_crate">
           <SourceFile path="lib.rs">
-            <TypeAlias
-              name="ResponseValue"
-              pub={true}
-              pub_crate={true}
-              pub_super={true}
-            >
+            <TypeAlias name="ResponseValue" pub={true}>
               String
             </TypeAlias>
             <hbr />
@@ -190,11 +185,11 @@ describe("ConstDeclaration", () => {
               100
             </ConstDeclaration>
             <hbr />
-            <ConstDeclaration name="WORKER_ID" type="u64" pub_crate={true}>
+            <ConstDeclaration name="WORKER_ID" type="u64" pub="crate">
               1
             </ConstDeclaration>
             <hbr />
-            <ConstDeclaration name="PARENT_ID" type="u64" pub_super={true}>
+            <ConstDeclaration name="PARENT_ID" type="u64" pub="super">
               2
             </ConstDeclaration>
           </SourceFile>
@@ -250,18 +245,12 @@ describe("ConstDeclaration", () => {
     `);
   });
 
-  it("applies visibility precedence for const declarations", () => {
+  it("applies pub visibility for const declarations", () => {
     expect(
       <Output>
         <CrateDirectory name="my_crate">
           <SourceFile path="lib.rs">
-            <ConstDeclaration
-              name="MAX_ITEMS"
-              type="usize"
-              pub={true}
-              pub_crate={true}
-              pub_super={true}
-            >
+            <ConstDeclaration name="MAX_ITEMS" type="usize" pub={true}>
               16
             </ConstDeclaration>
             <hbr />

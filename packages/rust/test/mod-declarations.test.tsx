@@ -52,7 +52,7 @@ describe("ModDeclarations", () => {
   it("does not render declarations in non-root source files", () => {
     const crateScope = new RustCrateScope("my_crate");
     const parentModuleScope = new RustModuleScope("net", crateScope);
-    parentModuleScope.addChildModule("alpha", "pub");
+    parentModuleScope.addChildModule({ name: "alpha", pub: true });
 
     expect(
       <Output>
@@ -66,8 +66,8 @@ describe("ModDeclarations", () => {
   it("renders declarations before module content", () => {
     const crateScope = new RustCrateScope("my_crate");
     const moduleScope = new RustModuleScope("mod.rs", crateScope);
-    moduleScope.addChildModule("zebra", undefined);
-    moduleScope.addChildModule("alpha", "pub");
+    moduleScope.addChildModule({ name: "zebra" });
+    moduleScope.addChildModule({ name: "alpha", pub: true });
 
     expect(
       <Output>
@@ -123,10 +123,11 @@ describe("ModDeclarations", () => {
   it("renders attributes via addChildModule on scope", () => {
     const crateScope = new RustCrateScope("my_crate");
     const moduleScope = new RustModuleScope("mod.rs", crateScope);
-    moduleScope.addChildModule("tests", undefined, [
-      <Attribute name="cfg" args="test" />,
-    ]);
-    moduleScope.addChildModule("utils", "pub");
+    moduleScope.addChildModule({
+      name: "tests",
+      attributes: [<Attribute name="cfg" args="test" />],
+    });
+    moduleScope.addChildModule({ name: "utils", pub: true });
 
     expect(
       <Output>

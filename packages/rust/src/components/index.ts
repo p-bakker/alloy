@@ -39,3 +39,4 @@ export * from "./unsafe-block.js";
 export * from "./use-statement.js";
 export * from "./value.js";
 export * from "./while-expression.js";
+export * from "./visibility.js";

@@ -4,14 +4,15 @@ import { Declaration as CoreDeclaration, For } from "@alloy-js/core";
 import { createTypeAliasSymbol } from "../symbols/factories.js";
 import type { TypeParameterProp } from "./type-parameters.js";
 import { TypeParameters } from "./type-parameters.js";
-import { toRustVisibility, toVisibilityPrefix } from "./visibility.js";
+import {
+  type RustVisibilityProps,
+  toRustVisibility,
+  VisibilityPrefix,
+} from "./visibility.js";
 
-export interface TypeAliasProps {
+export interface TypeAliasProps extends RustVisibilityProps {
   name: string | Namekey;
   refkey?: Refkey;
-  pub?: boolean;
-  pub_crate?: boolean;
-  pub_super?: boolean;
   attributes?: Children[];
   typeParameters?: TypeParameterProp[];
   children?: Children;
@@ -22,9 +23,7 @@ export function TypeAlias(props: TypeAliasProps) {
     refkeys: props.refkey ? [props.refkey] : [],
   });
 
-  typeAliasSymbol.visibility = toRustVisibility(props);
-
-  const visibilityPrefix = toVisibilityPrefix(props);
+  typeAliasSymbol.visibility = toRustVisibility(props.pub);
 
   return (
     <>
@@ -37,7 +36,7 @@ export function TypeAlias(props: TypeAliasProps) {
         </>
       ) : null}
       <CoreDeclaration symbol={typeAliasSymbol}>
-        {visibilityPrefix}
+        <VisibilityPrefix pub={props.pub} />
         {"type "}
         {typeAliasSymbol.name}
         <TypeParameters params={props.typeParameters} />

@@ -1,13 +1,14 @@
 import { code, memo } from "@alloy-js/core";
 
 import { useRustModuleScope } from "../scopes/contexts.js";
+import { type RustVisibilityProps, VisibilityPrefix } from "./visibility.js";
 
-export interface UseStatementProps {
+export interface UseStatementProps extends RustVisibilityProps {
   path: string;
   symbol: string;
 }
 
-interface UseStatementEntry {
+interface UseStatementEntry extends RustVisibilityProps {
   path: string;
   symbols: string[];
 }
@@ -19,6 +20,7 @@ interface UseStatementGroupProps {
 export function UseStatement(props: UseStatementProps) {
   return (
     <>
+      <VisibilityPrefix pub={props.pub} />
       {code`use `}
       {props.path}
       {code`::`}
@@ -34,11 +36,18 @@ function UseStatementPath(props: UseStatementEntry) {
   );
 
   if (sortedSymbols.length === 1) {
-    return <UseStatement path={props.path} symbol={sortedSymbols[0]} />;
+    return (
+      <UseStatement
+        pub={props.pub}
+        path={props.path}
+        symbol={sortedSymbols[0]}
+      />
+    );
   }
 
   return (
     <>
+      <VisibilityPrefix pub={props.pub} />
       {code`use `}
       {props.path}
       {code`::{`}
@@ -53,7 +62,11 @@ function UseStatementGroup(props: UseStatementGroupProps) {
     <>
       {props.entries.map((entry, index) => (
         <>
-          <UseStatementPath path={entry.path} symbols={entry.symbols} />
+          <UseStatementPath
+            pub={entry.pub}
+            path={entry.path}
+            symbols={entry.symbols}
+          />
           {index < props.entries.length - 1 ? <hbr /> : null}
         </>
       ))}

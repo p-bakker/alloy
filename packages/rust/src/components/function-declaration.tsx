@@ -22,14 +22,15 @@ import { DocComment } from "./doc-comment.js";
 import { Parameters } from "./parameters.js";
 import type { TypeParameterProp } from "./type-parameters.js";
 import { TypeParameters, WhereClause } from "./type-parameters.js";
-import { toRustVisibility, toVisibilityPrefix } from "./visibility.js";
+import {
+  type RustVisibilityProps,
+  toRustVisibility,
+  VisibilityPrefix,
+} from "./visibility.js";
 
-export interface FunctionDeclarationProps {
+export interface FunctionDeclarationProps extends RustVisibilityProps {
   name: string | Namekey;
   refkey?: Refkey;
-  pub?: boolean;
-  pub_crate?: boolean;
-  pub_super?: boolean;
   async?: boolean;
   unsafe?: boolean;
   const?: boolean;
@@ -66,14 +67,12 @@ export function FunctionDeclaration(props: FunctionDeclarationProps) {
     },
   );
 
-  functionSymbol.visibility = toRustVisibility(props);
+  functionSymbol.visibility = toRustVisibility(props.pub);
   functionSymbol.isAsync = props.async ?? false;
   functionSymbol.isUnsafe = props.unsafe ?? false;
   functionSymbol.isConst = props.const ?? false;
   functionSymbol.receiverType =
     effectiveReceiver === "none" ? undefined : effectiveReceiver;
-
-  const visibilityPrefix = toVisibilityPrefix(props);
 
   return (
     <>
@@ -91,7 +90,7 @@ export function FunctionDeclaration(props: FunctionDeclarationProps) {
         </>
       ) : null}
       <CoreDeclaration symbol={functionSymbol}>
-        {visibilityPrefix}
+        <VisibilityPrefix pub={props.pub} />
         {props.async ? "async " : ""}
         {props.unsafe ? "unsafe " : ""}
         {props.const ? "const " : ""}

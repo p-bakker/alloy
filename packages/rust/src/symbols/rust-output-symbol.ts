@@ -9,7 +9,12 @@ import {
   watch,
 } from "@alloy-js/core";
 
-export type RustVisibility = "pub" | "pub(crate)" | "pub(super)" | undefined;
+export type RustVisibility =
+  | "pub"
+  | "pub(crate)"
+  | "pub(super)"
+  | `pub(in ${string})`
+  | undefined;
 
 export type RustSymbolKind =
   | "symbol"

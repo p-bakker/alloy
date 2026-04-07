@@ -16,14 +16,15 @@ import {
 import { DocComment } from "./doc-comment.js";
 import type { TypeParameterProp } from "./type-parameters.js";
 import { TypeParameters, WhereClause } from "./type-parameters.js";
-import { toRustVisibility, toVisibilityPrefix } from "./visibility.js";
+import {
+  type RustVisibilityProps,
+  toRustVisibility,
+  VisibilityPrefix,
+} from "./visibility.js";
 
-export interface StructDeclarationProps {
+export interface StructDeclarationProps extends RustVisibilityProps {
   name: string | Namekey;
   refkey?: Refkey;
-  pub?: boolean;
-  pub_crate?: boolean;
-  pub_super?: boolean;
   derives?: (string | Refkey)[];
   attributes?: Children[];
   doc?: string;
@@ -35,13 +36,10 @@ export interface StructDeclarationProps {
   children?: Children;
 }
 
-export interface FieldProps {
+export interface FieldProps extends RustVisibilityProps {
   name: string | Namekey;
   type: Children;
   refkey?: Refkey;
-  pub?: boolean;
-  pub_crate?: boolean;
-  pub_super?: boolean;
   attributes?: Children[];
   doc?: string;
 }
@@ -68,8 +66,7 @@ export function StructDeclaration(props: StructDeclarationProps) {
     binder: parentScope.binder,
   });
 
-  structSymbol.visibility = toRustVisibility(props);
-  const visibilityPrefix = toVisibilityPrefix(props);
+  structSymbol.visibility = toRustVisibility(props.pub);
   const members = props.children
     ? (Array.isArray(props.children)
         ? props.children
@@ -111,7 +108,7 @@ export function StructDeclaration(props: StructDeclarationProps) {
             typeParameters={props.typeParameters}
           />
         </Scope>
-        {visibilityPrefix}
+        <VisibilityPrefix pub={props.pub} />
         {"struct "}
         {structSymbol.name}
         <TypeParameters params={props.typeParameters} />
@@ -163,8 +160,7 @@ export function Field(props: FieldProps) {
   const fieldSymbol = createFieldSymbol(props.name, {
     refkeys: props.refkey ? [props.refkey] : [],
   });
-  fieldSymbol.visibility = toRustVisibility(props);
-  const visibilityPrefix = toVisibilityPrefix(props);
+  fieldSymbol.visibility = toRustVisibility(props.pub);
 
   return (
     <CoreDeclaration symbol={fieldSymbol}>
@@ -181,7 +177,7 @@ export function Field(props: FieldProps) {
           <hbr />
         </>
       ) : null}
-      {visibilityPrefix}
+      <VisibilityPrefix pub={props.pub} />
       {fieldSymbol.name}
       {": "}
       {props.type}
