@@ -1,4 +1,5 @@
 import { Children, For, Indent } from "@alloy-js/core";
+import { ensureLabelTick } from "./label.js";
 
 export interface LoopExpressionProps {
   label?: string;
@@ -60,7 +61,7 @@ export function LoopExpression(props: LoopExpressionProps) {
     <>
       {props.label ?
         <>
-          {props.label}
+          {ensureLabelTick(props.label)}
           {": "}
         </>
       : null}
