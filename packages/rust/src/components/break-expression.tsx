@@ -1,5 +1,7 @@
 import type { Children } from "@alloy-js/core";
 
+import { ensureLabelTick } from "./label.js";
+
 export interface BreakExpressionProps {
   label?: string;
   children?: Children;
@@ -9,7 +11,7 @@ export function BreakExpression(props: BreakExpressionProps) {
   return (
     <>
       {"break"}
-      {props.label ? <> {props.label}</> : null}
+      {props.label ? <> {ensureLabelTick(props.label)}</> : null}
       {typeof props.children !== "undefined" ? <> {props.children}</> : null}
     </>
   );

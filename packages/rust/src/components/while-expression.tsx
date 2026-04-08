@@ -1,6 +1,8 @@
 import type { Children } from "@alloy-js/core";
 import { For, Indent } from "@alloy-js/core";
 
+import { ensureLabelTick } from "./label.js";
+
 export interface WhileExpressionProps {
   condition: Children;
   label?: string;
@@ -62,7 +64,7 @@ export function WhileExpression(props: WhileExpressionProps) {
     <>
       {props.label ? (
         <>
-          {props.label}
+          {ensureLabelTick(props.label)}
           {": "}
         </>
       ) : null}

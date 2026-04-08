@@ -1,3 +1,5 @@
+import { ensureLabelTick } from "./label.js";
+
 export interface ContinueExpressionProps {
   label?: string;
 }
@@ -6,7 +8,7 @@ export function ContinueExpression(props: ContinueExpressionProps) {
   return (
     <>
       {"continue"}
-      {props.label ? <> {props.label}</> : null}
+      {props.label ? <> {ensureLabelTick(props.label)}</> : null}
     </>
   );
 }

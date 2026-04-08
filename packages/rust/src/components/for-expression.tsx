@@ -1,6 +1,8 @@
 import type { Children } from "@alloy-js/core";
 import { For, Indent } from "@alloy-js/core";
 
+import { ensureLabelTick } from "./label.js";
+
 export interface ForExpressionProps {
   pattern: Children;
   iterator: Children;
@@ -63,7 +65,7 @@ export function ForExpression(props: ForExpressionProps) {
     <>
       {props.label ? (
         <>
-          {props.label}
+          {ensureLabelTick(props.label)}
           {": "}
         </>
       ) : null}
