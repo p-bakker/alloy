@@ -1,12 +1,12 @@
 import {
   Children,
   Declaration as CoreDeclaration,
+  createScope,
   For,
   Indent,
   Namekey,
   Refkey,
   Scope,
-  createScope,
 } from "@alloy-js/core";
 import { RustImplScope, useRustScope } from "../scopes/index.js";
 import {
@@ -29,7 +29,7 @@ import {
 export interface StructDeclarationProps extends RustVisibilityProps {
   name: string | Namekey;
   refkey?: Refkey;
-  derives?: (string | Refkey)[];
+  derives?: (string | Refkey)[] | Refkey;
   attributes?: Children[];
   doc?: string;
   typeParameters?: TypeParameterProp[];
@@ -82,6 +82,13 @@ export function StructDeclaration(props: StructDeclarationProps) {
     : [];
   const tupleTypes = props.types ?? [];
 
+  const derives =
+    props.derives ?
+      Array.isArray(props.derives) ?
+        props.derives
+      : [props.derives]
+    : [];
+
   return (
     <>
       {props.doc ?
@@ -97,10 +104,10 @@ export function StructDeclaration(props: StructDeclarationProps) {
           <hbr />
         </>
       : null}
-      {props.derives && props.derives.length > 0 ?
+      {derives && derives.length > 0 ?
         <>
           {"#[derive("}
-          <For each={props.derives} joiner={", "}>
+          <For each={derives} joiner={", "}>
             {(derive) => derive}
           </For>
           {")]"}
