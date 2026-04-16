@@ -4,7 +4,6 @@ import {
   InnerDocComment,
   SourceFile,
   createRustNamePolicy,
-  std,
 } from "@alloy-js/rust";
 import { ConfigFile } from "./components/config-file.js";
 import { ErrorModule } from "./components/error-module.js";
@@ -12,7 +11,7 @@ import { StoreModule } from "./components/store-module.js";
 import { TraitsModule } from "./components/traits-module.js";
 
 const output = render(
-  <Output namePolicy={createRustNamePolicy()} externals={[std]}>
+  <Output namePolicy={createRustNamePolicy()}>
     <CrateDirectory
       name="kv_store"
       version="0.1.0"

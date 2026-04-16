@@ -4,7 +4,6 @@ import {
   InnerDocComment,
   SourceFile,
   createRustNamePolicy,
-  std,
 } from "@alloy-js/rust";
 import { execSync } from "child_process";
 import { existsSync, rmSync } from "fs";
@@ -88,7 +87,7 @@ describe.skipIf(!hasCargo)("rust smoke test", () => {
 
   beforeAll(async () => {
     const output = render(
-      <Output namePolicy={createRustNamePolicy()} externals={[std]}>
+      <Output namePolicy={createRustNamePolicy()}>
         <CrateDirectory
           name="kv_store"
           version="0.1.0"
