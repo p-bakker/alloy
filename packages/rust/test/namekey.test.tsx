@@ -10,7 +10,6 @@ import {
   Field,
   FunctionDeclaration,
   ImplBlock,
-  Reference,
   SourceFile,
   StructDeclaration,
   TraitDeclaration,
@@ -48,7 +47,7 @@ describe("namekey support", () => {
               <Field name="name" type="String" pub />
             </StructDeclaration>
             <hbr />
-            type Alias = <Reference refkey={personKey} />;
+            type Alias = {personKey};
           </SourceFile>
         </CrateDirectory>
       </Output>,
@@ -90,9 +89,7 @@ describe("namekey support", () => {
           <Field name="name" type="String" pub />
         </StructDeclaration>
       </SourceFile>,
-      <SourceFile path="lib.rs">
-        type Alias = {personKey};
-      </SourceFile>,
+      <SourceFile path="lib.rs">type Alias = {personKey};</SourceFile>,
     ]);
     const libFile = findFile(output, "lib.rs");
     expect(libFile.contents).toContain("use crate::models::Person;");
@@ -130,11 +127,19 @@ describe("namekey support", () => {
             <StructDeclaration name={personKey} pub />
             <hbr />
             <TraitDeclaration name={greetableKey} pub>
-              <FunctionDeclaration name="greet" receiver="&self" returnType="String" />
+              <FunctionDeclaration
+                name="greet"
+                receiver="&self"
+                returnType="String"
+              />
             </TraitDeclaration>
             <hbr />
             <ImplBlock type={personKey} trait={greetableKey}>
-              <FunctionDeclaration name="greet" receiver="&self" returnType="String">
+              <FunctionDeclaration
+                name="greet"
+                receiver="&self"
+                returnType="String"
+              >
                 String::from("hello")
               </FunctionDeclaration>
             </ImplBlock>
@@ -160,7 +165,12 @@ describe("namekey support", () => {
       <Output>
         <CrateDirectory name="my_crate">
           <SourceFile path="lib.rs">
-            <FunctionDeclaration name={fnKey} pub receiver="none" returnType="bool">
+            <FunctionDeclaration
+              name={fnKey}
+              pub
+              receiver="none"
+              returnType="bool"
+            >
               true
             </FunctionDeclaration>
           </SourceFile>
@@ -179,7 +189,9 @@ describe("namekey support", () => {
       <Output>
         <CrateDirectory name="my_crate">
           <SourceFile path="lib.rs">
-            <ConstDeclaration name={maxKey} pub type="u32">5</ConstDeclaration>
+            <ConstDeclaration name={maxKey} pub type="u32">
+              5
+            </ConstDeclaration>
           </SourceFile>
         </CrateDirectory>
       </Output>,
@@ -192,7 +204,9 @@ describe("namekey support", () => {
       <Output>
         <CrateDirectory name="my_crate">
           <SourceFile path="lib.rs">
-            <TypeAlias name={resultKey} pub>Result&lt;String, String&gt;</TypeAlias>
+            <TypeAlias name={resultKey} pub>
+              Result&lt;String, String&gt;
+            </TypeAlias>
           </SourceFile>
         </CrateDirectory>
       </Output>,
@@ -227,7 +241,7 @@ describe("namekey support", () => {
           <SourceFile path="lib.rs">
             <StructDeclaration name={nk} refkey={explicitKey} pub />
             <hbr />
-            type A = <Reference refkey={explicitKey} />;
+            type A = {explicitKey};
             <hbr />
             type B = {nk};
           </SourceFile>

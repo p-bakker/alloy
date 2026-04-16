@@ -5,7 +5,6 @@ import { describe, expect, it } from "vitest";
 import {
   Attribute,
   CrateDirectory,
-  Reference,
   SourceFile,
   TraitDeclaration,
 } from "../src/components/index.js";
@@ -188,9 +187,7 @@ describe("TraitDeclaration", () => {
           <SourceFile path="lib.rs">
             <TraitDeclaration name="Serialize" refkey={traitRef} />
             <hbr />
-            {"type Alias = "}
-            <Reference refkey={traitRef} />
-            {";"}
+            type Alias = {traitRef};
             <hbr />
             <TraitKindProbe name="Serialize" />
           </SourceFile>
@@ -208,10 +205,7 @@ describe("TraitDeclaration", () => {
       <Output>
         <CrateDirectory name="my_crate">
           <SourceFile path="lib.rs">
-            <TraitDeclaration
-              name="Serialize"
-              pub={true}
-            />
+            <TraitDeclaration name="Serialize" pub={true} />
             <hbr />
             <TraitVisibilityProbe name="Serialize" />
           </SourceFile>

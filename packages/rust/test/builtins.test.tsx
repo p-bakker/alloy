@@ -7,7 +7,6 @@ import {
   PRELUDE_TYPES_2024,
 } from "../src/builtins/prelude.js";
 import { CrateDirectory } from "../src/components/crate-directory.js";
-import { Reference } from "../src/components/reference.js";
 import { SourceFile } from "../src/components/source-file.js";
 import { useCrateContext } from "../src/context/crate-context.js";
 import { RustCrateScope } from "../src/scopes/index.js";
@@ -60,7 +59,7 @@ describe("std builtins", () => {
                 consumerCrateScope = capturedCrateScope;
               }}
             >
-              type Map = <Reference refkey={std.collections.HashMap} />;
+              type Map = {std.collections.HashMap};
             </ScopeCapture>
           </SourceFile>
         </CrateDirectory>
@@ -80,9 +79,7 @@ describe("std builtins", () => {
     const output = render(
       <Output>
         <CrateDirectory name="my_crate">
-          <SourceFile path="lib">
-            type Fmt = <Reference refkey={std.fmt.Display} />;
-          </SourceFile>
+          <SourceFile path="lib">type Fmt = {std.fmt.Display};</SourceFile>
         </CrateDirectory>
       </Output>,
     );

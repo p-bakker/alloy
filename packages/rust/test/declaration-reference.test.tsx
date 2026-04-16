@@ -4,7 +4,6 @@ import { d } from "@alloy-js/core/testing";
 import { describe, expect, it } from "vitest";
 import { CrateDirectory } from "../src/components/crate-directory.js";
 import { Declaration } from "../src/components/declaration.js";
-import { Reference } from "../src/components/reference.js";
 import { SourceFile } from "../src/components/source-file.js";
 
 describe("Declaration", () => {
@@ -76,7 +75,7 @@ describe("Reference", () => {
               struct UserType;
             </Declaration>
             <hbr />
-            type Alias = <Reference refkey={userType} />;
+            type Alias = {userType};
           </SourceFile>
         </CrateDirectory>
       </Output>,

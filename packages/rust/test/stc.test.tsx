@@ -15,10 +15,9 @@ import {
   FunctionCallExpression,
   FunctionDeclaration,
   ImplBlock,
-  ModuleDirectory,
   InnerDocComment,
+  ModuleDirectory,
   Parameters,
-  Reference,
   SourceFile,
   StructDeclaration,
   StructExpression,
@@ -202,12 +201,12 @@ describe("STC wrappers", () => {
   });
 
   it("InnerDocComment wrapper supports .children and matches JSX output", () => {
-    expect(
-      inFile(<InnerDocComment>Hello module</InnerDocComment>),
-    ).toRenderTo("//! Hello module\n\n");
-    expect(
-      inFile(Stc.InnerDocComment().children(["Hello module"])),
-    ).toRenderTo("//! Hello module\n\n");
+    expect(inFile(<InnerDocComment>Hello module</InnerDocComment>)).toRenderTo(
+      "//! Hello module\n\n",
+    );
+    expect(inFile(Stc.InnerDocComment().children(["Hello module"]))).toRenderTo(
+      "//! Hello module\n\n",
+    );
   });
 
   it("CrateDirectory + ModuleDirectory + SourceFile wrappers match JSX output", () => {
@@ -286,9 +285,7 @@ describe("STC wrappers", () => {
         <>
           <StructDeclaration name="User" refkey={userRef} />
           <hbr />
-          <TypeAlias name="UserAlias">
-            <Reference refkey={userRef} />
-          </TypeAlias>
+          <TypeAlias name="UserAlias">{userRef}</TypeAlias>
         </>,
       ),
     ).toRenderTo(d`

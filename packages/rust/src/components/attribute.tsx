@@ -1,5 +1,4 @@
 import { Children, Refkey } from "@alloy-js/core";
-import { Reference } from "./reference.js";
 
 export interface AttributeProps {
   name: string | Refkey;
@@ -29,9 +28,7 @@ function AttributeBase(props: AttributeBaseProps) {
   return (
     <>
       {props.marker}
-      {typeof props.name === "string" ?
-        props.name
-      : <Reference refkey={props.name} />}
+      {props.name}
       {props.args !== undefined ?
         <>
           {"("}

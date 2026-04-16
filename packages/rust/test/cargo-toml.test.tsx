@@ -4,7 +4,6 @@ import { d } from "@alloy-js/core/testing";
 import { describe, expect, it } from "vitest";
 import { CargoTomlFile } from "../src/components/cargo-toml-file.js";
 import { CrateDirectory } from "../src/components/crate-directory.js";
-import { Reference } from "../src/components/reference.js";
 import { SourceFile } from "../src/components/source-file.js";
 import { createCrate } from "../src/create-crate.js";
 import { findFile } from "./utils.js";
@@ -55,9 +54,7 @@ describe("CargoTomlFile", () => {
             serde: { version: "1.0.200", features: ["derive"] },
           }}
         >
-          <SourceFile path="lib.rs">
-            type Alias = <Reference refkey={serde.Serialize} />;
-          </SourceFile>
+          <SourceFile path="lib.rs">type Alias = {serde.Serialize};</SourceFile>
         </CrateDirectory>
       </Output>,
     );
@@ -96,9 +93,7 @@ describe("CargoTomlFile", () => {
           edition="2024"
           includeCargoToml
         >
-          <SourceFile path="lib.rs">
-            type Alias = <Reference refkey={serde.Serialize} />;
-          </SourceFile>
+          <SourceFile path="lib.rs">type Alias = {serde.Serialize};</SourceFile>
         </CrateDirectory>
       </Output>,
     );
@@ -127,9 +122,7 @@ describe("CargoTomlFile", () => {
           edition="2024"
           includeCargoToml
         >
-          <SourceFile path="lib.rs">
-            type Alias = <Reference refkey={serde.Serialize} />;
-          </SourceFile>
+          <SourceFile path="lib.rs">type Alias = {serde.Serialize};</SourceFile>
         </CrateDirectory>
       </Output>,
     );

@@ -10,7 +10,6 @@ import {
   Field,
   FunctionDeclaration,
   ImplBlock,
-  Reference,
   SourceFile,
   StructDeclaration,
 } from "../src/components/index.js";
@@ -105,9 +104,9 @@ describe("Rust edge cases", () => {
             </ModuleDirectory>
             <ModuleDirectory path="routes">
               <SourceFile path="mod.rs">
-                type FirstAlias = <Reference refkey={userRef} />;
+                type FirstAlias = {userRef};
                 <hbr />
-                type SecondAlias = <Reference refkey={userRef} />;
+                type SecondAlias = {userRef};
               </SourceFile>
             </ModuleDirectory>
           </CrateDirectory>
@@ -148,9 +147,9 @@ describe("Rust edge cases", () => {
             </ModuleDirectory>
             <ModuleDirectory path="routes">
               <SourceFile path="mod.rs">
-                type UserAlias = <Reference refkey={userRef} />;
+                type UserAlias = {userRef};
                 <hbr />
-                type AccountAlias = <Reference refkey={accountRef} />;
+                type AccountAlias = {accountRef};
               </SourceFile>
             </ModuleDirectory>
           </CrateDirectory>
@@ -198,11 +197,11 @@ describe("Rust edge cases", () => {
               </Declaration>
             </SourceFile>
             <SourceFile path="lib.rs">
-              type Maybe = <Reference refkey={optionRef} />;
+              type Maybe = {optionRef};
               <hbr />
-              type Items = <Reference refkey={vecRef} />;
+              type Items = {vecRef};
               <hbr />
-              type Name = <Reference refkey={stringRef} />;
+              type Name = {stringRef};
             </SourceFile>
           </CrateDirectory>
         </Output>,
@@ -234,9 +233,7 @@ describe("Rust edge cases", () => {
                   struct PrivateModel;
                 </Declaration>
               </SourceFile>
-              <SourceFile path="routes">
-                type Alias = <Reference refkey={privateType} />;
-              </SourceFile>
+              <SourceFile path="routes">type Alias = {privateType};</SourceFile>
             </CrateDirectory>
           </Output>,
         ),

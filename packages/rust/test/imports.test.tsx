@@ -5,7 +5,6 @@ import { describe, expect, it } from "vitest";
 import { CrateDirectory } from "../src/components/crate-directory.js";
 import { Declaration } from "../src/components/declaration.js";
 import { ModuleDirectory } from "../src/components/module-directory.js";
-import { Reference } from "../src/components/reference.js";
 import { SourceFile } from "../src/components/source-file.js";
 import { findFile } from "./utils.js";
 
@@ -21,7 +20,7 @@ describe("Rust imports integration", () => {
               struct User;
             </Declaration>
             <hbr />
-            type UserAlias = <Reference refkey={userRef} />;
+            type UserAlias = {userRef};
           </SourceFile>
         </CrateDirectory>
       </Output>,
@@ -49,9 +48,7 @@ describe("Rust imports integration", () => {
             </SourceFile>
           </ModuleDirectory>
           <ModuleDirectory path="routes">
-            <SourceFile path="mod.rs">
-              type UserAlias = <Reference refkey={userRef} />;
-            </SourceFile>
+            <SourceFile path="mod.rs">type UserAlias = {userRef};</SourceFile>
           </ModuleDirectory>
         </CrateDirectory>
       </Output>,
@@ -90,9 +87,9 @@ describe("Rust imports integration", () => {
           </ModuleDirectory>
           <ModuleDirectory path="routes">
             <SourceFile path="mod.rs">
-              type UserAlias = <Reference refkey={userRef} />;
+              type UserAlias = {userRef};
               <hbr />
-              type AccountAlias = <Reference refkey={accountRef} />;
+              type AccountAlias = {accountRef};
             </SourceFile>
           </ModuleDirectory>
         </CrateDirectory>
@@ -148,11 +145,11 @@ describe("Rust imports integration", () => {
           </ModuleDirectory>
           <ModuleDirectory path="routes">
             <SourceFile path="mod.rs">
-              type MapAlias = <Reference refkey={mapRef} />;
+              type MapAlias = {mapRef};
               <hbr />
-              type DeserializeAlias = <Reference refkey={deserializeRef} />;
+              type DeserializeAlias = {deserializeRef};
               <hbr />
-              type UserAlias = <Reference refkey={userRef} />;
+              type UserAlias = {userRef};
             </SourceFile>
           </ModuleDirectory>
         </CrateDirectory>
@@ -195,11 +192,11 @@ describe("Rust imports integration", () => {
             </Declaration>
           </SourceFile>
           <SourceFile path="lib.rs">
-            type OptionAlias = <Reference refkey={optionRef} />;
+            type OptionAlias = {optionRef};
             <hbr />
-            type ResultAlias = <Reference refkey={resultRef} />;
+            type ResultAlias = {resultRef};
             <hbr />
-            type VecAlias = <Reference refkey={vecRef} />;
+            type VecAlias = {vecRef};
           </SourceFile>
         </CrateDirectory>
       </Output>,
