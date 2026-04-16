@@ -2,9 +2,14 @@ import {
   Scope,
   SourceDirectory,
   createScope,
+  getSymbolCreator,
+  useBinder,
   type Children,
 } from "@alloy-js/core";
 
+import { alloc } from "../builtins/alloc/index.js";
+import { core } from "../builtins/core/index.js";
+import { std } from "../builtins/std/index.js";
 import type { CrateContextValue } from "../context/crate-context.js";
 import { CrateContext } from "../context/crate-context.js";
 import {
@@ -18,12 +23,20 @@ export interface CrateDirectoryProps {
   version?: string;
   edition?: string;
   crateType?: "lib" | "bin";
+  noStd?: boolean;
   dependencies?: Record<string, CrateDependency>;
   includeCargoToml?: boolean;
   children?: Children;
 }
 
 export function CrateDirectory(props: CrateDirectoryProps) {
+  const binder = useBinder()!;
+  if (!props.noStd) {
+    getSymbolCreator(std)(binder);
+  }
+  getSymbolCreator(alloc)(binder);
+  getSymbolCreator(core)(binder);
+
   const scope = createScope(RustCrateScope, props.name, props.version);
   const context: CrateContextValue = {
     scope,

@@ -53,7 +53,7 @@ describe("std builtins", () => {
     let consumerCrateScope: RustCrateScope | undefined;
 
     const output = render(
-      <Output externals={[std]}>
+      <Output>
         <CrateDirectory name="my_crate">
           <SourceFile path="lib">
             <ScopeCapture
@@ -79,7 +79,7 @@ describe("std builtins", () => {
 
   it("references fmt::Display with correct use statement", () => {
     const output = render(
-      <Output externals={[std]}>
+      <Output>
         <CrateDirectory name="my_crate">
           <SourceFile path="lib">
             type Fmt = <Reference refkey={std.fmt.Display} />;
@@ -91,6 +91,51 @@ describe("std builtins", () => {
     expect(findFile(output, "lib").contents.trim()).toBe(
       ["use std::fmt::Display;", "type Fmt = Display;"].join("\n"),
     );
+  });
+
+  it("auto-registers std via CrateDirectory without externals", () => {
+    const output = render(
+      <Output>
+        <CrateDirectory name="my_crate">
+          <SourceFile path="lib">
+            type Map = {std.collections.HashMap};
+          </SourceFile>
+        </CrateDirectory>
+      </Output>,
+    );
+
+    expect(findFile(output, "lib").contents.trim()).toBe(
+      ["use std::collections::HashMap;", "type Map = HashMap;"].join("\n"),
+    );
+  });
+
+  it("is idempotent when std is also passed via externals", () => {
+    const output = render(
+      <Output externals={[std]}>
+        <CrateDirectory name="my_crate">
+          <SourceFile path="lib">
+            type Map = {std.collections.HashMap};
+          </SourceFile>
+        </CrateDirectory>
+      </Output>,
+    );
+
+    expect(findFile(output, "lib").contents.trim()).toBe(
+      ["use std::collections::HashMap;", "type Map = HashMap;"].join("\n"),
+    );
+  });
+
+  it("noStd skips std registration but core types still resolve", () => {
+    const output = render(
+      <Output>
+        <CrateDirectory name="my_crate" noStd>
+          <SourceFile path="lib">type A = {core.clone.Clone};</SourceFile>
+        </CrateDirectory>
+      </Output>,
+    );
+
+    const content = findFile(output, "lib").contents.trim();
+    expect(content).toContain("type A = Clone;");
   });
 });
 
@@ -105,11 +150,9 @@ describe("core builtins", () => {
 
   it("generates core:: use paths", () => {
     const output = render(
-      <Output externals={[core]}>
-        <CrateDirectory name="my_crate">
-          <SourceFile path="lib">
-            type Fmt = <Reference refkey={core.fmt.Display} />;
-          </SourceFile>
+      <Output>
+        <CrateDirectory name="my_crate" noStd>
+          <SourceFile path="lib">type Fmt = {core.fmt.Display};</SourceFile>
         </CrateDirectory>
       </Output>,
     );
