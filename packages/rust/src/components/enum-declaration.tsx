@@ -1,10 +1,10 @@
 import type { Children, Namekey, Refkey } from "@alloy-js/core";
 import {
   Declaration as CoreDeclaration,
+  createScope,
   For,
   Indent,
   Scope,
-  createScope,
 } from "@alloy-js/core";
 
 import { RustImplScope, useRustScope } from "../scopes/index.js";
@@ -25,7 +25,7 @@ import {
 export interface EnumDeclarationProps extends RustVisibilityProps {
   name: string | Namekey;
   refkey?: Refkey;
-  derives?: (string | Refkey)[];
+  derives?: (string | Refkey)[] | Refkey;
   attributes?: Children[];
   doc?: string;
   typeParameters?: TypeParameterProp[];
@@ -73,6 +73,12 @@ export function EnumDeclaration(props: EnumDeclarationProps) {
       )
     : [];
 
+  const derives = props.derives
+    ? Array.isArray(props.derives)
+      ? props.derives
+      : [props.derives]
+    : [];
+
   return (
     <>
       {props.doc ? (
@@ -88,10 +94,10 @@ export function EnumDeclaration(props: EnumDeclarationProps) {
           <hbr />
         </>
       ) : null}
-      {props.derives && props.derives.length > 0 ? (
+      {derives && derives.length > 0 ? (
         <>
           {"#[derive("}
-          <For each={props.derives} joiner={", "}>
+          <For each={derives} joiner={", "}>
             {(derive) => derive}
           </For>
           {")]"}
