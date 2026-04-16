@@ -11,7 +11,6 @@ import {
   Field,
   FunctionDeclaration,
   ImplBlock,
-  Reference,
   SourceFile,
   StructDeclaration,
   TraitDeclaration,
@@ -49,7 +48,7 @@ describe("namekey support", () => {
               <Field name="name" type="String" pub />
             </StructDeclaration>
             <hbr />
-            type Alias = <Reference refkey={personKey} />;
+            type Alias = {personKey};
           </SourceFile>
         </CrateDirectory>
       </Output>,
@@ -243,7 +242,7 @@ describe("namekey support", () => {
           <SourceFile path="lib.rs">
             <StructDeclaration name={nk} refkey={explicitKey} pub />
             <hbr />
-            type A = <Reference refkey={explicitKey} />;
+            type A = {explicitKey};
             <hbr />
             type B = {nk};
           </SourceFile>

@@ -9,7 +9,6 @@ import {
   Field,
   FunctionDeclaration,
   ModuleDirectory,
-  Reference,
   SourceFile,
   StructDeclaration,
 } from "../src/components/index.js";
@@ -205,9 +204,7 @@ describe("Module structure integration", () => {
             </SourceFile>
           </ModuleDirectory>
           <ModuleDirectory path="services">
-            <SourceFile path="mod.rs">
-              type UserAlias = <Reference refkey={userRef} />;
-            </SourceFile>
+            <SourceFile path="mod.rs">type UserAlias = {userRef};</SourceFile>
           </ModuleDirectory>
           <SourceFile path="lib.rs" />
         </CrateDirectory>

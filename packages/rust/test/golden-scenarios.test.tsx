@@ -11,7 +11,6 @@ import {
   FunctionDeclaration,
   ImplBlock,
   ModuleDirectory,
-  Reference,
   SourceFile,
   StructDeclaration,
   TraitDeclaration,
@@ -218,7 +217,7 @@ describe("Golden scenarios", () => {
       <Output externals={[serde]}>
         <CrateDirectory name="consumer" includeCargoToml>
           <SourceFile path="lib.rs">
-            type Serializable = <Reference refkey={serde.Serialize} />;
+            type Serializable = {serde.Serialize};
           </SourceFile>
         </CrateDirectory>
       </Output>,

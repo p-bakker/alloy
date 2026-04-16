@@ -17,7 +17,6 @@ import {
 } from "../scopes/index.js";
 import { NamedTypeSymbol } from "../symbols/named-type-symbol.js";
 import { RustOutputSymbol } from "../symbols/rust-output-symbol.js";
-import { Reference } from "./reference.js";
 import type { TypeParameterProp } from "./type-parameters.js";
 import { TypeParameters, WhereClause } from "./type-parameters.js";
 
@@ -123,13 +122,6 @@ export function ImplBlock(props: ImplBlockProps) {
       symbolKind: "struct",
     });
 
-  const renderedTrait =
-    props.trait && isRefkey(props.trait) ? (
-      <Reference refkey={props.trait} />
-    ) : (
-      props.trait
-    );
-
   const implScope = createScope(RustImplScope, implTargetSymbol, parentScope, {
     binder: parentScope.binder,
   });
@@ -153,9 +145,9 @@ export function ImplBlock(props: ImplBlockProps) {
       ) : null}
       {code`impl`}
       <TypeParameters params={implTypeParameters} />{" "}
-      {renderedTrait ? (
+      {props.trait ? (
         <>
-          {renderedTrait}
+          {props.trait}
           {code` for `}
         </>
       ) : null}

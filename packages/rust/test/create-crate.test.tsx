@@ -10,7 +10,6 @@ import {
 import { describe, expect, it } from "vitest";
 
 import { CrateDirectory } from "../src/components/crate-directory.js";
-import { Reference } from "../src/components/reference.js";
 import { SourceFile } from "../src/components/source-file.js";
 import { useCrateContext } from "../src/context/crate-context.js";
 import {
@@ -134,9 +133,9 @@ describe("createCrate", () => {
                 consumerCrateScope = capturedCrateScope;
               }}
             >
-              type RootAlias = <Reference refkey={serde.Serialize} />;
+              type RootAlias = {serde.Serialize};
               <hbr />
-              type NestedAlias = <Reference refkey={serde.de.Deserializer} />;
+              type NestedAlias = {serde.de.Deserializer};
             </ScopeCapture>
           </SourceFile>
         </CrateDirectory>
@@ -181,7 +180,7 @@ describe("createCrate", () => {
                 consumerCrateScope = capturedCrateScope;
               }}
             >
-              type DataMap = <Reference refkey={std.collections.HashMap} />;
+              type DataMap = {std.collections.HashMap};
             </ScopeCapture>
           </SourceFile>
         </CrateDirectory>
@@ -227,7 +226,7 @@ describe("createCrate", () => {
       <Output externals={[std]}>
         <CrateDirectory name="my_crate">
           <SourceFile path="lib">
-            type Map = <Reference refkey={std.collections.HashMap} />;
+            type Map = {std.collections.HashMap};
           </SourceFile>
         </CrateDirectory>
       </Output>,
