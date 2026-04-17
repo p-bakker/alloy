@@ -12,7 +12,7 @@ pub enum StoreError {
     LockError(String),
 }
 impl Display for StoreError {
-    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
             Self::NotFound => write!(f, "key not found"),
             Self::StorageFull => write!(f, "storage is full"),
@@ -22,4 +22,4 @@ impl Display for StoreError {
     }
 }
 /// A specialized Result type for store operations.
-pub type Result<T> = Result<T, StoreError>;
+pub type Result<T> = std::result::Result<T, StoreError>;

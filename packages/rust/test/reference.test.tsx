@@ -159,11 +159,42 @@ describe("Rust reference resolution", () => {
     expect(consumerCrateScope!.dependencies.get("serde")).toBe("*");
   });
 
+  it("imports external crate symbol that shares a prelude name via use, not fully qualified", () => {
+    const externalResult = refkey("external-result");
+
+    const output = render(
+      <Output>
+        <CrateDirectory name="anyhow">
+          <SourceFile path="lib.rs">
+            <Declaration
+              name="Result"
+              refkey={externalResult}
+              nameKind="type"
+              pub
+            >
+              pub type Result;
+            </Declaration>
+          </SourceFile>
+        </CrateDirectory>
+        <CrateDirectory name="my_crate">
+          <SourceFile path="consumer">
+            type Alias = <Reference refkey={externalResult} />;
+          </SourceFile>
+        </CrateDirectory>
+      </Output>,
+    );
+
+    const content = findFile(output, "src/consumer").contents.trim();
+    expect(content).toContain("use anyhow::Result;");
+    expect(content).toContain("type Alias = Result;");
+    expect(content).not.toContain("anyhow::Result;type");
+  });
+
   it("generates use for same-crate symbols that shadow prelude names", () => {
     const preludeLikeType = refkey("prelude-like-type");
     let consumerModuleScope: RustModuleScope | undefined;
 
-    render(
+    const output = render(
       <Output>
         <CrateDirectory name="my_crate">
           <SourceFile path="types">
@@ -192,6 +223,11 @@ describe("Rust reference resolution", () => {
     expect(consumerModuleScope).toBeDefined();
     expect(consumerModuleScope!.imports.size).toBe(1);
     expect(consumerModuleScope!.imports.get("crate::types")?.size).toBe(1);
+
+    const content = findFile(output, "src/lib").contents.trim();
+    expect(content).toContain("use crate::types::Option;");
+    expect(content).toContain("type Alias = Option;");
+    expect(content).not.toContain("crate::types::Option;type");
   });
 
   it("throws on private symbol reference from another module", () => {

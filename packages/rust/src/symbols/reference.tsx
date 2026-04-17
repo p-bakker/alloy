@@ -60,50 +60,60 @@ export function ref(
     const targetModule = declarationScope?.enclosingModule;
     const targetCrate = declarationScope?.enclosingCrate;
 
-    // Only skip import for prelude types when the symbol is NOT declared
-    // in the current crate. User-defined types that shadow prelude names
-    // (e.g., `type Result<T> = ...`) still need `use` imports.
-    const isLocalSymbol =
+    const isPreludeSymbol =
+      prelude.has(declarationName) &&
+      targetCrate instanceof RustCrateScope &&
+      isBuiltinCrate(targetCrate);
+
+    const isCrossModule =
+      targetModule instanceof RustModuleScope &&
       targetCrate instanceof RustCrateScope &&
       sourceCrate instanceof RustCrateScope &&
-      targetCrate === sourceCrate;
+      targetModule !== currentModuleScope;
 
-    if (!(prelude.has(declarationName) && !isLocalSymbol)) {
+    let useFullyQualified = false;
+
+    if (
+      isPreludeSymbol &&
+      currentModuleScope.hasLocalDeclaration(declarationName)
+    ) {
+      useFullyQualified = true;
+    } else if (!isPreludeSymbol && isCrossModule) {
+      const isSameCrate = targetCrate === sourceCrate;
+
       if (
-        targetModule instanceof RustModuleScope &&
-        targetCrate instanceof RustCrateScope &&
-        sourceCrate instanceof RustCrateScope
+        isSameCrate &&
+        !isVisibleFrom(lexicalDeclaration.visibility, result.fullReferencePath)
       ) {
-        if (targetModule !== currentModuleScope) {
-          if (targetCrate === sourceCrate) {
-            if (
-              !isVisibleFrom(
-                lexicalDeclaration.visibility,
-                result.fullReferencePath,
-              )
-            ) {
-              throw new Error(
-                `Cannot reference private symbol '${declarationName}' from module '${currentModuleScope.name}'.`,
-              );
-            }
-
-            const sameCratePath = buildUsePath("crate", result.pathDown);
-            currentModuleScope.addUse(sameCratePath, lexicalDeclaration);
-          } else {
-            const externalCratePath = buildUsePath(
-              targetCrate.name,
-              result.pathDown,
-            );
-            currentModuleScope.addUse(externalCratePath, lexicalDeclaration);
-            if (!isBuiltinCrate(targetCrate)) {
-              sourceCrate.addDependency(
-                targetCrate.name,
-                targetCrate.version ?? "*",
-              );
-            }
-          }
-        }
+        throw new Error(
+          `Cannot reference private symbol '${declarationName}' from module '${currentModuleScope.name}'.`,
+        );
       }
+
+      const usePath = buildUsePath(
+        isSameCrate ? "crate" : targetCrate.name,
+        result.pathDown,
+      );
+
+      if (currentModuleScope.hasConflictingImport(declarationName, usePath)) {
+        useFullyQualified = true;
+      } else {
+        currentModuleScope.addUse(usePath, lexicalDeclaration);
+      }
+
+      if (!isSameCrate && !isBuiltinCrate(targetCrate)) {
+        sourceCrate.addDependency(targetCrate.name, targetCrate.version ?? "*");
+      }
+    }
+
+    if (useFullyQualified && targetCrate instanceof RustCrateScope) {
+      const qualifiedPath = buildUsePath(targetCrate.name, result.pathDown);
+      return [
+        <>
+          {qualifiedPath}::{declarationName}
+        </>,
+        symbol,
+      ];
     }
 
     return [

@@ -57,6 +57,19 @@ export class RustModuleScope extends RustScopeBase {
     symbolsForPath.add(symbol);
   }
 
+  /**
+   * Check if a symbol name is already imported from a different path.
+   */
+  hasConflictingImport(name: string, path: string): boolean {
+    for (const [importPath, symbols] of this.#imports) {
+      if (importPath === path) continue;
+      for (const sym of symbols) {
+        if (sym.name === name) return true;
+      }
+    }
+    return false;
+  }
+
   get childModules() {
     return this.#childModules;
   }
@@ -69,6 +82,18 @@ export class RustModuleScope extends RustScopeBase {
 
     this.#childModules.set(declaration.name, declaration);
     return declaration;
+  }
+
+  /**
+   * Check if a name is declared locally in this module (types or values space).
+   */
+  hasLocalDeclaration(name: string): boolean {
+    for (const space of [this.spaceFor("types"), this.spaceFor("values")]) {
+      if (space?.symbolNames.has(name)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   get types(): OutputSpace {

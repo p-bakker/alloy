@@ -9,6 +9,7 @@ import {
 } from "../src/builtins/prelude.js";
 import { CrateDirectory } from "../src/components/crate-directory.js";
 import { SourceFile } from "../src/components/source-file.js";
+import { TypeAlias } from "../src/components/type-alias.js";
 import { useCrateContext } from "../src/context/crate-context.js";
 import type { RustCrateScope } from "../src/scopes/index.js";
 import { findFile } from "./utils.js";
@@ -133,6 +134,91 @@ describe("std builtins", () => {
 
     const content = findFile(output, "src/lib").contents.trim();
     expect(content).toContain("type A = Clone;");
+  });
+
+  it("references prelude types as short names without use imports", () => {
+    const output = render(
+      <Output>
+        <CrateDirectory name="my_crate">
+          <SourceFile path="lib">
+            type A = {std.clone.Clone};{"\n"}
+            type B = {std.cmp.Eq};{"\n"}
+            type C = {std.marker.Send};{"\n"}
+            type D = {std.marker.Sync};
+          </SourceFile>
+        </CrateDirectory>
+      </Output>,
+    );
+
+    const content = findFile(output, "src/lib").contents.trim();
+    expect(content).not.toContain("use std::");
+    expect(content).not.toContain("std::clone");
+    expect(content).not.toContain("std::cmp");
+    expect(content).not.toContain("std::marker");
+    expect(content).toContain("type A = Clone;");
+    expect(content).toContain("type B = Eq;");
+    expect(content).toContain("type C = Send;");
+    expect(content).toContain("type D = Sync;");
+  });
+
+  it("references prelude and non-prelude std types together", () => {
+    const output = render(
+      <Output>
+        <CrateDirectory name="my_crate">
+          <SourceFile path="lib">
+            type A = {std.clone.Clone};{"\n"}
+            type B = {std.collections.HashMap};
+          </SourceFile>
+        </CrateDirectory>
+      </Output>,
+    );
+
+    const content = findFile(output, "src/lib").contents.trim();
+    expect(content).toContain("use std::collections::HashMap;");
+    expect(content).not.toContain("use std::clone");
+    expect(content).toContain("type A = Clone;");
+    expect(content).toContain("type B = HashMap;");
+  });
+
+  it("fully qualifies prelude types when shadowed by a local declaration", () => {
+    const output = render(
+      <Output>
+        <CrateDirectory name="my_crate">
+          <SourceFile path="lib">
+            <TypeAlias name="Result" pub typeParameters={[{ name: "T" }]}>
+              {std.result.Result}
+              {"<T, String>"}
+            </TypeAlias>
+          </SourceFile>
+        </CrateDirectory>
+      </Output>,
+    );
+
+    const content = findFile(output, "src/lib").contents.trim();
+    expect(content).toContain("std::result::Result<T, String>");
+    expect(content).not.toMatch(/^use /m);
+  });
+
+  it("fully qualifies std::fmt::Result when shadowed by a local Result alias", () => {
+    const output = render(
+      <Output>
+        <CrateDirectory name="my_crate">
+          <SourceFile path="lib">
+            type Fmt = {std.fmt.Result};{"\n"}
+            <TypeAlias name="Result" pub typeParameters={[{ name: "T" }]}>
+              {std.result.Result}
+              {"<T, String>"}
+            </TypeAlias>
+          </SourceFile>
+        </CrateDirectory>
+      </Output>,
+    );
+
+    const content = findFile(output, "src/lib").contents.trim();
+    expect(content).toContain("type Fmt = std::fmt::Result;");
+    expect(content).toContain("= std::result::Result<T, String>");
+    expect(content).not.toContain("use std::result");
+    expect(content).not.toContain("use std::fmt");
   });
 });
 
