@@ -67,7 +67,7 @@ describe("std builtins", () => {
       </Output>,
     );
 
-    expect(findFile(output, "lib").contents.trim()).toBe(
+    expect(findFile(output, "src/lib").contents.trim()).toBe(
       ["use std::collections::HashMap;", "type Map = HashMap;"].join("\n"),
     );
 
@@ -85,7 +85,7 @@ describe("std builtins", () => {
       </Output>,
     );
 
-    expect(findFile(output, "lib").contents.trim()).toBe(
+    expect(findFile(output, "src/lib").contents.trim()).toBe(
       ["use std::fmt::Display;", "type Fmt = Display;"].join("\n"),
     );
   });
@@ -101,7 +101,7 @@ describe("std builtins", () => {
       </Output>,
     );
 
-    expect(findFile(output, "lib").contents.trim()).toBe(
+    expect(findFile(output, "src/lib").contents.trim()).toBe(
       ["use std::collections::HashMap;", "type Map = HashMap;"].join("\n"),
     );
   });
@@ -117,7 +117,7 @@ describe("std builtins", () => {
       </Output>,
     );
 
-    expect(findFile(output, "lib").contents.trim()).toBe(
+    expect(findFile(output, "src/lib").contents.trim()).toBe(
       ["use std::collections::HashMap;", "type Map = HashMap;"].join("\n"),
     );
   });
@@ -131,7 +131,7 @@ describe("std builtins", () => {
       </Output>,
     );
 
-    const content = findFile(output, "lib").contents.trim();
+    const content = findFile(output, "src/lib").contents.trim();
     expect(content).toContain("type A = Clone;");
   });
 });
@@ -154,7 +154,7 @@ describe("core builtins", () => {
       </Output>,
     );
 
-    expect(findFile(output, "lib").contents.trim()).toBe(
+    expect(findFile(output, "src/lib").contents.trim()).toBe(
       ["use core::fmt::Display;", "type Fmt = Display;"].join("\n"),
     );
   });

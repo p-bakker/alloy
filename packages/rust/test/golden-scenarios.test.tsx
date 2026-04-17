@@ -109,13 +109,13 @@ describe("Golden scenarios", () => {
       </Output>,
     );
 
-    expect(findFile(output, "lib.rs").contents.trim()).toBe(
+    expect(findFile(output, "src/lib.rs").contents.trim()).toBe(
       d`
         mod models;
         mod services;
       `.trim(),
     );
-    expect(findFile(output, "models/mod.rs").contents.trim()).toBe(
+    expect(findFile(output, "src/models/mod.rs").contents.trim()).toBe(
       d`
         pub struct User {
             pub name: String,
@@ -123,7 +123,7 @@ describe("Golden scenarios", () => {
         }
       `.trim(),
     );
-    expect(findFile(output, "services/mod.rs").contents.trim()).toBe(
+    expect(findFile(output, "src/services/mod.rs").contents.trim()).toBe(
       d`
         use crate::models::User;
         pub fn greet(user: &User) -> String {
@@ -223,7 +223,7 @@ describe("Golden scenarios", () => {
       </Output>,
     );
 
-    expect(findFile(output, "lib.rs").contents.trim()).toBe(
+    expect(findFile(output, "src/lib.rs").contents.trim()).toBe(
       d`
         use serde::Serialize;
         type Serializable = Serialize;
@@ -235,9 +235,6 @@ describe("Golden scenarios", () => {
         name = "consumer"
         version = "0.1.0"
         edition = "2021"
-
-        [lib]
-        path = "lib.rs"
 
         [dependencies]
         serde = "1.0.219"

@@ -42,7 +42,7 @@ describe("ModDeclarations", () => {
       </Output>,
     );
 
-    expect(findFile(output, "net/mod.rs").contents).toContain(d`
+    expect(findFile(output, "src/net/mod.rs").contents).toContain(d`
       pub mod alpha;
       mod zebra;
       fn net() {}
@@ -97,7 +97,7 @@ describe("ModDeclarations", () => {
       </Output>,
     );
 
-    expect(findFile(output, "lib.rs").contents).toContain(d`
+    expect(findFile(output, "src/lib.rs").contents).toContain(d`
       #[cfg(test)]
       mod tests;
       fn main() {}

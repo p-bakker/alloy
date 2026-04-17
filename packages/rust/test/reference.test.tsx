@@ -264,7 +264,7 @@ describe("Rust reference resolution", () => {
       </Output>,
     );
 
-    expect(findFile(output, "models/mod.rs").contents).toContain(
+    expect(findFile(output, "src/models/mod.rs").contents).toContain(
       "use crate::inner::InternalModel;",
     );
   });
@@ -323,7 +323,7 @@ describe("Rust reference nested scope traversal", () => {
       </Output>,
     );
 
-    expect(findFile(output, "routes/mod.rs").contents.trim()).toBe(
+    expect(findFile(output, "src/routes/mod.rs").contents.trim()).toBe(
       d`
       use crate::models::User;
       struct Response {
@@ -361,7 +361,7 @@ describe("Rust reference nested scope traversal", () => {
       </Output>,
     );
 
-    expect(findFile(output, "routes/mod.rs").contents.trim()).toBe(
+    expect(findFile(output, "src/routes/mod.rs").contents.trim()).toBe(
       d`
       use crate::models::User;
       fn lookup(user: User) -> User {}
@@ -403,7 +403,7 @@ describe("Rust reference nested scope traversal", () => {
       </Output>,
     );
 
-    expect(findFile(output, "routes/mod.rs").contents.trim()).toBe(
+    expect(findFile(output, "src/routes/mod.rs").contents.trim()).toBe(
       d`
       use crate::models::User;
       struct Router {}
@@ -445,7 +445,7 @@ describe("Rust reference nested scope traversal", () => {
       </Output>,
     );
 
-    expect(findFile(output, "routes/mod.rs").contents.trim()).toBe(
+    expect(findFile(output, "src/routes/mod.rs").contents.trim()).toBe(
       d`
       use crate::models::User;
       trait UserMapper {

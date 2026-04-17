@@ -58,13 +58,13 @@ describe("ref() qualified path rendering", () => {
         </CrateDirectory>
       </Output>,
     ).toRenderTo({
-      "models.rs": d`
+      "src/models.rs": d`
         pub enum Status {
             Active,
             Pending,
         }
       `,
-      "lib.rs": d`
+      "src/lib.rs": d`
         mod models;
         use crate::models::Status;
         let s = Status::Pending;

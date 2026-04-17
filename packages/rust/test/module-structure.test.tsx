@@ -30,16 +30,16 @@ describe("Module structure integration", () => {
       </Output>,
     );
 
-    expect(findFile(output, "lib.rs").contents.trim()).toBe(
+    expect(findFile(output, "src/lib.rs").contents.trim()).toBe(
       d`
         mod models;
         mod routes;
       `.trim(),
     );
-    expect(findFile(output, "models/mod.rs").contents.trim()).toBe(
+    expect(findFile(output, "src/models/mod.rs").contents.trim()).toBe(
       d`pub struct User;`,
     );
-    expect(findFile(output, "routes/mod.rs").contents.trim()).toBe(
+    expect(findFile(output, "src/routes/mod.rs").contents.trim()).toBe(
       d`pub fn list() {}`,
     );
   });
@@ -59,11 +59,11 @@ describe("Module structure integration", () => {
       </Output>,
     );
 
-    expect(findFile(output, "lib.rs").contents.trim()).toBe(d`mod models;`);
-    expect(findFile(output, "models/mod.rs").contents.trim()).toBe(
+    expect(findFile(output, "src/lib.rs").contents.trim()).toBe(d`mod models;`);
+    expect(findFile(output, "src/models/mod.rs").contents.trim()).toBe(
       d`mod user;`,
     );
-    expect(findFile(output, "models/user/mod.rs").contents.trim()).toBe(
+    expect(findFile(output, "src/models/user/mod.rs").contents.trim()).toBe(
       d`pub struct User;`,
     );
   });
@@ -83,7 +83,7 @@ describe("Module structure integration", () => {
       </Output>,
     );
 
-    expect(findFile(output, "lib.rs").contents.trim()).toBe(
+    expect(findFile(output, "src/lib.rs").contents.trim()).toBe(
       d`
         pub mod alpha;
         mod zebra;
@@ -110,7 +110,7 @@ describe("Module structure integration", () => {
       </Output>,
     );
 
-    expect(findFile(output, "api/mod.rs").contents.trim()).toBe(
+    expect(findFile(output, "src/api/mod.rs").contents.trim()).toBe(
       d`
         mod internal;
         pub mod v1;
@@ -129,8 +129,8 @@ describe("Module structure integration", () => {
       </Output>,
     );
 
-    expect(findFile(output, "lib.rs").contents.trim()).toBe(d`mod user;`);
-    expect(findFile(output, "user.rs").contents.trim()).toBe(
+    expect(findFile(output, "src/lib.rs").contents.trim()).toBe(d`mod user;`);
+    expect(findFile(output, "src/user.rs").contents.trim()).toBe(
       d`pub struct User;`,
     );
   });
@@ -145,8 +145,10 @@ describe("Module structure integration", () => {
       </Output>,
     );
 
-    expect(findFile(output, "lib.rs").contents.trim()).toBe(d`pub mod api;`);
-    expect(findFile(output, "api.rs").contents.trim()).toBe(
+    expect(findFile(output, "src/lib.rs").contents.trim()).toBe(
+      d`pub mod api;`,
+    );
+    expect(findFile(output, "src/api.rs").contents.trim()).toBe(
       d`pub fn ping() {}`,
     );
   });
@@ -160,7 +162,9 @@ describe("Module structure integration", () => {
       </Output>,
     );
 
-    expect(findFile(output, "lib.rs").contents.trim()).toBe(d`fn root() {}`);
+    expect(findFile(output, "src/lib.rs").contents.trim()).toBe(
+      d`fn root() {}`,
+    );
   });
 
   it("keeps deterministic ordering across module directories and standalone source files", () => {
@@ -180,7 +184,7 @@ describe("Module structure integration", () => {
       </Output>,
     );
 
-    expect(findFile(output, "lib.rs").contents.trim()).toBe(
+    expect(findFile(output, "src/lib.rs").contents.trim()).toBe(
       d`
         mod alpha;
         pub mod beta;
@@ -211,7 +215,7 @@ describe("Module structure integration", () => {
       </Output>,
     );
 
-    expect(findFile(output, "services/mod.rs").contents.trim()).toBe(
+    expect(findFile(output, "src/services/mod.rs").contents.trim()).toBe(
       d`
         use crate::models::User;
         type UserAlias = User;
@@ -250,13 +254,13 @@ describe("Module structure integration", () => {
       </Output>,
     );
 
-    expect(findFile(output, "lib.rs").contents.trim()).toBe(
+    expect(findFile(output, "src/lib.rs").contents.trim()).toBe(
       d`
         mod models;
         mod services;
       `.trim(),
     );
-    expect(findFile(output, "models/mod.rs").contents.trim()).toBe(
+    expect(findFile(output, "src/models/mod.rs").contents.trim()).toBe(
       d`
         pub struct User {
             pub name: String,
@@ -264,7 +268,7 @@ describe("Module structure integration", () => {
         }
       `.trim(),
     );
-    expect(findFile(output, "services/mod.rs").contents.trim()).toBe(
+    expect(findFile(output, "src/services/mod.rs").contents.trim()).toBe(
       d`
         use crate::models::User;
         pub fn greet(user: &User) -> String {

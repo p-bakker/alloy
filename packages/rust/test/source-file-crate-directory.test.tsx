@@ -3,6 +3,7 @@ import "@alloy-js/core/testing";
 import { d } from "@alloy-js/core/testing";
 import { describe, expect, it } from "vitest";
 
+import { CargoTomlFile } from "../src/components/cargo-toml-file.js";
 import { CrateDirectory } from "../src/components/crate-directory.js";
 import { InnerDocComment } from "../src/components/doc-comment.js";
 import { ModuleDirectory } from "../src/components/module-directory.js";
@@ -44,7 +45,7 @@ describe("SourceFile", () => {
       </Output>,
     );
 
-    expect(findFile(output, "lib.rs").filetype).toBe("rust");
+    expect(findFile(output, "src/lib.rs").filetype).toBe("rust");
   });
 
   it("keeps placeholder blocks output-neutral", () => {
@@ -177,5 +178,68 @@ describe("CrateDirectory", () => {
         </CrateDirectory>
       </Output>,
     ).toRenderTo(d`my_crate|none|2021|lib|true`);
+  });
+});
+
+describe("CrateDirectory sourcePath", () => {
+  it("places source files under src/ by default", () => {
+    const output = render(
+      <Output>
+        <CrateDirectory name="my_crate" includeCargoToml>
+          <SourceFile path="lib.rs">fn main() {}</SourceFile>
+        </CrateDirectory>
+      </Output>,
+    );
+
+    expect(findFile(output, "src/lib.rs").contents).toContain("fn main()");
+    expect(findFile(output, "Cargo.toml").contents).not.toContain("[lib]");
+  });
+
+  it("places source files at root with sourcePath='.'", () => {
+    const output = render(
+      <Output>
+        <CrateDirectory name="my_crate" sourcePath="." includeCargoToml>
+          <SourceFile path="lib.rs">fn main() {}</SourceFile>
+        </CrateDirectory>
+      </Output>,
+    );
+
+    expect(findFile(output, "lib.rs").contents).toContain("fn main()");
+    expect(findFile(output, "Cargo.toml").contents).toContain("[lib]");
+    expect(findFile(output, "Cargo.toml").contents).toContain(
+      'path = "lib.rs"',
+    );
+  });
+
+  it("hoists manual CargoTomlFile to crate root", () => {
+    const output = render(
+      <Output>
+        <CrateDirectory name="my_crate">
+          <CargoTomlFile name="my_crate" version="1.0.0" />
+          <SourceFile path="lib.rs">fn main() {}</SourceFile>
+        </CrateDirectory>
+      </Output>,
+    );
+
+    expect(findFile(output, "Cargo.toml").contents).toContain(
+      'name = "my_crate"',
+    );
+    expect(findFile(output, "src/lib.rs").contents).toContain("fn main()");
+  });
+
+  it("supports custom sourcePath", () => {
+    const output = render(
+      <Output>
+        <CrateDirectory name="my_crate" sourcePath="lib" includeCargoToml>
+          <SourceFile path="lib.rs">fn main() {}</SourceFile>
+        </CrateDirectory>
+      </Output>,
+    );
+
+    expect(findFile(output, "lib/lib.rs").contents).toContain("fn main()");
+    expect(findFile(output, "Cargo.toml").contents).toContain("[lib]");
+    expect(findFile(output, "Cargo.toml").contents).toContain(
+      'path = "lib/lib.rs"',
+    );
   });
 });

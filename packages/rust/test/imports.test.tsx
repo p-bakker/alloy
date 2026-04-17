@@ -27,7 +27,7 @@ describe("Rust imports integration", () => {
       </Output>,
     );
 
-    expect(findFile(output, "lib.rs").contents.trim()).toBe(
+    expect(findFile(output, "src/lib.rs").contents.trim()).toBe(
       d`
       pub struct User;
       type UserAlias = User;
@@ -55,7 +55,7 @@ describe("Rust imports integration", () => {
       </Output>,
     );
 
-    expect(findFile(output, "routes/mod.rs").contents.trim()).toBe(
+    expect(findFile(output, "src/routes/mod.rs").contents.trim()).toBe(
       d`
       use crate::models::User;
       type UserAlias = User;
@@ -97,7 +97,7 @@ describe("Rust imports integration", () => {
       </Output>,
     );
 
-    expect(findFile(output, "routes/mod.rs").contents.trim()).toBe(
+    expect(findFile(output, "src/routes/mod.rs").contents.trim()).toBe(
       d`
       use crate::models::{Account, User};
       type UserAlias = User;
@@ -157,7 +157,7 @@ describe("Rust imports integration", () => {
       </Output>,
     );
 
-    expect(findFile(output, "routes/mod.rs").contents.trim()).toBe(
+    expect(findFile(output, "src/routes/mod.rs").contents.trim()).toBe(
       d`
       use std::collections::HashMap;
 
@@ -203,7 +203,7 @@ describe("Rust imports integration", () => {
       </Output>,
     );
 
-    expect(findFile(output, "lib.rs").contents.trim()).toBe(
+    expect(findFile(output, "src/lib.rs").contents.trim()).toBe(
       d`
       use crate::types::{Option, Result, Vec};
       type OptionAlias = Option;

@@ -3,6 +3,7 @@ import {
   SourceDirectory,
   createScope,
   getSymbolCreator,
+  isComponentCreator,
   useBinder,
   type Children,
 } from "@alloy-js/core";
@@ -23,6 +24,7 @@ export interface CrateDirectoryProps {
   version?: string;
   edition?: string;
   crateType?: "lib" | "bin";
+  sourcePath?: string;
   noStd?: boolean;
   dependencies?: Record<string, CrateDependency>;
   includeCargoToml?: boolean;
@@ -38,19 +40,22 @@ export function CrateDirectory(props: CrateDirectoryProps) {
   getSymbolCreator(core)(binder);
 
   const scope = createScope(RustCrateScope, props.name, props.version);
+  const sourcePath = props.sourcePath ?? "src";
   const context: CrateContextValue = {
     scope,
     name: props.name,
     version: props.version,
     edition: props.edition ?? "2021",
     crateType: props.crateType ?? "lib",
+    sourcePath,
   };
+
+  const { rootChildren, sourceChildren } = partitionChildren(props.children);
 
   return (
     <SourceDirectory path=".">
       <Scope value={scope}>
         <CrateContext.Provider value={context}>
-          {props.children}
           {props.includeCargoToml ? (
             <CargoTomlFile
               name={props.name}
@@ -59,8 +64,33 @@ export function CrateDirectory(props: CrateDirectoryProps) {
               dependencies={props.dependencies}
             />
           ) : null}
+          {rootChildren}
+          <SourceDirectory path={sourcePath}>{sourceChildren}</SourceDirectory>
         </CrateContext.Provider>
       </Scope>
     </SourceDirectory>
   );
+}
+
+function partitionChildren(children: Children | undefined): {
+  rootChildren: Children[];
+  sourceChildren: Children[];
+} {
+  const rootChildren: Children[] = [];
+  const sourceChildren: Children[] = [];
+
+  if (children === undefined || children === null) {
+    return { rootChildren, sourceChildren };
+  }
+
+  const items = Array.isArray(children) ? children : [children];
+  for (const child of items) {
+    if (isComponentCreator(child, CargoTomlFile)) {
+      rootChildren.push(child);
+    } else {
+      sourceChildren.push(child);
+    }
+  }
+
+  return { rootChildren, sourceChildren };
 }
