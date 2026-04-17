@@ -96,9 +96,9 @@ export function FunctionDeclaration(props: FunctionDeclarationProps) {
       : null}
       <CoreDeclaration symbol={functionSymbol}>
         <VisibilityPrefix pub={props.pub} />
+        {props.const ? "const " : ""}
         {props.async ? "async " : ""}
         {props.unsafe ? "unsafe " : ""}
-        {props.const ? "const " : ""}
         {"fn "}
         {functionSymbol.name}
         <Scope value={functionScope}>

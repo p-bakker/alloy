@@ -67,7 +67,7 @@ describe("FunctionDeclaration", () => {
           </SourceFile>
         </CrateDirectory>
       </Output>,
-    ).toRenderTo(d`pub(crate) async unsafe const fn work() {}`);
+    ).toRenderTo(d`pub(crate) const async unsafe fn work() {}`);
   });
 
   it("renders pub(super) visibility with qualifiers in rust order", () => {
@@ -85,7 +85,7 @@ describe("FunctionDeclaration", () => {
           </SourceFile>
         </CrateDirectory>
       </Output>,
-    ).toRenderTo(d`pub(super) async unsafe const fn work() {}`);
+    ).toRenderTo(d`pub(super) const async unsafe fn work() {}`);
   });
 
   it("renders parameters from descriptors", () => {
@@ -176,7 +176,7 @@ describe("FunctionDeclaration", () => {
         </CrateDirectory>
       </Output>,
     ).toRenderTo(d`
-      pub(crate) async unsafe const fn run-work(input-value: i32) {
+      pub(crate) const async unsafe fn run-work(input-value: i32) {
           input-value
       }
       pub(crate)|true|true|true
