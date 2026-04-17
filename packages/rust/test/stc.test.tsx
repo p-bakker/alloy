@@ -247,9 +247,6 @@ describe("STC wrappers", () => {
       version = "0.1.0"
       edition = "2021"
 
-      [lib]
-      path = "lib.rs"
-
       [dependencies]
       serde = "1.0"
     `);
@@ -268,9 +265,6 @@ describe("STC wrappers", () => {
       name = "my_crate"
       version = "0.1.0"
       edition = "2021"
-
-      [lib]
-      path = "lib.rs"
 
       [dependencies]
       serde = "1.0"

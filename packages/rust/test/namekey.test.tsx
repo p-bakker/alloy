@@ -91,7 +91,7 @@ describe("namekey support", () => {
       </SourceFile>,
       <SourceFile path="lib.rs">type Alias = {personKey};</SourceFile>,
     ]);
-    const libFile = findFile(output, "lib.rs");
+    const libFile = findFile(output, "src/lib.rs");
     expect(libFile.contents).toContain("use crate::models::Person;");
     expect(libFile.contents).toContain("type Alias = Person;");
   });

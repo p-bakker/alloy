@@ -46,19 +46,23 @@ export function CargoTomlFile(props: CargoTomlFileProps) {
     );
     const crateType = crate?.crateType ?? "lib";
     const crateName = crate?.name ?? props.name;
-    const targetLines =
-      crateType === "bin" ?
-        ["[[bin]]", `name = "${crateName}"`, 'path = "main.rs"']
-      : ["[lib]", 'path = "lib.rs"'];
-
+    const sourcePath = crate?.sourcePath ?? "src";
     const lines = [
       "[package]",
       `name = "${props.name}"`,
       `version = "${props.version ?? "0.1.0"}"`,
       `edition = "${props.edition ?? "2021"}"`,
-      "",
-      ...targetLines,
     ];
+
+    if (sourcePath !== "src") {
+      const pathPrefix = sourcePath === "." ? "" : `${sourcePath}/`;
+
+      if (crateType === "bin") {
+        lines.push("", "[[bin]]", `name = "${crateName}"`, `path = "${pathPrefix}main.rs"`);
+      } else {
+        lines.push("", "[lib]", `path = "${pathPrefix}lib.rs"`);
+      }
+    }
 
     if (sortedDependencies.length > 0) {
       lines.push("", "[dependencies]");

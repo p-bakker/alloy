@@ -46,7 +46,7 @@ describe("T070 - ImplBlock Trait Name Missing Use Import", () => {
       </Output>,
     );
 
-    const libFile = findFile(output, "lib.rs");
+    const libFile = findFile(output, "src/lib.rs");
     expect(libFile.contents).toContain("use std::fmt::Display");
     expect(libFile.contents).toContain("impl Display for StoreError");
   });
@@ -76,7 +76,7 @@ describe("T070 - ImplBlock Trait Name Missing Use Import", () => {
       </Output>,
     );
 
-    const modFile = findFile(output, "models/mod.rs");
+    const modFile = findFile(output, "src/models/mod.rs");
     expect(modFile.contents).toContain("use crate::traits::Greetable");
     expect(modFile.contents).toContain("impl Greetable for User");
   });
@@ -101,7 +101,7 @@ describe("T070 - ImplBlock Trait Name Missing Use Import", () => {
       </Output>,
     );
 
-    const libFile = findFile(output, "lib.rs");
+    const libFile = findFile(output, "src/lib.rs");
     // Should not contain duplicate use statements
     const useCount = (libFile.contents.match(/use.*Greetable/g) || []).length;
     expect(useCount).toBeLessThanOrEqual(1);
@@ -140,7 +140,7 @@ describe("T070 - ImplBlock Trait Name Missing Use Import", () => {
       </Output>,
     );
 
-    const libFile = findFile(output, "lib.rs");
+    const libFile = findFile(output, "src/lib.rs");
     expect(libFile.contents).toContain("use std::fmt::Display");
     expect(libFile.contents).toContain("impl<T> Display for MyType<T>");
   });

@@ -93,6 +93,7 @@ describe.skipIf(!hasCargo)("rust smoke test", () => {
           version="0.1.0"
           edition="2021"
           crateType="lib"
+          sourcePath="."
           includeCargoToml
         >
           <ErrorModule />

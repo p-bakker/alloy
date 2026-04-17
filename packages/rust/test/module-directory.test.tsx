@@ -49,7 +49,7 @@ describe("ModuleDirectory", () => {
       </Output>,
     );
 
-    expect(findFile(output, "net/client.rs").contents.trim()).toBe(
+    expect(findFile(output, "src/net/client.rs").contents.trim()).toBe(
       d`client.rs|net|my_crate|true`,
     );
     expect(crateScope).toBeDefined();
@@ -84,7 +84,7 @@ describe("ModuleDirectory", () => {
       </Output>,
     );
 
-    expect(findFile(output, "net/http/client.rs").contents.trim()).toBe(
+    expect(findFile(output, "src/net/http/client.rs").contents.trim()).toBe(
       d`fn client() {}`,
     );
     expect(crateScope).toBeDefined();

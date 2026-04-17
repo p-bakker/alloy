@@ -40,7 +40,7 @@ export function toSourceText(c: Children, options?: PrintTreeOptions): string {
     { insertFinalNewLine: false, ...options },
   );
 
-  return findFile(res, "test.rs").contents;
+  return findFile(res, "src/test.rs").contents;
 }
 
 /**

@@ -113,7 +113,7 @@ describe("Rust edge cases", () => {
         </Output>,
       );
 
-      expect(findFile(output, "routes/mod.rs").contents.trim()).toBe(
+      expect(findFile(output, "src/routes/mod.rs").contents.trim()).toBe(
         d`
           use crate::models::User;
           type FirstAlias = User;
@@ -156,7 +156,7 @@ describe("Rust edge cases", () => {
         </Output>,
       );
 
-      expect(findFile(output, "routes/mod.rs").contents.trim()).toBe(
+      expect(findFile(output, "src/routes/mod.rs").contents.trim()).toBe(
         d`
           use crate::models::{Account, User};
           type UserAlias = User;
@@ -207,7 +207,7 @@ describe("Rust edge cases", () => {
         </Output>,
       );
 
-      expect(findFile(output, "lib.rs").contents.trim()).toBe(
+      expect(findFile(output, "src/lib.rs").contents.trim()).toBe(
         d`
           use crate::types::{Option, String, Vec};
           type Maybe = Option;

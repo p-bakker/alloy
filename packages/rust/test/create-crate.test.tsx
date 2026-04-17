@@ -140,7 +140,7 @@ describe("createCrate", () => {
       </Output>,
     );
 
-    expect(findFile(output, "lib").contents.trim()).toBe(
+    expect(findFile(output, "src/lib").contents.trim()).toBe(
       [
         "use serde::Serialize;",
         "use serde::de::Deserializer;",
@@ -185,7 +185,7 @@ describe("createCrate", () => {
       </Output>,
     );
 
-    expect(findFile(output, "lib").contents.trim()).toBe(
+    expect(findFile(output, "src/lib").contents.trim()).toBe(
       ["use std::collections::HashMap;", "type DataMap = HashMap;"].join("\n"),
     );
     expect(consumerCrateScope).toBeDefined();
@@ -230,7 +230,7 @@ describe("createCrate", () => {
       </Output>,
     );
 
-    expect(findFile(output, "lib").contents.trim()).toBe(
+    expect(findFile(output, "src/lib").contents.trim()).toBe(
       ["use std::collections::HashMap;", "type Map = HashMap;"].join("\n"),
     );
   });

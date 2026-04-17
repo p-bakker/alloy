@@ -26,9 +26,6 @@ describe("CargoTomlFile", () => {
       version = "0.1.0"
       edition = "2021"
 
-      [lib]
-      path = "lib.rs"
-
       [dependencies]
       serde = "1.0"
       tokio = { version = "1.0", features = ["full"] }
@@ -65,9 +62,6 @@ describe("CargoTomlFile", () => {
       name = "consumer"
       version = "0.1.0"
       edition = "2021"
-
-      [lib]
-      path = "lib.rs"
 
       [dependencies]
       serde = { version = "1.0.200", features = ["derive"] }
@@ -106,9 +100,6 @@ describe("CargoTomlFile", () => {
       version = "2.0.0"
       edition = "2024"
 
-      [lib]
-      path = "lib.rs"
-
       [dependencies]
       serde = "1.0.219"
     `.trim(),
@@ -132,7 +123,7 @@ describe("CargoTomlFile", () => {
     );
   });
 
-  it("renders bin target section with crate name and path", () => {
+  it("omits bin section when main.rs is at Cargo default location", () => {
     const output = render(
       <Output>
         <CrateDirectory name="consumer_bin" crateType="bin" includeCargoToml>
@@ -147,12 +138,43 @@ describe("CargoTomlFile", () => {
       name = "consumer_bin"
       version = "0.1.0"
       edition = "2021"
-
-      [[bin]]
-      name = "consumer_bin"
-      path = "main.rs"
     `.trim(),
     );
+  });
+
+  it("renders [lib] section for lib crate with non-default sourcePath", () => {
+    const output = render(
+      <Output>
+        <CrateDirectory name="my_crate" sourcePath="." includeCargoToml>
+          <SourceFile path="utils.rs">pub fn run() {}</SourceFile>
+        </CrateDirectory>
+      </Output>,
+    );
+
+    const cargoToml = findFile(output, "Cargo.toml").contents.trim();
+    expect(cargoToml).toContain(["[lib]", 'path = "lib.rs"'].join("\n"));
+    expect(cargoToml).not.toContain("[[bin]]");
+  });
+
+  it("renders [[bin]] section for bin crate with non-default sourcePath", () => {
+    const output = render(
+      <Output>
+        <CrateDirectory
+          name="my_crate"
+          crateType="bin"
+          sourcePath="."
+          includeCargoToml
+        >
+          <SourceFile path="app.rs">fn main() {}</SourceFile>
+        </CrateDirectory>
+      </Output>,
+    );
+
+    const cargoToml = findFile(output, "Cargo.toml").contents.trim();
+    expect(cargoToml).toContain(
+      ['[[bin]]', 'name = "my_crate"', 'path = "main.rs"'].join("\n"),
+    );
+    expect(cargoToml).not.toContain("[lib]");
   });
 
   it("omits dependencies section when no dependencies are present", () => {
@@ -165,9 +187,6 @@ describe("CargoTomlFile", () => {
       name = "empty_dependencies"
       version = "0.1.0"
       edition = "2021"
-
-      [lib]
-      path = "lib.rs"
     `);
   });
 
@@ -181,13 +200,10 @@ describe("CargoTomlFile", () => {
       name = "empty_map"
       version = "0.1.0"
       edition = "2021"
-
-      [lib]
-      path = "lib.rs"
     `);
   });
 
-  it("renders crate target section before dependencies", () => {
+  it("renders dependencies after package section", () => {
     const output = render(
       <Output>
         <CargoTomlFile name="ordering" dependencies={{ serde: "1.0" }} />
@@ -195,11 +211,8 @@ describe("CargoTomlFile", () => {
     );
 
     const cargoToml = findFile(output, "Cargo.toml").contents;
-    expect(cargoToml.indexOf("[lib]")).toBeGreaterThan(
+    expect(cargoToml.indexOf("[dependencies]")).toBeGreaterThan(
       cargoToml.indexOf(`edition = "2021"`),
-    );
-    expect(cargoToml.indexOf("[lib]")).toBeLessThan(
-      cargoToml.indexOf("[dependencies]"),
     );
   });
 });
