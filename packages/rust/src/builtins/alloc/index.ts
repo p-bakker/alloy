@@ -32,7 +32,8 @@ import { mod_vec } from "./vec.js";
 export const allocDescriptor = {
   name: "alloc",
   builtin: true,
-  modules: {
+  items: {
+    ...mod_root,
     alloc: mod_alloc,
     borrow: mod_borrow,
     boxed: mod_boxed,
@@ -44,7 +45,6 @@ export const allocDescriptor = {
     "ffi::c_str": mod_ffi_c_str,
     fmt: mod_fmt,
     rc: mod_rc,
-    "": mod_root,
     slice: mod_slice,
     str: mod_str,
     "str::pattern": mod_str_pattern,

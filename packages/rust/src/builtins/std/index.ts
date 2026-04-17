@@ -86,7 +86,8 @@ import { mod_vec } from "./vec.js";
 export const stdDescriptor = {
   name: "std",
   builtin: true,
-  modules: {
+  items: {
+    ...mod_root,
     alloc: mod_alloc,
     any: mod_any,
     array: mod_array,
@@ -147,7 +148,6 @@ export const stdDescriptor = {
     "range::legacy": mod_range_legacy,
     rc: mod_rc,
     result: mod_result,
-    "": mod_root,
     slice: mod_slice,
     str: mod_str,
     "str::pattern": mod_str_pattern,

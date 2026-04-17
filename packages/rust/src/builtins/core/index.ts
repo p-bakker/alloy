@@ -56,7 +56,8 @@ import { mod_ub_checks } from "./ub_checks.js";
 export const coreDescriptor = {
   name: "core",
   builtin: true,
-  modules: {
+  items: {
+    ...mod_root,
     alloc: mod_alloc,
     any: mod_any,
     array: mod_array,
@@ -102,7 +103,6 @@ export const coreDescriptor = {
     range: mod_range,
     "range::legacy": mod_range_legacy,
     result: mod_result,
-    "": mod_root,
     slice: mod_slice,
     str: mod_str,
     "str::pattern": mod_str_pattern,

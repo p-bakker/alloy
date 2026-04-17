@@ -52,19 +52,17 @@ describe("createCrate", () => {
     const serde = createCrate({
       name: "serde",
       version: "1.0.219",
-      modules: {
-        "": {
-          Serialize: { kind: "trait" },
-          Deserialize: { kind: "trait" },
-        },
+      items: {
+        Serialize: { kind: "trait" },
+        Deserialize: { kind: "trait" },
         json: {
           to_string: { kind: "function" },
         },
       },
     });
 
-    expect(isRefkey(serde[""].Serialize)).toBe(true);
-    expect(isRefkey(serde[""].Deserialize)).toBe(true);
+    expect(isRefkey(serde.Serialize)).toBe(true);
+    expect(isRefkey(serde.Deserialize)).toBe(true);
     expect(isRefkey(serde.json.to_string)).toBe(true);
     expect(getCrateInfo(serde)).toEqual({ name: "serde", version: "1.0.219" });
   });
@@ -73,10 +71,8 @@ describe("createCrate", () => {
     const serde = createCrate({
       name: "serde",
       version: "1.0.219",
-      modules: {
-        "": {
-          Serialize: { kind: "trait" },
-        },
+      items: {
+        Serialize: { kind: "trait" },
         json: {
           to_string: { kind: "function" },
         },
@@ -92,7 +88,7 @@ describe("createCrate", () => {
 
     const rootResolution = binder.resolveDeclarationByKey(
       undefined,
-      serde[""].Serialize,
+      serde.Serialize,
     ).value;
     expect(rootResolution?.symbol.name).toBe("Serialize");
 
@@ -117,10 +113,8 @@ describe("createCrate", () => {
     const serde = createCrate({
       name: "serde",
       version: "1.0.219",
-      modules: {
-        "": {
-          Serialize: { kind: "trait" },
-        },
+      items: {
+        Serialize: { kind: "trait" },
         de: {
           Deserializer: { kind: "trait" },
         },
@@ -140,7 +134,7 @@ describe("createCrate", () => {
                 consumerCrateScope = capturedCrateScope;
               }}
             >
-              type RootAlias = <Reference refkey={serde[""].Serialize} />;
+              type RootAlias = <Reference refkey={serde.Serialize} />;
               <hbr />
               type NestedAlias = <Reference refkey={serde.de.Deserializer} />;
             </ScopeCapture>
@@ -169,7 +163,7 @@ describe("createCrate", () => {
     const std = createCrate({
       name: "std",
       builtin: true,
-      modules: {
+      items: {
         collections: {
           HashMap: { kind: "struct" },
         },
@@ -205,7 +199,7 @@ describe("createCrate", () => {
     const std = createCrate({
       name: "std",
       builtin: true,
-      modules: {
+      items: {
         collections: {
           HashMap: {
             kind: "struct",

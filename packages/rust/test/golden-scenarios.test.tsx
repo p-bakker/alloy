@@ -209,10 +209,8 @@ describe("Golden scenarios", () => {
     const serde = createCrate({
       name: "serde",
       version: "1.0.219",
-      modules: {
-        "": {
-          Serialize: { kind: "trait" },
-        },
+      items: {
+        Serialize: { kind: "trait" },
       },
     });
 
@@ -220,7 +218,7 @@ describe("Golden scenarios", () => {
       <Output externals={[serde]}>
         <CrateDirectory name="consumer" includeCargoToml>
           <SourceFile path="lib.rs">
-            type Serializable = <Reference refkey={serde[""].Serialize} />;
+            type Serializable = <Reference refkey={serde.Serialize} />;
           </SourceFile>
         </CrateDirectory>
       </Output>,
