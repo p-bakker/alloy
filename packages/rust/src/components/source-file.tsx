@@ -6,6 +6,10 @@ import {
   useScope,
   type Children,
 } from "@alloy-js/core";
+import {
+  useRustFormatOptions,
+  type RustFormatOptions,
+} from "../context/format-options.js";
 import { RustCrateScope } from "../scopes/rust-crate-scope.js";
 import { RustModuleScope } from "../scopes/rust-module-scope.js";
 import { ModDeclarations } from "./mod-declarations.js";
@@ -13,7 +17,9 @@ import { Reference } from "./reference.js";
 import { UseStatements } from "./use-statement.js";
 import { type RustVisibilityProps } from "./visibility.js";
 
-export interface SourceFileProps extends RustVisibilityProps {
+export interface SourceFileProps
+  extends RustVisibilityProps,
+    RustFormatOptions {
   path: string;
   attributes?: Children[];
   children?: Children;
@@ -82,6 +88,12 @@ export function SourceFile(props: SourceFileProps) {
   });
   const declarationScope = getDeclarationScope(props.path, scopeParent, scope);
 
+  const opts = useRustFormatOptions({
+    printWidth: props.printWidth,
+    tabWidth: props.tabWidth,
+    useTabs: props.useTabs,
+  });
+
   const header =
     props.headerComment !== undefined || props.header !== undefined ?
       <>
@@ -95,6 +107,7 @@ export function SourceFile(props: SourceFileProps) {
       path={props.path}
       filetype="rust"
       reference={Reference}
+      {...opts}
       header={header}
     >
       <Scope value={scope}>

@@ -29,7 +29,7 @@ describe("ForExpression", () => {
       ),
     ).toRenderTo(d`
       for item in collection {
-        process(item);
+          process(item);
       }
     `);
   });
@@ -43,7 +43,7 @@ describe("ForExpression", () => {
       ),
     ).toRenderTo(d`
       for (i, val) in list.iter().enumerate() {
-        println!("{}: {}", i, val);
+          println!("{}: {}", i, val);
       }
     `);
   });
@@ -57,7 +57,7 @@ describe("ForExpression", () => {
       ),
     ).toRenderTo(d`
       'outer: for x in 0..10 {
-        do_work(x);
+          do_work(x);
       }
     `);
   });
@@ -72,8 +72,8 @@ describe("ForExpression", () => {
       ),
     ).toRenderTo(d`
       for item in items {
-        let processed = transform(item);
-        results.push(processed);
+          let processed = transform(item);
+          results.push(processed);
       }
     `);
   });
@@ -87,7 +87,7 @@ describe("ForExpression", () => {
       ),
     ).toRenderTo(d`
       for x in vec {
-        println!("{}", x);
+          println!("{}", x);
       }
     `);
   });

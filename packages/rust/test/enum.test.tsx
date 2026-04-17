@@ -143,10 +143,7 @@ describe("EnumDeclaration", () => {
       <Output>
         <CrateDirectory name="my_crate">
           <SourceFile path="lib.rs">
-            <EnumDeclaration
-              name="Status"
-              pub={true}
-            />
+            <EnumDeclaration name="Status" pub={true} />
             <hbr />
             <EnumVisibilityProbe name="Status" />
           </SourceFile>
@@ -173,7 +170,7 @@ describe("EnumVariant", () => {
       </Output>,
     ).toRenderTo(d`
       enum Status {
-        Pending,
+          Pending,
       }
     `);
   });
@@ -191,7 +188,7 @@ describe("EnumVariant", () => {
       </Output>,
     ).toRenderTo(d`
       enum Message {
-        Text(String, i32),
+          Text(String, i32),
       }
     `);
   });
@@ -211,7 +208,7 @@ describe("EnumVariant", () => {
       </Output>,
     ).toRenderTo(d`
       enum Message {
-        Text(String),
+          Text(String),
       }
     `);
   });
@@ -231,12 +228,12 @@ describe("EnumVariant", () => {
         </CrateDirectory>
       </Output>,
     ).toRenderTo(d`
-      enum Message {
-        Data {
-          id: u64,
-          payload: String,
-        },
-      }
+        enum Message {
+            Data {
+                id: u64,
+                payload: String,
+            },
+        }
     `);
   });
 
@@ -253,8 +250,8 @@ describe("EnumVariant", () => {
       </Output>,
     ).toRenderTo(d`
       enum Status {
-        /// Waiting for processing.
-        Pending,
+          /// Waiting for processing.
+          Pending,
       }
     `);
   });
@@ -276,14 +273,14 @@ describe("EnumVariant", () => {
         </CrateDirectory>
       </Output>,
     ).toRenderTo(d`
-      pub enum Event {
-        Ready,
-        Data(String),
-        Error {
-          code: u32,
-          message: String,
-        },
-      }
+        pub enum Event {
+            Ready,
+            Data(String),
+            Error {
+                code: u32,
+                message: String,
+            },
+        }
     `);
   });
 
@@ -304,7 +301,7 @@ describe("EnumVariant", () => {
       </Output>,
     ).toRenderTo(d`
       enum Status {
-        Pending,
+          Pending,
       }
       Status::Pending
     `);
@@ -327,9 +324,9 @@ describe("EnumVariant", () => {
       </Output>,
     ).toRenderTo(d`
       enum Status {
-        #[deprecated]
-        Active,
-        Inactive,
+          #[deprecated]
+          Active,
+          Inactive,
       }
     `);
   });
@@ -343,7 +340,9 @@ describe("EnumVariant", () => {
               <EnumVariant
                 name="Red"
                 doc="The red color."
-                attributes={[<Attribute name="serde" args={'rename = "red"'} />]}
+                attributes={[
+                  <Attribute name="serde" args={'rename = "red"'} />,
+                ]}
               />
             </EnumDeclaration>
           </SourceFile>
@@ -351,9 +350,9 @@ describe("EnumVariant", () => {
       </Output>,
     ).toRenderTo(d`
       enum Color {
-        /// The red color.
-        #[serde(rename = "red")]
-        Red,
+          /// The red color.
+          #[serde(rename = "red")]
+          Red,
       }
     `);
   });
@@ -375,8 +374,8 @@ describe("EnumVariant", () => {
       </Output>,
     ).toRenderTo(d`
       enum Message {
-        #[allow(dead_code)]
-        Data(Vec<u8>),
+          #[allow(dead_code)]
+          Data(Vec<u8>),
       }
     `);
   });

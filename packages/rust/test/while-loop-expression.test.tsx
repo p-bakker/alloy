@@ -30,7 +30,7 @@ describe("WhileExpression + LoopExpression", () => {
       ),
     ).toRenderTo(d`
       while !stack.is_empty() {
-        process(stack.pop());
+          process(stack.pop());
       }
     `);
   });
@@ -44,7 +44,7 @@ describe("WhileExpression + LoopExpression", () => {
       ),
     ).toRenderTo(d`
       while let Some(item) = iter.next() {
-        process(item);
+          process(item);
       }
     `);
   });
@@ -58,7 +58,7 @@ describe("WhileExpression + LoopExpression", () => {
       ),
     ).toRenderTo(d`
       'retry: while attempts < max_attempts {
-        attempts += 1;
+          attempts += 1;
       }
     `);
   });
@@ -70,7 +70,7 @@ describe("WhileExpression + LoopExpression", () => {
       ),
     ).toRenderTo(d`
       loop {
-        if done { break result; }
+          if done { break result; }
       }
     `);
   });
@@ -82,7 +82,7 @@ describe("WhileExpression + LoopExpression", () => {
       ),
     ).toRenderTo(d`
       'outer: loop {
-        run_once();
+          run_once();
       }
     `);
   });
@@ -101,10 +101,10 @@ describe("WhileExpression + LoopExpression", () => {
       ),
     ).toRenderTo(d`
       'retry: while let Some(item) = queue.pop_front() {
-        process(item);
+          process(item);
       }
       'outer: loop {
-        break;
+          break;
       }
     `);
   });

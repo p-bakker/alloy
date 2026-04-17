@@ -332,7 +332,7 @@ describe("Rust reference nested scope traversal", () => {
       d`
       use crate::models::User;
       struct Response {
-        user: User,
+          user: User,
       }
     `.trim(),
     );
@@ -413,7 +413,7 @@ describe("Rust reference nested scope traversal", () => {
       use crate::models::User;
       struct Router {}
       impl Router {
-        fn from_user(user: User) -> User {}
+          fn from_user(user: User) -> User {}
       }
     `.trim(),
     );
@@ -454,7 +454,7 @@ describe("Rust reference nested scope traversal", () => {
       d`
       use crate::models::User;
       trait UserMapper {
-        fn map_user(user: User) -> User;
+          fn map_user(user: User) -> User;
       }
     `.trim(),
     );

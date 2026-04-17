@@ -29,7 +29,7 @@ describe("T073: doc comment declaration line breaks", () => {
       /// First doc
       /// Second line
       pub enum MyEnum {
-        Variant1,
+          Variant1,
       }
     `);
   });

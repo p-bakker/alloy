@@ -57,10 +57,10 @@ describe("Rust edge cases", () => {
         </Output>,
       ).toRenderTo(d`
         struct Wrapper {
-          value: i32,
+            value: i32,
         }
         enum Unit {
-          Only,
+            Only,
         }
       `);
     });
@@ -267,10 +267,10 @@ describe("Rust edge cases", () => {
       ).toRenderTo(d`
         struct Point {}
         impl Point {
-          fn new() {}
+            fn new() {}
         }
         impl Point {
-          fn distance(&self) {}
+            fn distance(&self) {}
         }
       `);
     });

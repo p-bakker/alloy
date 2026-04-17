@@ -31,7 +31,7 @@ describe("IfExpression", () => {
       ),
     ).toRenderTo(d`
       if self.data.len() >= self.max_capacity {
-        return Err(StoreError::StorageFull);
+          return Err(StoreError::StorageFull);
       }
     `);
   });
@@ -47,11 +47,11 @@ describe("IfExpression", () => {
       ),
     ).toRenderTo(d`
       if entry.status == EntryStatus::Expired {
-        Err(StoreError::NotFound)
+          Err(StoreError::NotFound)
       } else if entry.is_stale() {
-        Err(StoreError::NotFound)
+          Err(StoreError::NotFound)
       } else {
-        Ok(&entry.value)
+          Ok(&entry.value)
       }
     `);
   });
@@ -67,9 +67,9 @@ describe("IfExpression", () => {
       ),
     ).toRenderTo(d`
       if let Some(ttl) = entry.ttl {
-        if entry.created_at.elapsed() > ttl {
-          return Err(StoreError::NotFound);
-        }
+          if entry.created_at.elapsed() > ttl {
+              return Err(StoreError::NotFound);
+          }
       }
     `);
   });
@@ -85,11 +85,11 @@ describe("IfExpression", () => {
       ),
     ).toRenderTo(d`
       if value > 10 {
-        value
+          value
       } else if value > 0 {
-        0
+          0
       } else {
-        -1
+          -1
       }
     `);
   });

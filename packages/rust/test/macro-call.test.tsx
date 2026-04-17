@@ -60,11 +60,11 @@ describe("MacroCall", () => {
       ),
     ).toRenderTo(d`
       println!(
-        "Long message: {:?}",
-        var1,
-        var2,
-        var3,
-        Context::new(session_id, metadata, now, source, trace_id, actor)
+          "Long message: {:?}",
+          var1,
+          var2,
+          var3,
+          Context::new(session_id, metadata, now, source, trace_id, actor)
       )
     `);
   });

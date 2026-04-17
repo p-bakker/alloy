@@ -149,8 +149,8 @@ describe("FunctionDeclaration", () => {
       /// Line one.
       /// Line two.
       fn run() {
-        let value = 1;
-        value
+          let value = 1;
+          value
       }
     `);
   });
@@ -177,7 +177,7 @@ describe("FunctionDeclaration", () => {
       </Output>,
     ).toRenderTo(d`
       pub(crate) async unsafe const fn run-work(input-value: i32) {
-        input-value
+          input-value
       }
       pub(crate)|true|true|true
     `);
@@ -188,10 +188,7 @@ describe("FunctionDeclaration", () => {
       <Output>
         <CrateDirectory name="my_crate">
           <SourceFile path="lib.rs">
-            <FunctionDeclaration
-              name="run-work"
-              pub={true}
-            />
+            <FunctionDeclaration name="run-work" pub={true} />
             <hbr />
             <FunctionFlagsProbe name="run-work" />
           </SourceFile>
@@ -221,7 +218,7 @@ describe("FunctionDeclaration", () => {
     ).toRenderTo(d`
       struct Item {}
       impl Item {
-        fn run(&self) {}
+          fn run(&self) {}
       }
     `);
   });
@@ -244,7 +241,7 @@ describe("FunctionDeclaration", () => {
     ).toRenderTo(d`
       struct Item {}
       impl Item {
-        fn run(&mut self) {}
+          fn run(&mut self) {}
       }
     `);
   });
@@ -267,7 +264,7 @@ describe("FunctionDeclaration", () => {
     ).toRenderTo(d`
       struct Item {}
       impl Item {
-        fn consume(self) {}
+          fn consume(self) {}
       }
     `);
   });
@@ -290,7 +287,7 @@ describe("FunctionDeclaration", () => {
     ).toRenderTo(d`
       struct Item {}
       impl Item {
-        fn new() {}
+          fn new() {}
       }
     `);
   });
@@ -319,7 +316,7 @@ describe("FunctionDeclaration", () => {
     ).toRenderTo(d`
       struct Item {}
       impl Item {
-        fn set(&self, x: i32, y: i32) {}
+          fn set(&self, x: i32, y: i32) {}
       }
     `);
   });
@@ -337,7 +334,7 @@ describe("FunctionDeclaration", () => {
       </Output>,
     ).toRenderTo(d`
       trait Runner {
-        fn run(&self);
+          fn run(&self);
       }
     `);
   });
@@ -357,9 +354,9 @@ describe("FunctionDeclaration", () => {
       </Output>,
     ).toRenderTo(d`
       trait Runner {
-        fn run(&self) {
-          println!("default");
-        }
+          fn run(&self) {
+              println!("default");
+          }
       }
     `);
   });
@@ -414,7 +411,7 @@ describe("FunctionDeclaration", () => {
       /// Runs the process.
       #[inline]
       fn run() {
-        todo!()
+          todo!()
       }
     `);
   });

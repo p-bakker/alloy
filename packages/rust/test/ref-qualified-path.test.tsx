@@ -33,8 +33,8 @@ describe("ref() qualified path rendering", () => {
       </Output>,
     ).toRenderTo(d`
       pub enum Status {
-        Active,
-        Pending,
+          Active,
+          Pending,
       }
       let s = Status::Pending;
     `);
@@ -53,16 +53,14 @@ describe("ref() qualified path rendering", () => {
               <EnumVariant name="Pending" refkey={pendingVariant} />
             </EnumDeclaration>
           </SourceFile>
-          <SourceFile path="lib.rs">
-            let s = {pendingVariant};
-          </SourceFile>
+          <SourceFile path="lib.rs">let s = {pendingVariant};</SourceFile>
         </CrateDirectory>
       </Output>,
     ).toRenderTo({
       "models.rs": d`
         pub enum Status {
-          Active,
-          Pending,
+            Active,
+            Pending,
         }
       `,
       "lib.rs": d`
@@ -83,11 +81,17 @@ describe("ref() qualified path rendering", () => {
         <CrateDirectory name="my_crate">
           <SourceFile path="lib.rs">
             <StructDeclaration pub name="Config" refkey={structKey}>
-              {"timeout: u64,"}
+              {"timeout: u64"}
             </StructDeclaration>
             <hbr />
             <ImplBlock type={structKey}>
-              <FunctionDeclaration pub name="new" refkey={newFn} receiver="none" returnType="Self">
+              <FunctionDeclaration
+                pub
+                name="new"
+                refkey={newFn}
+                receiver="none"
+                returnType="Self"
+              >
                 {"Self { timeout: 30 }"}
               </FunctionDeclaration>
             </ImplBlock>
@@ -98,12 +102,12 @@ describe("ref() qualified path rendering", () => {
       </Output>,
     ).toRenderTo(d`
       pub struct Config {
-        timeout: u64,
+          timeout: u64
       }
       impl Config {
-        pub fn new() -> Self {
-          Self { timeout: 30 }
-        }
+          pub fn new() -> Self {
+              Self { timeout: 30 }
+          }
       }
       let c = Config::new();
     `);

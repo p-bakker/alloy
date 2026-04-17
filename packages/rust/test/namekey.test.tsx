@@ -33,7 +33,7 @@ describe("namekey support", () => {
       </Output>,
     ).toRenderTo(d`
       pub struct Person {
-        pub name: String,
+          pub name: String,
       }
     `);
   });
@@ -54,7 +54,7 @@ describe("namekey support", () => {
       </Output>,
     ).toRenderTo(d`
       pub struct Person {
-        pub name: String,
+          pub name: String,
       }
       type Alias = Person;
     `);
@@ -76,7 +76,7 @@ describe("namekey support", () => {
       </Output>,
     ).toRenderTo(d`
       pub struct Person {
-        pub name: String,
+          pub name: String,
       }
       type Alias = Person;
     `);
@@ -114,8 +114,8 @@ describe("namekey support", () => {
       </Output>,
     ).toRenderTo(d`
       pub enum Status {
-        Active,
-        Inactive,
+          Active,
+          Inactive,
       }
     `);
   });
@@ -144,12 +144,12 @@ describe("namekey support", () => {
     ).toRenderTo(d`
       pub struct Person {}
       pub trait Greetable {
-        fn greet(&self) -> String;
+          fn greet(&self) -> String;
       }
       impl Greetable for Person {
-        fn greet(&self) -> String {
-          String::from("hello")
-        }
+          fn greet(&self) -> String {
+              String::from("hello")
+          }
       }
     `);
   });
@@ -168,7 +168,7 @@ describe("namekey support", () => {
       </Output>,
     ).toRenderTo(d`
       pub fn do_stuff() -> bool {
-        true
+          true
       }
     `);
   });
@@ -213,7 +213,7 @@ describe("namekey support", () => {
       </Output>,
     ).toRenderTo(d`
       pub struct Config {
-        pub user_name: String,
+          pub user_name: String,
       }
     `);
   });

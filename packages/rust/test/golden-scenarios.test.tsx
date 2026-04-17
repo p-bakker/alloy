@@ -62,18 +62,18 @@ describe("Golden scenarios", () => {
       </Output>,
     ).toRenderTo(d`
       pub struct Point {
-        pub x: f64,
-        pub y: f64,
+          pub x: f64,
+          pub y: f64,
       }
       impl Point {
-        pub fn new(x: f64, y: f64) -> Self {
-          Self { x, y }
-        }
-        fn distance(&self, other: &Point) -> f64 {
-          let dx = self.x - other.x;
-          let dy = self.y - other.y;
-          (dx * dx + dy * dy).sqrt()
-        }
+          pub fn new(x: f64, y: f64) -> Self {
+              Self { x, y }
+          }
+          fn distance(&self, other: &Point) -> f64 {
+              let dx = self.x - other.x;
+              let dy = self.y - other.y;
+              (dx * dx + dy * dy).sqrt()
+          }
       }
     `);
   });
@@ -118,8 +118,8 @@ describe("Golden scenarios", () => {
     expect(findFile(output, "models/mod.rs").contents.trim()).toBe(
       d`
         pub struct User {
-          pub name: String,
-          pub age: u32,
+            pub name: String,
+            pub age: u32,
         }
       `.trim(),
     );
@@ -127,7 +127,7 @@ describe("Golden scenarios", () => {
       d`
         use crate::models::User;
         pub fn greet(user: &User) -> String {
-          format!("Hello, {}!", user.name)
+            format!("Hello, {}!", user.name)
         }
       `.trim(),
     );
@@ -159,15 +159,15 @@ describe("Golden scenarios", () => {
       </Output>,
     ).toRenderTo(d`
       trait Greetable {
-        fn greet(&self) -> String;
+          fn greet(&self) -> String;
       }
       pub struct User {
-        pub name: String,
+          pub name: String,
       }
       impl Greetable for User {
-        fn greet(&self) -> String {
-          format!("Hello, {}!", self.name)
-        }
+          fn greet(&self) -> String {
+              format!("Hello, {}!", self.name)
+          }
       }
     `);
   });
@@ -190,17 +190,17 @@ describe("Golden scenarios", () => {
         </CrateDirectory>
       </Output>,
     ).toRenderTo(d`
-      pub enum Shape {
-        Circle {
-          radius: f64,
-        },
-        Rectangle {
-          width: f64,
-          height: f64,
-        },
-        Point(f64, f64),
-        Nothing,
-      }
+        pub enum Shape {
+            Circle {
+                radius: f64,
+            },
+            Rectangle {
+                width: f64,
+                height: f64,
+            },
+            Point(f64, f64),
+            Nothing,
+        }
     `);
   });
 
