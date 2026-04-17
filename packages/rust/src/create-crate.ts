@@ -32,16 +32,16 @@ export interface SymbolDescriptor {
   members?: Record<string, MemberDescriptor>;
 }
 
+/** An entry in `items` is either a root symbol or a submodule of symbols. */
+type CrateItem = SymbolDescriptor | Record<string, SymbolDescriptor>;
+
 export interface CrateDescriptor<
-  TModules extends Record<string, Record<string, SymbolDescriptor>> = Record<
-    string,
-    Record<string, SymbolDescriptor>
-  >,
+  TItems extends Record<string, CrateItem> = Record<string, CrateItem>,
 > {
   name: string;
   version?: string;
   builtin?: boolean;
-  modules: TModules;
+  items: TItems;
 }
 
 type SymbolRef<TSymbol extends SymbolDescriptor> =
@@ -49,12 +49,14 @@ type SymbolRef<TSymbol extends SymbolDescriptor> =
     ? RefkeyableObject & { [K in keyof M]: Refkey }
     : Refkey;
 
+type ItemRef<T extends CrateItem> = T extends SymbolDescriptor
+  ? SymbolRef<T>
+  : T extends Record<string, SymbolDescriptor>
+    ? { [S in keyof T]: SymbolRef<T[S]> }
+    : never;
+
 export type CrateRef<TDescriptor extends CrateDescriptor = CrateDescriptor> = {
-  [P in keyof TDescriptor["modules"]]: {
-    [S in keyof TDescriptor["modules"][P]]: SymbolRef<
-      TDescriptor["modules"][P][S]
-    >;
-  };
+  [P in keyof TDescriptor["items"]]: ItemRef<TDescriptor["items"][P]>;
 };
 
 const crateFactoryStateSymbol: unique symbol = Symbol(
@@ -97,7 +99,7 @@ interface DescriptorEntry {
   exportName: string;
   descriptor: SymbolDescriptor;
   symbolRefkey: Refkey;
-  modules: object; // reference to descriptor.modules for stable refkey derivation
+  items: object; // reference to descriptor.items for stable refkey derivation
 }
 
 interface BinderState {
@@ -106,11 +108,15 @@ interface BinderState {
   createdSymbols: Map<Refkey, RustOutputSymbol>;
 }
 
+function isSymbolDescriptor(value: CrateItem): value is SymbolDescriptor {
+  return "kind" in value && typeof (value as SymbolDescriptor).kind === "string";
+}
+
 export function createCrate<
-  const TModules extends Record<string, Record<string, SymbolDescriptor>>,
+  const TItems extends Record<string, CrateItem>,
 >(
-  descriptor: CrateDescriptor<TModules>,
-): CrateRef<CrateDescriptor<TModules>> & SymbolCreator & ExternalCrate {
+  descriptor: CrateDescriptor<TItems>,
+): CrateRef<CrateDescriptor<TItems>> & SymbolCreator & ExternalCrate {
   const binderStates = new WeakMap<Binder, BinderState>();
   const entries: DescriptorEntry[] = [];
   const crateFactoryState: CrateFactoryState = {
@@ -147,45 +153,58 @@ export function createCrate<
     [crateFactoryStateSymbol]: crateFactoryState,
   } as Record<string | symbol, unknown>;
 
-  for (const [modulePath, symbols] of Object.entries(descriptor.modules)) {
-    const moduleRefs: Record<string, unknown> = {};
-    for (const [exportName, symbolDescriptor] of Object.entries(symbols)) {
-      const symbolRefkey = refkey(descriptor.modules, modulePath, exportName);
+  function addSymbolRef(
+    target: Record<string, unknown>,
+    modulePath: string,
+    exportName: string,
+    symbolDescriptor: SymbolDescriptor,
+  ) {
+    const symbolRefkey = refkey(descriptor.items, modulePath, exportName);
 
-      // If the symbol has members, create a RefkeyableObject with member refkeys
-      if (symbolDescriptor.members) {
-        const symbolWithMembers: Record<string | symbol, unknown> = {
-          [REFKEYABLE]() {
-            return symbolRefkey;
-          },
-        };
-        for (const memberName of Object.keys(symbolDescriptor.members)) {
-          const memberRefkey = refkey(
-            descriptor.modules,
-            modulePath,
-            exportName,
-            memberName,
-          );
-          symbolWithMembers[memberName] = memberRefkey;
-        }
-        moduleRefs[exportName] = symbolWithMembers;
-      } else {
-        moduleRefs[exportName] = symbolRefkey;
+    if (symbolDescriptor.members) {
+      const symbolWithMembers: Record<string | symbol, unknown> = {
+        [REFKEYABLE]() {
+          return symbolRefkey;
+        },
+      };
+      for (const memberName of Object.keys(symbolDescriptor.members)) {
+        const memberRefkey = refkey(
+          descriptor.items,
+          modulePath,
+          exportName,
+          memberName,
+        );
+        symbolWithMembers[memberName] = memberRefkey;
       }
-
-      entries.push({
-        modulePath,
-        exportName,
-        descriptor: symbolDescriptor,
-        symbolRefkey,
-        modules: descriptor.modules,
-      });
+      target[exportName] = symbolWithMembers;
+    } else {
+      target[exportName] = symbolRefkey;
     }
 
-    crateRef[modulePath] = moduleRefs;
+    entries.push({
+      modulePath,
+      exportName,
+      descriptor: symbolDescriptor,
+      symbolRefkey,
+      items: descriptor.items,
+    });
   }
 
-  return crateRef as CrateRef<CrateDescriptor<TModules>> &
+  for (const [key, value] of Object.entries(descriptor.items)) {
+    if (isSymbolDescriptor(value)) {
+      // Root symbol — spread directly onto crateRef
+      addSymbolRef(crateRef, "", key, value);
+    } else {
+      // Submodule — create a nested object
+      const moduleRefs: Record<string, unknown> = {};
+      for (const [exportName, symbolDescriptor] of Object.entries(value)) {
+        addSymbolRef(moduleRefs, key, exportName, symbolDescriptor);
+      }
+      crateRef[key] = moduleRefs;
+    }
+  }
+
+  return crateRef as CrateRef<CrateDescriptor<TItems>> &
     SymbolCreator &
     ExternalCrate;
 }
@@ -311,7 +330,7 @@ function createSymbolFromDescriptor(
       descriptor.members,
     )) {
       const memberRefkey = refkey(
-        entry.modules,
+        entry.items,
         entry.modulePath,
         exportName,
         memberName,

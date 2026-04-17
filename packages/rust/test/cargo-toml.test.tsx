@@ -40,10 +40,8 @@ describe("CargoTomlFile", () => {
     const serde = createCrate({
       name: "serde",
       version: "1.0.219",
-      modules: {
-        "": {
-          Serialize: { kind: "trait" },
-        },
+      items: {
+        Serialize: { kind: "trait" },
       },
     });
 
@@ -58,7 +56,7 @@ describe("CargoTomlFile", () => {
           }}
         >
           <SourceFile path="lib.rs">
-            type Alias = <Reference refkey={serde[""].Serialize} />;
+            type Alias = <Reference refkey={serde.Serialize} />;
           </SourceFile>
         </CrateDirectory>
       </Output>,
@@ -85,10 +83,8 @@ describe("CargoTomlFile", () => {
     const serde = createCrate({
       name: "serde",
       version: "1.0.219",
-      modules: {
-        "": {
-          Serialize: { kind: "trait" },
-        },
+      items: {
+        Serialize: { kind: "trait" },
       },
     });
 
@@ -101,7 +97,7 @@ describe("CargoTomlFile", () => {
           includeCargoToml
         >
           <SourceFile path="lib.rs">
-            type Alias = <Reference refkey={serde[""].Serialize} />;
+            type Alias = <Reference refkey={serde.Serialize} />;
           </SourceFile>
         </CrateDirectory>
       </Output>,
@@ -132,7 +128,7 @@ describe("CargoTomlFile", () => {
           includeCargoToml
         >
           <SourceFile path="lib.rs">
-            type Alias = <Reference refkey={serde[""].Serialize} />;
+            type Alias = <Reference refkey={serde.Serialize} />;
           </SourceFile>
         </CrateDirectory>
       </Output>,

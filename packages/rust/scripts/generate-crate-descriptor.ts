@@ -958,7 +958,7 @@ for (const [topLevel, entries] of [...topLevelModules.entries()].sort(([a], [b])
   if (cli.builtin) {
     lines.push(`  builtin: true,`);
   }
-  lines.push(`  modules: {`);
+  lines.push(`  items: {`);
 
   for (const { varName, modulePath } of moduleFileNames) {
     const key = modulePath === "" ? '""' : `"${modulePath}"`;
