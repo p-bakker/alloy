@@ -27,7 +27,7 @@ describe("BlockExpression", () => {
     expect(inFile(<BlockExpression>{code`x + y`}</BlockExpression>))
       .toRenderTo(d`
       {
-        x + y
+          x + y
       }
     `);
   });
@@ -43,9 +43,9 @@ describe("BlockExpression", () => {
       ),
     ).toRenderTo(d`
       {
-        let a = compute();
-        let b = transform(a);
-        a + b
+          let a = compute();
+          let b = transform(a);
+          a + b
       }
     `);
   });
@@ -69,9 +69,9 @@ describe("BlockExpression", () => {
       ),
     ).toRenderTo(d`
       let x = {
-        let a = compute();
-        let b = transform(a);
-        a + b
+          let a = compute();
+          let b = transform(a);
+          a + b
       };
     `);
   });
@@ -86,8 +86,8 @@ describe("BlockExpression", () => {
       ),
     ).toRenderTo(d`
       {
-        let x = 5;
-        x + 1
+          let x = 5;
+          x + 1
       }
     `);
   });

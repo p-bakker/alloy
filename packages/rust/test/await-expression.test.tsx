@@ -55,7 +55,7 @@ describe("AwaitExpression", () => {
       ),
     ).toRenderTo(d`
       async fn fetch_user() {
-        client.get(url).await?
+          client.get(url).await?
       }
     `);
   });

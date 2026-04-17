@@ -73,8 +73,8 @@ describe("ClosureExpression", () => {
       ),
     ).toRenderTo(d`
       |entry| {
-        let ttl = entry.ttl;
-        ttl.is_some()
+          let ttl = entry.ttl;
+          ttl.is_some()
       }
     `);
   });
@@ -91,7 +91,7 @@ describe("ClosureExpression", () => {
       ),
     ).toRenderTo(d`
       |value: i32| -> bool {
-        value > 0
+          value > 0
       }
     `);
   });

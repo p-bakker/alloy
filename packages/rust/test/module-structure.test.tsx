@@ -262,8 +262,8 @@ describe("Module structure integration", () => {
     expect(findFile(output, "models/mod.rs").contents.trim()).toBe(
       d`
         pub struct User {
-          pub name: String,
-          pub age: u32,
+            pub name: String,
+            pub age: u32,
         }
       `.trim(),
     );
@@ -271,7 +271,7 @@ describe("Module structure integration", () => {
       d`
         use crate::models::User;
         pub fn greet(user: &User) -> String {
-          format!("Hello, {}!", user.name)
+            format!("Hello, {}!", user.name)
         }
       `.trim(),
     );

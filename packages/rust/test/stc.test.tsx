@@ -51,7 +51,7 @@ describe("STC wrappers", () => {
       ),
     ).toRenderTo(d`
       struct Point {
-        x: i32,
+          x: i32,
       }
     `);
 
@@ -63,7 +63,7 @@ describe("STC wrappers", () => {
       ),
     ).toRenderTo(d`
       struct Point {
-        x: i32,
+          x: i32,
       }
     `);
   });
@@ -77,7 +77,7 @@ describe("STC wrappers", () => {
       ),
     ).toRenderTo(d`
       enum Status {
-        Ok,
+          Ok,
       }
     `);
 
@@ -89,7 +89,7 @@ describe("STC wrappers", () => {
       ),
     ).toRenderTo(d`
       enum Status {
-        Ok,
+          Ok,
       }
     `);
   });
@@ -103,7 +103,7 @@ describe("STC wrappers", () => {
       ),
     ).toRenderTo(d`
       fn hello() {
-        println!("hi");
+          println!("hi");
       }
     `);
 
@@ -111,7 +111,7 @@ describe("STC wrappers", () => {
       inFile(Stc.FunctionDeclaration({ name: "hello" }).code`println!("hi");`),
     ).toRenderTo(d`
       fn hello() {
-        println!("hi");
+          println!("hi");
       }
     `);
   });
@@ -141,7 +141,7 @@ describe("STC wrappers", () => {
     ).toRenderTo(d`
       struct Item {}
       impl Item {
-        fn run(&self) {}
+          fn run(&self) {}
       }
     `);
 
@@ -158,7 +158,7 @@ describe("STC wrappers", () => {
     ).toRenderTo(d`
       struct Item {}
       impl Item {
-        fn run(&self) {}
+          fn run(&self) {}
       }
     `);
   });
@@ -332,7 +332,7 @@ describe("STC wrappers", () => {
       ),
     ).toRenderTo(d`
       fn render_params() {
-        (value: i32)
+          (value: i32)
       }
     `);
     expect(
@@ -343,7 +343,7 @@ describe("STC wrappers", () => {
       ),
     ).toRenderTo(d`
       fn render_params() {
-        (value: i32)
+          (value: i32)
       }
     `);
 

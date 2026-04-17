@@ -139,10 +139,10 @@ describe("TraitDeclaration", () => {
       </Output>,
     ).toRenderTo(d`
       trait Runner {
-        fn run(&self);
-        fn run_default(&self) {
-        true
-        }
+          fn run(&self);
+          fn run_default(&self) {
+          true
+          }
       }
     `);
   });
@@ -175,7 +175,7 @@ describe("TraitDeclaration", () => {
       </Output>,
     ).toRenderTo(d`
       trait Runner {
-        trait-scope
+          trait-scope
       }
     `);
   });

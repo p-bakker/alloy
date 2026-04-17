@@ -47,7 +47,7 @@ describe("ImplBlock", () => {
     ).toRenderTo(d`
       struct Foo {}
       impl Foo {
-        fn new(&self) {}
+          fn new(&self) {}
       }
     `);
   });
@@ -74,7 +74,7 @@ describe("ImplBlock", () => {
       trait Printable {}
       struct Foo {}
       impl Printable for Foo {
-        fn print(&self) {}
+          fn print(&self) {}
       }
     `);
   });
@@ -140,7 +140,7 @@ describe("ImplBlock", () => {
     ).toRenderTo(d`
       struct Foo {}
       impl Foo {
-        fn run(&self) {}
+          fn run(&self) {}
       }
       run
     `);
@@ -216,7 +216,7 @@ describe("ImplBlock", () => {
     ).toRenderTo(d`
       struct Store<K, V> {}
       impl<K, V> Store<K, V> {
-        fn new(&self) {}
+          fn new(&self) {}
       }
     `);
   });
@@ -247,7 +247,7 @@ describe("ImplBlock", () => {
       trait Displayable {}
       struct Store<K, V> {}
       impl<K, V> Displayable for Store<K, V> {
-        fn fmt(&self) {}
+          fn fmt(&self) {}
       }
     `);
   });
@@ -325,7 +325,7 @@ describe("ImplBlock", () => {
       struct Foo {}
       #[automatically_derived]
       impl Display for Foo {
-        fn fmt(&self) {}
+          fn fmt(&self) {}
       }
     `);
   });

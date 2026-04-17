@@ -36,9 +36,9 @@ describe("MatchExpression", () => {
       ),
     ).toRenderTo(d`
       match self {
-        Self::NotFound => write!(f, "key not found"),
-        Self::StorageFull => write!(f, "storage is full"),
-        Self::SerializationError(msg) => write!(f, "serialization error: {}", msg),
+          Self::NotFound => write!(f, "key not found"),
+          Self::StorageFull => write!(f, "storage is full"),
+          Self::SerializationError(msg) => write!(f, "serialization error: {}", msg),
       }
     `);
   });
@@ -54,7 +54,7 @@ describe("MatchExpression", () => {
       ),
     ).toRenderTo(d`
       match entry {
-        Some(e) if e.is_expired() => Err(StoreError::NotFound),
+          Some(e) if e.is_expired() => Err(StoreError::NotFound),
       }
     `);
   });
@@ -71,10 +71,10 @@ describe("MatchExpression", () => {
       ),
     ).toRenderTo(d`
       match option {
-        Some(x) => {
-          println!("got value");
-          x + 1
-        },
+          Some(x) => {
+              println!("got value");
+              x + 1
+          },
       }
     `);
   });
@@ -88,7 +88,7 @@ describe("MatchExpression", () => {
       ),
     ).toRenderTo(d`
       match result {
-        Ok(value) => value,
+          Ok(value) => value,
       }
     `);
   });

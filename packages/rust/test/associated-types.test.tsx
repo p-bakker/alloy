@@ -49,7 +49,7 @@ describe("AssociatedType", () => {
       </Output>,
     ).toRenderTo(d`
       trait Iterable {
-        type Item;
+          type Item;
       }
       Item:associated-type
     `);
@@ -68,7 +68,7 @@ describe("AssociatedType", () => {
       </Output>,
     ).toRenderTo(d`
       trait Iterable {
-        type Item: Clone;
+          type Item: Clone;
       }
     `);
   });
@@ -95,7 +95,7 @@ describe("AssociatedType", () => {
       trait Iterable {}
       struct Numbers {}
       impl Iterable for Numbers {
-        type Item = u32;
+          type Item = u32;
       }
     `);
   });
@@ -113,7 +113,7 @@ describe("AssociatedType", () => {
       </Output>,
     ).toRenderTo(d`
       trait Iterable {
-        type Item: Clone;
+          type Item: Clone;
       }
     `);
   });

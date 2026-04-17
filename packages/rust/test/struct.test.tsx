@@ -110,8 +110,8 @@ describe("StructDeclaration", () => {
       </Output>,
     ).toRenderTo(d`
       struct Foo {
-        first: String,
-        second: u64,
+          first: String,
+          second: u64,
       }
     `);
   });
@@ -248,9 +248,9 @@ describe("Field", () => {
       </Output>,
     ).toRenderTo(d`
       struct Foo {
-        pub name: String,
-        pub(crate) id: u64,
-        pub(super) owner: String,
+          pub name: String,
+          pub(crate) id: u64,
+          pub(super) owner: String,
       }
     `);
   });
@@ -268,8 +268,8 @@ describe("Field", () => {
       </Output>,
     ).toRenderTo(d`
       struct Foo {
-        /// Primary name.
-        name: String,
+          /// Primary name.
+          name: String,
       }
     `);
   });
@@ -287,7 +287,7 @@ describe("Field", () => {
       </Output>,
     ).toRenderTo(d`
       struct Foo {
-        pub id: u64,
+          pub id: u64,
       }
     `);
   });
@@ -312,9 +312,9 @@ describe("Field", () => {
       </Output>,
     ).toRenderTo(d`
       struct Config {
-        #[serde(rename = "user_name")]
-        name: String,
-        age: u32,
+          #[serde(rename = "user_name")]
+          name: String,
+          age: u32,
       }
     `);
   });
@@ -337,9 +337,9 @@ describe("Field", () => {
       </Output>,
     ).toRenderTo(d`
       struct Config {
-        /// The port number.
-        #[serde(default)]
-        port: u16,
+          /// The port number.
+          #[serde(default)]
+          port: u16,
       }
     `);
   });

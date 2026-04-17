@@ -25,7 +25,7 @@ describe("UnsafeBlock", () => {
   it("renders a simple unsafe block", () => {
     expect(inFile(<UnsafeBlock>{code`*ptr`}</UnsafeBlock>)).toRenderTo(d`
       unsafe {
-        *ptr
+          *ptr
       }
     `);
   });
@@ -40,8 +40,8 @@ describe("UnsafeBlock", () => {
       ),
     ).toRenderTo(d`
       unsafe {
-        let ptr = &value as *const i32;
-        let val = *ptr;
+          let ptr = &value as *const i32;
+          let val = *ptr;
       }
     `);
   });
@@ -62,8 +62,8 @@ describe("UnsafeBlock", () => {
       ),
     ).toRenderTo(d`
       unsafe {
-        if ptr.is_null() { return None; }
-        Some(*ptr)
+          if ptr.is_null() { return None; }
+          Some(*ptr)
       }
     `);
   });
@@ -72,7 +72,7 @@ describe("UnsafeBlock", () => {
     expect(inFile(Stc.UnsafeBlock().children(["libc::free(ptr);"])))
       .toRenderTo(d`
       unsafe {
-        libc::free(ptr);
+          libc::free(ptr);
       }
     `);
   });

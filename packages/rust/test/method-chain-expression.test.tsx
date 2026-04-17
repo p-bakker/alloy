@@ -68,10 +68,10 @@ describe("MethodChainExpression", () => {
     ).toRenderTo(
       d`
         items
-          .iter()
-          .filter(predicate)
-          .map(mapper)
-          .collect::<Vec<_>>()
+            .iter()
+            .filter(predicate)
+            .map(mapper)
+            .collect::<Vec<_>>()
       `,
       { printWidth: 20 },
     );
