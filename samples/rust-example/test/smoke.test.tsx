@@ -6,9 +6,10 @@ import { join } from "path";
 import { Output, render, writeOutput } from "@alloy-js/core";
 import {
   CrateDirectory,
-  ModuleDocComment,
+  InnerDocComment,
   SourceFile,
   createRustNamePolicy,
+  std,
 } from "@alloy-js/rust";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
@@ -16,7 +17,6 @@ import { ConfigFile } from "../src/components/config-file.js";
 import { ErrorModule } from "../src/components/error-module.js";
 import { StoreModule } from "../src/components/store-module.js";
 import { TraitsModule } from "../src/components/traits-module.js";
-import { stdCrate } from "../src/externals.js";
 
 function hasRustToolchain(): boolean {
   try {
@@ -88,7 +88,7 @@ describe.skipIf(!hasCargo)("rust smoke test", () => {
 
   beforeAll(async () => {
     const output = render(
-      <Output namePolicy={createRustNamePolicy()} externals={[stdCrate]}>
+      <Output namePolicy={createRustNamePolicy()} externals={[std]}>
         <CrateDirectory
           name="kv_store"
           version="0.1.0"
@@ -104,9 +104,9 @@ describe.skipIf(!hasCargo)("rust smoke test", () => {
           <SourceFile
             path="lib.rs"
             headerComment={
-              <ModuleDocComment>
+              <InnerDocComment>
                 A generic, thread-safe key-value store library.
-              </ModuleDocComment>
+              </InnerDocComment>
             }
           />
         </CrateDirectory>
