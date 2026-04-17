@@ -7,7 +7,6 @@ import {
   Attribute,
   CrateDirectory,
   Declaration,
-  DeriveAttribute,
   InnerAttribute,
   SourceFile,
   StructDeclaration,
@@ -48,43 +47,7 @@ describe("Attribute", () => {
   });
 });
 
-describe("DeriveAttribute", () => {
-  it("renders single derive trait", () => {
-    expect(<DeriveAttribute traits={["Debug"]} />).toRenderTo(
-      d`#[derive(Debug)]`,
-    );
-  });
-
-  it("renders multiple derive traits", () => {
-    expect(
-      <DeriveAttribute traits={["Debug", "Clone", "Serialize"]} />,
-    ).toRenderTo(d`#[derive(Debug, Clone, Serialize)]`);
-  });
-
-  it("resolves refkey trait names", () => {
-    const serializeTrait = refkey("serialize-trait");
-    expect(
-      <Output>
-        <CrateDirectory name="my_crate">
-          <SourceFile path="lib.rs">
-            <Declaration
-              name="Serialize"
-              refkey={serializeTrait}
-              nameKind="trait"
-            >
-              trait Serialize {`{}`}
-            </Declaration>
-            <hbr />
-            <DeriveAttribute traits={[serializeTrait]} />
-          </SourceFile>
-        </CrateDirectory>
-      </Output>,
-    ).toRenderTo(d`
-      trait Serialize {}
-      #[derive(Serialize)]
-    `);
-  });
-
+describe("DeriveAttribute (via derives prop)", () => {
   it("renders before declarations", () => {
     expect(
       <Output>

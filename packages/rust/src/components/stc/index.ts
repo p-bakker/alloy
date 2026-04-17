@@ -3,7 +3,6 @@ import { stc } from "@alloy-js/core";
 import { AssociatedType as AssociatedTypeComponent } from "../associated-type.js";
 import {
   Attribute as AttributeComponent,
-  DeriveAttribute as DeriveAttributeComponent,
   InnerAttribute as InnerAttributeComponent,
 } from "../attribute.js";
 import { AwaitExpression as AwaitExpressionComponent } from "../await-expression.js";
@@ -80,7 +79,6 @@ export const StaticDeclaration = stc(StaticDeclarationComponent);
 export const ContinueExpression = stc(ContinueExpressionComponent);
 export const CrateDirectory = stc(CrateDirectoryComponent);
 export const BreakExpression = stc(BreakExpressionComponent);
-export const DeriveAttribute = stc(DeriveAttributeComponent);
 export const BlockComment = stc(BlockCommentComponent);
 export const DocComment = stc(DocCommentComponent);
 export const EnumDeclaration = stc(EnumDeclarationComponent);

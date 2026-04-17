@@ -1,5 +1,4 @@
 import type { Children, Refkey } from "@alloy-js/core";
-import { For } from "@alloy-js/core";
 
 import { Reference } from "./reference.js";
 
@@ -11,10 +10,6 @@ export interface AttributeProps {
 export interface InnerAttributeProps {
   name: string | Refkey;
   args?: Children;
-}
-
-export interface DeriveAttributeProps {
-  traits: (string | Refkey)[];
 }
 
 export function Attribute(props: AttributeProps) {
@@ -49,20 +44,5 @@ function AttributeBase(props: AttributeBaseProps) {
       ) : null}
       {"]"}
     </>
-  );
-}
-
-export function DeriveAttribute(props: DeriveAttributeProps) {
-  return (
-    <Attribute
-      name="derive"
-      args={
-        <For each={props.traits} joiner={", "}>
-          {(item) =>
-            typeof item === "string" ? item : <Reference refkey={item} />
-          }
-        </For>
-      }
-    />
   );
 }

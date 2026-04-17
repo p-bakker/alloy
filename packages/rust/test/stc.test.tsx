@@ -8,7 +8,6 @@ import {
   CargoTomlFile,
   ConstDeclaration,
   CrateDirectory,
-  DeriveAttribute,
   DocComment,
   EnumDeclaration,
   EnumVariant,
@@ -194,15 +193,6 @@ describe("STC wrappers", () => {
     expect(inFile(Stc.Attribute({ name: "cfg", args: "test" }))).toRenderTo(
       d`#[cfg(test)]`,
     );
-  });
-
-  it("DeriveAttribute wrapper matches JSX output", () => {
-    expect(inFile(<DeriveAttribute traits={["Debug", "Clone"]} />)).toRenderTo(
-      d`#[derive(Debug, Clone)]`,
-    );
-    expect(
-      inFile(Stc.DeriveAttribute({ traits: ["Debug", "Clone"] })),
-    ).toRenderTo(d`#[derive(Debug, Clone)]`);
   });
 
   it("DocComment wrapper supports .children and matches JSX output", () => {
