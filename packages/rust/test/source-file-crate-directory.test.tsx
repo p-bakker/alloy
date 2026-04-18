@@ -77,6 +77,22 @@ describe("SourceFile", () => {
     `);
   });
 
+  it("wraps a plain-string headerComment in InnerDocComment", () => {
+    expect(
+      <Output>
+        <CrateDirectory name="my_crate">
+          <SourceFile path="lib.rs" headerComment="Crate docs">
+            {code`fn main() {}`}
+          </SourceFile>
+        </CrateDirectory>
+      </Output>,
+    ).toRenderTo(d`
+      //! Crate docs
+
+      fn main() {}
+    `);
+  });
+
   it("registers standalone source files with pub(super) visibility", () => {
     let moduleScopeName = "";
     let moduleScopeValues = "";

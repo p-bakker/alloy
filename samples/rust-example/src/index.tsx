@@ -1,7 +1,6 @@
 import { Output, render, writeOutput } from "@alloy-js/core";
 import {
   CrateDirectory,
-  InnerDocComment,
   SourceFile,
   createRustNamePolicy,
 } from "@alloy-js/rust";
@@ -28,11 +27,7 @@ const output = render(
 
       <SourceFile
         path="lib.rs"
-        headerComment={
-          <InnerDocComment>
-            {`A generic, thread-safe key-value store library.\n\nThis crate provides a configurable in-memory store\nwith support for TTL-based expiration, capacity limits,\nand trait-based extensibility.`}
-          </InnerDocComment>
-        }
+        headerComment={`A generic, thread-safe key-value store library.\n\nThis crate provides a configurable in-memory store\nwith support for TTL-based expiration, capacity limits,\nand trait-based extensibility.`}
       />
     </CrateDirectory>
   </Output>,
