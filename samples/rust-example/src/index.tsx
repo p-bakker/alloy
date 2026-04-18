@@ -17,7 +17,6 @@ const output = render(
       version="0.1.0"
       edition="2021"
       crateType="lib"
-      sourcePath="."
       includeCargoToml
     >
       <ErrorModule />

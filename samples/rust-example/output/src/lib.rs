@@ -4,7 +4,7 @@
 //! with support for TTL-based expiration, capacity limits,
 //! and trait-based extensibility.
 
-mod config;
+pub mod config;
 pub mod error;
 pub mod store;
 pub mod traits;
