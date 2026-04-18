@@ -114,9 +114,9 @@ describe("Rust reference resolution", () => {
     );
 
     expect(consumerModuleScope).toBeDefined();
-    expect(consumerModuleScope!.imports.get("crate::types::nested")?.size).toBe(
-      1,
-    );
+    expect(
+      consumerModuleScope!.getImport("crate::types::nested")?.names.size,
+    ).toBe(1);
   });
 
   it("resolves refkey to external crate symbol and tracks dependency", () => {
@@ -155,7 +155,7 @@ describe("Rust reference resolution", () => {
 
     expect(consumerModuleScope).toBeDefined();
     expect(consumerCrateScope).toBeDefined();
-    expect(consumerModuleScope!.imports.get("serde::types")?.size).toBe(1);
+    expect(consumerModuleScope!.getImport("serde::types")?.names.size).toBe(1);
     expect(consumerCrateScope!.dependencies.get("serde")).toBe("*");
   });
 
@@ -222,7 +222,7 @@ describe("Rust reference resolution", () => {
 
     expect(consumerModuleScope).toBeDefined();
     expect(consumerModuleScope!.imports.size).toBe(1);
-    expect(consumerModuleScope!.imports.get("crate::types")?.size).toBe(1);
+    expect(consumerModuleScope!.getImport("crate::types")?.names.size).toBe(1);
 
     const content = findFile(output, "src/lib").contents.trim();
     expect(content).toContain("use crate::types::Option;");

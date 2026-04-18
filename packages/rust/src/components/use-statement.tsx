@@ -1,58 +1,61 @@
 import { code, memo } from "@alloy-js/core";
 
 import { useRustModuleScope } from "../scopes/contexts.js";
-import { type RustVisibilityProps, VisibilityPrefix } from "./visibility.js";
+import { type RustVisibility } from "../symbols/rust-output-symbol.js";
+import {
+  type RustVisibilityProps,
+  toRustVisibility,
+  VisibilityPrefix,
+} from "./visibility.js";
 
 export interface UseStatementProps extends RustVisibilityProps {
   path: string;
   symbol: string;
 }
 
-interface UseStatementEntry extends RustVisibilityProps {
+interface UseStatementLineProps {
   path: string;
+  visibility: RustVisibility;
   symbols: string[];
 }
 
 interface UseStatementGroupProps {
-  entries: UseStatementEntry[];
+  entries: UseStatementLineProps[];
 }
 
+// Registers the import into the enclosing module scope; `<UseStatements />`
+// groups and renders all entries with the same (path, visibility).
 export function UseStatement(props: UseStatementProps) {
-  return (
-    <>
-      <VisibilityPrefix pub={props.pub} />
-      {code`use `}
-      {props.path}
-      {code`::`}
-      {props.symbol}
-      {code`;`}
-    </>
-  );
+  const moduleScope = useRustModuleScope();
+  const visibility = toRustVisibility(props.pub);
+  moduleScope.addUse(props.path, props.symbol, visibility);
+  return null;
 }
 
-function UseStatementPath(props: UseStatementEntry) {
+function UseStatementLine(props: UseStatementLineProps) {
   const sortedSymbols = [...props.symbols].sort((left, right) =>
     left.localeCompare(right),
   );
 
-  if (sortedSymbols.length === 1) {
-    return (
-      <UseStatement
-        pub={props.pub}
-        path={props.path}
-        symbol={sortedSymbols[0]}
-      />
+  const body =
+    sortedSymbols.length === 1 ? (
+      sortedSymbols[0]
+    ) : (
+      <>
+        {code`{`}
+        {sortedSymbols.join(", ")}
+        {code`}`}
+      </>
     );
-  }
 
   return (
     <>
-      <VisibilityPrefix pub={props.pub} />
+      <VisibilityPrefix pub={props.visibility} />
       {code`use `}
       {props.path}
-      {code`::{`}
-      {sortedSymbols.join(", ")}
-      {code`};`}
+      {code`::`}
+      {body}
+      {code`;`}
     </>
   );
 }
@@ -62,9 +65,9 @@ function UseStatementGroup(props: UseStatementGroupProps) {
     <>
       {props.entries.map((entry, index) => (
         <>
-          <UseStatementPath
-            pub={entry.pub}
+          <UseStatementLine
             path={entry.path}
+            visibility={entry.visibility}
             symbols={entry.symbols}
           />
           {index < props.entries.length - 1 ? <hbr /> : null}
@@ -74,34 +77,46 @@ function UseStatementGroup(props: UseStatementGroupProps) {
   );
 }
 
+/**
+ * Order for entries within a bucket: by path ascending, then private-first
+ * (undefined visibility) before `pub` variants. Keeps `pub use` re-exports
+ * after the plain imports for the same path — the idiomatic layout.
+ */
+function compareEntries(
+  left: UseStatementLineProps,
+  right: UseStatementLineProps,
+): number {
+  const byPath = left.path.localeCompare(right.path);
+  if (byPath !== 0) return byPath;
+  return (left.visibility ?? "").localeCompare(right.visibility ?? "");
+}
+
 export function UseStatements() {
   const moduleScope = useRustModuleScope();
   return memo(() => {
-    const stdEntries: UseStatementEntry[] = [];
-    const externalEntries: UseStatementEntry[] = [];
-    const crateEntries: UseStatementEntry[] = [];
+    const stdEntries: UseStatementLineProps[] = [];
+    const externalEntries: UseStatementLineProps[] = [];
+    const crateEntries: UseStatementLineProps[] = [];
 
-    for (const [path, symbols] of moduleScope.imports) {
-      const entry = {
-        path,
-        symbols: [...symbols].map((symbol) => symbol.name),
+    for (const group of moduleScope.imports.values()) {
+      const entry: UseStatementLineProps = {
+        path: group.path,
+        visibility: group.visibility,
+        symbols: [...group.names],
       };
 
-      if (path === "std" || path.startsWith("std::")) {
+      if (group.path === "std" || group.path.startsWith("std::")) {
         stdEntries.push(entry);
-      } else if (path === "crate" || path.startsWith("crate::")) {
+      } else if (group.path === "crate" || group.path.startsWith("crate::")) {
         crateEntries.push(entry);
       } else {
         externalEntries.push(entry);
       }
     }
 
-    const sortEntries = (left: UseStatementEntry, right: UseStatementEntry) =>
-      left.path.localeCompare(right.path);
-
-    stdEntries.sort(sortEntries);
-    externalEntries.sort(sortEntries);
-    crateEntries.sort(sortEntries);
+    stdEntries.sort(compareEntries);
+    externalEntries.sort(compareEntries);
+    crateEntries.sort(compareEntries);
 
     const groups = [stdEntries, externalEntries, crateEntries].filter(
       (group) => group.length > 0,
