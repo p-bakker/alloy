@@ -23,7 +23,7 @@ export interface ConfigFileProps {
 
 export function ConfigFile(props: ConfigFileProps) {
   return (
-    <SourceFile path="config.rs">
+    <SourceFile path="config.rs" pub>
       <DocComment>Configuration for the key-value store.</DocComment>
 
       <ConstDeclaration

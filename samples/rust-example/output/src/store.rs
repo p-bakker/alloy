@@ -2,6 +2,7 @@ use std::collections::HashMap;
 use std::hash::Hash;
 use std::time::{Duration, Instant};
 
+use crate::config::Config;
 use crate::error::{Result, StoreError};
 use crate::traits::Cacheable;
 /// Core storage engine for the key-value store.
@@ -33,19 +34,12 @@ pub struct Store<K: Eq + Hash + Clone, V: Clone + Send + Sync> {
     default_ttl: Option<Duration>,
 }
 impl<K: Eq + Hash + Clone, V: Clone + Send + Sync> Store<K, V> {
-    /// Creates a new store with the given maximum capacity.
-    pub fn new(max_capacity: usize) -> Self {
+    /// Creates a new store from the given configuration.
+    pub fn new(config: Config) -> Self {
         Self {
             data: HashMap::new(),
-            max_capacity,
-            default_ttl: None,
-        }
-    }
-    /// Sets a default time-to-live for new entries.
-    pub fn with_default_ttl(self, ttl: Duration) -> Self {
-        Self {
-            default_ttl: Some(ttl),
-            ..self
+            max_capacity: config.max_capacity,
+            default_ttl: config.default_ttl,
         }
     }
     /// Inserts a value into the store, returning an error if full.
