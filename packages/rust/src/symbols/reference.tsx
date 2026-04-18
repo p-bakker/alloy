@@ -2,8 +2,10 @@ import {
   Children,
   Refkey,
   memo,
+  onCleanup,
   resolve,
   unresolvedRefkey,
+  untrack,
 } from "@alloy-js/core";
 import {
   PRELUDE_TYPES,
@@ -26,6 +28,26 @@ const PRELUDE_BY_EDITION: Record<string, Set<string>> = {
   "2021": PRELUDE_TYPES_2021,
   "2024": PRELUDE_TYPES_2024,
 };
+
+const SIMPLE_NAMES_CACHE = new WeakMap<Set<string>, Set<string>>();
+
+/**
+ * Extract bare prelude names from a path-qualified prelude set. For entries
+ * like `"result::Result"` this returns `"Result"`; primitive entries like
+ * `"bool"` are already bare and pass through unchanged.
+ */
+function preludeSimpleNamesFor(prelude: Set<string>): Set<string> {
+  let cached = SIMPLE_NAMES_CACHE.get(prelude);
+  if (!cached) {
+    cached = new Set();
+    for (const entry of prelude) {
+      const idx = entry.lastIndexOf("::");
+      cached.add(idx === -1 ? entry : entry.slice(idx + 2));
+    }
+    SIMPLE_NAMES_CACHE.set(prelude, cached);
+  }
+  return cached;
+}
 
 export function ref(
   refkey: Refkey,
@@ -64,10 +86,14 @@ export function ref(
     const targetModule = declarationScope?.enclosingModule;
     const targetCrate = declarationScope?.enclosingCrate;
 
+    // Prelude lookup key is `<module>::<name>` without crate prefix
+    // (e.g. `result::Result`) — see prelude.ts for the key-format rationale.
+    // The `isBuiltinCrate` guard ensures we don't accidentally match a
+    // third-party crate whose module structure happens to coincide.
     const isPreludeSymbol =
-      prelude.has(declarationName) &&
       targetCrate instanceof RustCrateScope &&
-      isBuiltinCrate(targetCrate);
+      isBuiltinCrate(targetCrate) &&
+      prelude.has(buildModulePath(result.pathDown, declarationName));
 
     const isCrossModule =
       targetModule instanceof RustModuleScope &&
@@ -99,10 +125,38 @@ export function ref(
         result.pathDown,
       );
 
-      if (currentModuleScope.hasConflictingImport(declarationName, usePath)) {
+      // Break the cycle: the memo MUST track hasLocalDeclaration (reactive —
+      // we want to re-run when a local shadow appears later in render order),
+      // but must NOT track imports mutations (untrack hasConflictingImport
+      // and addUse/removeUse), otherwise each addUse → imports change →
+      // re-run → cleanup → removeUse → imports change → re-run loop.
+      const shadowedByLocal =
+        currentModuleScope.hasLocalDeclaration(declarationName);
+      // Builtin-crate symbols whose name collides with a prelude name but
+      // aren't the prelude entry (e.g. `std::fmt::Result` vs prelude
+      // `std::result::Result`) must NOT be imported — doing so would shadow
+      // the prelude for any reference that renders the bare name, producing
+      // subtly wrong code. Fully qualify these instead. User-defined types
+      // that share names with the prelude (intentional shadowing in user
+      // code) still import normally, since they aren't builtin-crate refs.
+      const wouldShadowPrelude =
+        isBuiltinCrate(targetCrate) &&
+        preludeSimpleNamesFor(prelude).has(declarationName);
+      if (
+        shadowedByLocal ||
+        wouldShadowPrelude ||
+        untrack(() =>
+          currentModuleScope.hasConflictingImport(declarationName, usePath),
+        )
+      ) {
         useFullyQualified = true;
       } else {
-        currentModuleScope.addUse(usePath, lexicalDeclaration);
+        untrack(() => currentModuleScope.addUse(usePath, lexicalDeclaration));
+        onCleanup(() => {
+          untrack(() =>
+            currentModuleScope.removeUse(usePath, lexicalDeclaration),
+          );
+        });
       }
 
       if (!isSameCrate && !isBuiltinCrate(targetCrate)) {
@@ -191,6 +245,24 @@ export function buildUsePath(
   }
 
   return [prefix, ...moduleSegments].join("::");
+}
+
+/**
+ * Build a module-qualified path `<module>::<name>` without crate prefix,
+ * used to check against the prelude set (which stores entries in this form
+ * to disambiguate e.g. `result::Result` from `fmt::Result`).
+ */
+function buildModulePath(pathDown: RustScopeBase[], name: string): string {
+  const moduleSegments: string[] = [];
+  for (const scope of pathDown) {
+    if (scope instanceof RustModuleScope) {
+      moduleSegments.push(...moduleNameSegments(scope.name));
+    }
+  }
+  // Bare name for primitives / root-level items (no module segments).
+  return moduleSegments.length === 0 ?
+      name
+    : [...moduleSegments, name].join("::");
 }
 
 export function moduleNameSegments(moduleName: string): string[] {
