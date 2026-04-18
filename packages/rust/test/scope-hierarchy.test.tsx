@@ -58,9 +58,10 @@ describe("Rust scope hierarchy", () => {
 
     expect(moduleScope.types).toBeDefined();
     expect(moduleScope.values).toBeDefined();
-    expect(moduleScope.imports.get("crate::types")?.has(request)).toBe(true);
-    expect(moduleScope.imports.get("crate::types")?.has(response)).toBe(true);
-    expect(moduleScope.imports.get("crate::types")?.size).toBe(2);
+    const types = moduleScope.getImport("crate::types");
+    expect(types?.names.has("Request")).toBe(true);
+    expect(types?.names.has("Response")).toBe(true);
+    expect(types?.names.size).toBe(2);
     expect(moduleScope.childModules.get("client")?.pub).toBe("crate");
   });
 

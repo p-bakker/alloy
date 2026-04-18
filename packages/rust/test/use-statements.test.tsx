@@ -13,10 +13,73 @@ import { RustModuleScope } from "../src/scopes/rust-module-scope.js";
 import { RustOutputSymbol } from "../src/symbols/rust-output-symbol.js";
 
 describe("UseStatement", () => {
-  it("renders a single use line", () => {
-    expect(<UseStatement path="std::fmt" symbol="Display" />).toRenderTo(
-      d`use std::fmt::Display;`,
-    );
+  it("registers a single import and renders via UseStatements", () => {
+    const crateScope = new RustCrateScope("my_crate");
+    const moduleScope = new RustModuleScope("lib.rs", crateScope);
+    expect(
+      <Output>
+        <Scope value={moduleScope}>
+          <UseStatement path="std::fmt" symbol="Display" />
+          <UseStatements />
+        </Scope>
+      </Output>,
+    ).toRenderTo(d`use std::fmt::Display;`);
+  });
+
+  it("merges multiple UseStatements with the same path into one line", () => {
+    const crateScope = new RustCrateScope("my_crate");
+    const moduleScope = new RustModuleScope("lib.rs", crateScope);
+    expect(
+      <Output>
+        <Scope value={moduleScope}>
+          <UseStatement path="crate::models" symbol="Person" />
+          <UseStatement path="crate::models" symbol="Status" />
+          <UseStatement path="crate::models" symbol="Borrowed" />
+          <UseStatements />
+        </Scope>
+      </Output>,
+    ).toRenderTo(d`use crate::models::{Borrowed, Person, Status};`);
+  });
+
+  it("keeps pub use separate from plain use for the same path", () => {
+    const crateScope = new RustCrateScope("my_crate");
+    const moduleScope = new RustModuleScope("lib.rs", crateScope);
+    expect(
+      <Output>
+        <Scope value={moduleScope}>
+          <UseStatement path="crate::models" symbol="Internal" />
+          <UseStatement pub path="crate::models" symbol="Person" />
+          <UseStatement pub path="crate::models" symbol="Status" />
+          <UseStatements />
+        </Scope>
+      </Output>,
+    ).toRenderTo(d`
+      use crate::models::Internal;
+      pub use crate::models::{Person, Status};
+    `);
+  });
+
+  it("groups hand-authored pub uses across multiple paths", () => {
+    const crateScope = new RustCrateScope("my_crate");
+    const moduleScope = new RustModuleScope("lib.rs", crateScope);
+    expect(
+      <Output>
+        <Scope value={moduleScope}>
+          <UseStatement pub path="crate::models" symbol="Person" />
+          <UseStatement pub path="crate::models" symbol="Status" />
+          <UseStatement pub path="crate::models" symbol="Borrowed" />
+          <UseStatement pub path="crate::models" symbol="Container" />
+          <UseStatement pub path="crate::traits" symbol="Greetable" />
+          <UseStatement pub path="crate::traits" symbol="AsyncFetchable" />
+          <UseStatement pub path="crate::utils" symbol="AppResult" />
+          <UseStatements />
+        </Scope>
+      </Output>,
+    ).toRenderTo(d`
+      pub use crate::models::{Borrowed, Container, Person, Status};
+      pub use crate::traits::{AsyncFetchable, Greetable};
+      pub use crate::utils::AppResult;
+    `);
   });
 });
 

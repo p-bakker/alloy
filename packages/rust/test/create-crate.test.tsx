@@ -151,8 +151,8 @@ describe("createCrate", () => {
 
     expect(consumerModuleScope).toBeDefined();
     expect(consumerCrateScope).toBeDefined();
-    expect(consumerModuleScope!.imports.get("serde")?.size).toBe(1);
-    expect(consumerModuleScope!.imports.get("serde::de")?.size).toBe(1);
+    expect(consumerModuleScope!.getImport("serde")?.names.size).toBe(1);
+    expect(consumerModuleScope!.getImport("serde::de")?.names.size).toBe(1);
     expect(consumerCrateScope!.dependencies.get("serde")).toBe("1.0.219");
   });
 
