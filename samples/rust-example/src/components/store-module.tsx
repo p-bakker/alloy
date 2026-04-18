@@ -45,7 +45,7 @@ export function StoreModule(props: StoreModuleProps) {
           name="EntryStatus"
           refkey={entryStatusKey}
           pub
-          derives={["Debug", "Clone", "PartialEq"]}
+          derives={[std.fmt.Debug, std.clone.Clone, std.cmp.PartialEq]}
           doc="Represents the current status of a cached entry."
         >
           <EnumVariant name="Active" doc="The entry is valid and accessible." />
@@ -65,7 +65,7 @@ export function StoreModule(props: StoreModuleProps) {
           name="Entry"
           refkey={entryKey}
           pub
-          derives={["Debug", "Clone"]}
+          derives={[std.fmt.Debug, std.clone.Clone]}
           typeParameters={[{ name: "V", constraint: std.clone.Clone }]}
           doc="A single entry in the store, holding a value and metadata."
         >

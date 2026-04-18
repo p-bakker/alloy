@@ -9,6 +9,7 @@ import {
   Scope,
 } from "@alloy-js/core";
 import { RustImplScope, useRustScope } from "../scopes/index.js";
+import { resolveSymbolName } from "../symbols/resolve-name.js";
 import {
   createFieldSymbol,
   createStructSymbol,
@@ -108,7 +109,7 @@ export function StructDeclaration(props: StructDeclarationProps) {
         <>
           {"#[derive("}
           <For each={derives} joiner={", "}>
-            {(derive) => derive}
+            {resolveSymbolName}
           </For>
           {")]"}
           <hbr />

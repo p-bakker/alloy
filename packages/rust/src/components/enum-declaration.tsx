@@ -9,6 +9,7 @@ import {
   Scope,
 } from "@alloy-js/core";
 import { RustImplScope, useRustScope } from "../scopes/index.js";
+import { resolveSymbolName } from "../symbols/resolve-name.js";
 import {
   createEnumSymbol,
   createTypeParameterSymbol,
@@ -100,7 +101,7 @@ export function EnumDeclaration(props: EnumDeclarationProps) {
         <>
           {"#[derive("}
           <For each={derives} joiner={", "}>
-            {(derive) => derive}
+            {resolveSymbolName}
           </For>
           {")]"}
           <hbr />

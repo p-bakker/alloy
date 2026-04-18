@@ -30,7 +30,7 @@ export function ErrorModule(props: ErrorModuleProps) {
           name="StoreError"
           refkey={storeErrorKey}
           pub
-          derives={["Debug", "Clone"]}
+          derives={[std.fmt.Debug, std.clone.Clone]}
         >
           <EnumVariant name="NotFound" doc="The requested key was not found." />
           <EnumVariant
