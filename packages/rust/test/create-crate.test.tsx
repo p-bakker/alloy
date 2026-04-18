@@ -236,4 +236,31 @@ describe("createCrate", () => {
       ["use std::collections::HashMap;", "type Map = HashMap;"].join("\n"),
     );
   });
+
+  it("skips use-statement for instance-member refkey references", () => {
+    const reqwest = createCrate({
+      name: "reqwest",
+      version: "0.12.0",
+      items: {
+        RequestBuilder: {
+          kind: "struct",
+          members: {
+            json: { kind: "function" },
+          },
+        },
+      },
+    });
+
+    const output = render(
+      <Output externals={[reqwest]}>
+        <CrateDirectory name="my_crate">
+          <SourceFile path="lib">{reqwest.RequestBuilder.json}</SourceFile>
+        </CrateDirectory>
+      </Output>,
+    );
+
+    const contents = findFile(output, "src/lib").contents;
+    // Parent type isn't imported — it never appears literally at the call site
+    expect(contents).not.toContain("use reqwest::RequestBuilder");
+  });
 });

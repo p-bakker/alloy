@@ -101,6 +101,15 @@ export function ref(
       sourceCrate instanceof RustCrateScope &&
       targetModule !== currentModuleScope;
 
+    // Refkeys that end in an instance member (e.g. a method with a `self`
+    // receiver, or a field) are accessed via the receiver value at the call
+    // site — the parent type does not appear literally in the emitted
+    // expression, so importing it would be dead code. We still track the
+    // crate dependency + features below, and we also skip the fully-qualified
+    // fallback for the same reason.
+    const lastMember = memberPath[memberPath.length - 1];
+    const isInstanceMemberAccess = lastMember?.isInstanceMemberSymbol === true;
+
     let useFullyQualified = false;
 
     if (
@@ -142,7 +151,10 @@ export function ref(
       const wouldShadowPrelude =
         isBuiltinCrate(targetCrate) &&
         preludeSimpleNamesFor(prelude).has(declarationName);
-      if (
+      if (isInstanceMemberAccess) {
+        // Skip use-statement entirely; the parent type name never appears in
+        // the rendered call expression.
+      } else if (
         shadowedByLocal ||
         wouldShadowPrelude ||
         untrack(() =>
