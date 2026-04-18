@@ -220,6 +220,48 @@ describe("std builtins", () => {
     expect(content).not.toContain("use std::result");
     expect(content).not.toContain("use std::fmt");
   });
+
+  it("fully qualifies builtin symbols whose name collides with a prelude name", () => {
+    // std::fmt::Result is not the prelude Result, but bears the same name.
+    // Importing it would silently shadow the prelude for any bare `Result`
+    // reference (including opaque string literals in the same file), so we
+    // fully-qualify it instead.
+    const output = render(
+      <Output>
+        <CrateDirectory name="my_crate">
+          <SourceFile path="lib">type Fmt = {std.fmt.Result};</SourceFile>
+        </CrateDirectory>
+      </Output>,
+    );
+
+    const content = findFile(output, "src/lib").contents.trim();
+    expect(content).toContain("type Fmt = std::fmt::Result;");
+    expect(content).not.toContain("use std::fmt::Result");
+  });
+
+  it("co-existence: prelude Result stays bare, std::fmt::Result is fully qualified", () => {
+    // Real-world scenario (Display::fmt impl): both prelude Result (for a
+    // type alias) and std::fmt::Result (for the fmt signature) are referenced
+    // in the same module. The prelude Result must render as bare `Result`,
+    // and std::fmt::Result must NOT be imported (else it would shadow the
+    // prelude for the bare reference).
+    const output = render(
+      <Output>
+        <CrateDirectory name="my_crate">
+          <SourceFile path="lib">
+            type Fmt = {std.fmt.Result};{"\n"}
+            type MyResult = {std.result.Result};
+          </SourceFile>
+        </CrateDirectory>
+      </Output>,
+    );
+
+    const content = findFile(output, "src/lib").contents.trim();
+    expect(content).toContain("type Fmt = std::fmt::Result;");
+    expect(content).toContain("type MyResult = Result;");
+    expect(content).not.toContain("use std::fmt::Result");
+    expect(content).not.toContain("use std::result::Result");
+  });
 });
 
 describe("core builtins", () => {
@@ -248,43 +290,48 @@ describe("core builtins", () => {
 
 describe("PRELUDE_TYPES", () => {
   it("contains core prelude types, traits, and primitives", () => {
-    // Core types and variants
-    for (const type of ["Option", "Some", "None", "Result", "Ok", "Err"]) {
+    // Types are module-qualified to disambiguate from same-named symbols
+    // (e.g. `result::Result` vs `fmt::Result`). Enum variants like `Some`,
+    // `Ok` are bare names since they live inside enum types, not modules.
+    for (const type of ["option::Option", "result::Result"]) {
       expect(PRELUDE_TYPES.has(type)).toBe(true);
     }
+    for (const variant of ["Some", "None", "Ok", "Err"]) {
+      expect(PRELUDE_TYPES.has(variant)).toBe(true);
+    }
     // Common structs
-    for (const type of ["Vec", "String", "Box"]) {
+    for (const type of ["vec::Vec", "string::String", "boxed::Box"]) {
       expect(PRELUDE_TYPES.has(type)).toBe(true);
     }
     // Core traits
     for (const type of [
-      "Clone",
-      "Copy",
-      "Default",
-      "Drop",
-      "Eq",
-      "PartialEq",
-      "Ord",
-      "PartialOrd",
-      "Iterator",
-      "IntoIterator",
-      "From",
-      "Into",
-      "AsRef",
-      "AsMut",
-      "Send",
-      "Sync",
-      "Sized",
-      "Unpin",
-      "ToOwned",
-      "ToString",
-      "Fn",
-      "FnMut",
-      "FnOnce",
+      "clone::Clone",
+      "marker::Copy",
+      "default::Default",
+      "ops::Drop",
+      "cmp::Eq",
+      "cmp::PartialEq",
+      "cmp::Ord",
+      "cmp::PartialOrd",
+      "iter::Iterator",
+      "iter::IntoIterator",
+      "convert::From",
+      "convert::Into",
+      "convert::AsRef",
+      "convert::AsMut",
+      "marker::Send",
+      "marker::Sync",
+      "marker::Sized",
+      "marker::Unpin",
+      "borrow::ToOwned",
+      "string::ToString",
+      "ops::Fn",
+      "ops::FnMut",
+      "ops::FnOnce",
     ]) {
       expect(PRELUDE_TYPES.has(type)).toBe(true);
     }
-    // Primitives
+    // Primitives (no module path)
     for (const type of [
       "bool",
       "char",
@@ -308,15 +355,20 @@ describe("PRELUDE_TYPES", () => {
     }
   });
 
+  it("disambiguates prelude Result from fmt::Result", () => {
+    expect(PRELUDE_TYPES.has("result::Result")).toBe(true);
+    expect(PRELUDE_TYPES.has("fmt::Result")).toBe(false);
+  });
+
   it("has edition-specific prelude sets", () => {
     // 2021 adds TryFrom, TryInto, FromIterator
-    expect(PRELUDE_TYPES_2021.has("TryFrom")).toBe(true);
-    expect(PRELUDE_TYPES_2021.has("TryInto")).toBe(true);
-    expect(PRELUDE_TYPES_2021.has("FromIterator")).toBe(true);
+    expect(PRELUDE_TYPES_2021.has("convert::TryFrom")).toBe(true);
+    expect(PRELUDE_TYPES_2021.has("convert::TryInto")).toBe(true);
+    expect(PRELUDE_TYPES_2021.has("iter::FromIterator")).toBe(true);
 
     // 2024 adds Future, IntoFuture
-    expect(PRELUDE_TYPES_2024.has("Future")).toBe(true);
-    expect(PRELUDE_TYPES_2024.has("IntoFuture")).toBe(true);
+    expect(PRELUDE_TYPES_2024.has("future::Future")).toBe(true);
+    expect(PRELUDE_TYPES_2024.has("future::IntoFuture")).toBe(true);
 
     // 2024 is a superset of 2021
     for (const type of PRELUDE_TYPES_2021) {

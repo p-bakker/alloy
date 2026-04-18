@@ -57,6 +57,15 @@ export class RustModuleScope extends RustScopeBase {
     symbolsForPath.add(symbol);
   }
 
+  removeUse(path: string, symbol: RustOutputSymbol) {
+    const symbolsForPath = this.#imports.get(path);
+    if (!symbolsForPath) return;
+    symbolsForPath.delete(symbol);
+    if (symbolsForPath.size === 0) {
+      this.#imports.delete(path);
+    }
+  }
+
   /**
    * Check if a symbol name is already imported from a different path.
    */
