@@ -12,6 +12,7 @@ import {
 } from "../context/format-options.js";
 import { RustCrateScope } from "../scopes/rust-crate-scope.js";
 import { RustModuleScope } from "../scopes/rust-module-scope.js";
+import { InnerDocComment } from "./doc-comment.js";
 import { ModDeclarations } from "./mod-declarations.js";
 import { Reference } from "./reference.js";
 import { UseStatements } from "./use-statement.js";
@@ -23,7 +24,13 @@ export interface SourceFileProps
   path: string;
   attributes?: Children[];
   children?: Children;
+  /** Attributes/directives placed above `use` imports (e.g. `#![allow(...)]`). */
   header?: Children;
+  /**
+   * A module-level comment. Plain strings are wrapped in `InnerDocComment`
+   * (`//!`) automatically since that's the Rust convention. Pass one of the
+   * explicit doc/comment components (e.g. `BlockComment`) for other styles.
+   */
   headerComment?: Children;
 }
 
@@ -94,10 +101,18 @@ export function SourceFile(props: SourceFileProps) {
     useTabs: props.useTabs,
   });
 
+  // Plain-string headerComment is the common "module-level docs" case, so
+  // wrap it in InnerDocComment automatically. For other shapes (attributes,
+  // block comments, etc.), pass a JSX element and it'll be used as-is.
+  const headerComment =
+    typeof props.headerComment === "string" ?
+      <InnerDocComment>{props.headerComment}</InnerDocComment>
+    : props.headerComment;
+
   const header =
-    props.headerComment !== undefined || props.header !== undefined ?
+    headerComment !== undefined || props.header !== undefined ?
       <>
-        {props.headerComment}
+        {headerComment}
         {props.header}
       </>
     : undefined;

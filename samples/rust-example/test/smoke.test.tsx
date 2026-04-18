@@ -1,7 +1,6 @@
 import { Output, render, writeOutput } from "@alloy-js/core";
 import {
   CrateDirectory,
-  InnerDocComment,
   SourceFile,
   createRustNamePolicy,
 } from "@alloy-js/rust";
@@ -103,11 +102,7 @@ describe.skipIf(!hasCargo)("rust smoke test", () => {
 
           <SourceFile
             path="lib.rs"
-            headerComment={
-              <InnerDocComment>
-                A generic, thread-safe key-value store library.
-              </InnerDocComment>
-            }
+            headerComment="A generic, thread-safe key-value store library."
           />
         </CrateDirectory>
       </Output>,
