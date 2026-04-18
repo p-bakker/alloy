@@ -23,18 +23,22 @@ export interface MemberDescriptor {
   name?: string;
   /** True for associated functions (no self receiver, called with `::`). */
   associated?: boolean;
+  /** Cargo features required for this member to be available. */
+  features?: readonly string[];
   metadata?: Record<string, unknown>;
 }
 
 export interface SymbolDescriptor {
   kind: RustSymbolKind;
   name?: string;
+  /** Cargo features required for this symbol to be available. */
+  features?: readonly string[];
   metadata?: Record<string, unknown>;
   members?: Record<string, MemberDescriptor>;
 }
 
 /** An entry in `items` is either a root symbol or a submodule of symbols. */
-type CrateItem = SymbolDescriptor | Record<string, SymbolDescriptor>;
+export type CrateItem = SymbolDescriptor | Record<string, SymbolDescriptor>;
 
 export interface CrateDescriptor<
   TItems extends Record<string, CrateItem> = Record<string, CrateItem>,
@@ -45,13 +49,13 @@ export interface CrateDescriptor<
   items: TItems;
 }
 
-type SymbolRef<TSymbol extends SymbolDescriptor> = TSymbol extends {
+export type SymbolRef<TSymbol extends SymbolDescriptor> = TSymbol extends {
   members: infer M extends Record<string, MemberDescriptor>;
 }
   ? RefkeyableObject & { [K in keyof M]: Refkey }
   : Refkey;
 
-type ItemRef<T extends CrateItem> = T extends SymbolDescriptor
+export type ItemRef<T extends CrateItem> = T extends SymbolDescriptor
   ? SymbolRef<T>
   : T extends Record<string, SymbolDescriptor>
     ? { [S in keyof T]: SymbolRef<T[S]> }
@@ -279,11 +283,14 @@ function createSymbolFromDescriptor(
 ) {
   const { descriptor, symbolRefkey, exportName } = entry;
   const symbolName = descriptor.name ?? exportName;
+  const metadata = descriptor.features
+    ? { ...descriptor.metadata, features: descriptor.features }
+    : descriptor.metadata;
   const options = {
     binder,
     refkeys: symbolRefkey,
     symbolKind: descriptor.kind,
-    metadata: descriptor.metadata,
+    metadata,
     ignoreNamePolicy: true,
     ignoreNameConflict: true,
   } as const;
@@ -332,11 +339,14 @@ function createSymbolFromDescriptor(
         memberName,
       );
       const memberSymbolName = memberDesc.name ?? memberName;
+      const memberMetadata = memberDesc.features
+        ? { ...memberDesc.metadata, features: memberDesc.features }
+        : memberDesc.metadata;
       const memberOptions = {
         binder,
         refkeys: memberRefkey,
         symbolKind: memberDesc.kind,
-        metadata: memberDesc.metadata,
+        metadata: memberMetadata,
         ignoreNamePolicy: true,
         ignoreNameConflict: true,
       } as const;

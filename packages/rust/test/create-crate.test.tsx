@@ -263,4 +263,120 @@ describe("createCrate", () => {
     // Parent type isn't imported — it never appears literally at the call site
     expect(contents).not.toContain("use reqwest::RequestBuilder");
   });
+
+  it("collects features from referenced symbols into crate dependencies", () => {
+    const tokio = createCrate({
+      name: "tokio",
+      version: "1.42.0",
+      items: {
+        runtime: {
+          Runtime: { kind: "struct", features: ["rt"] },
+        },
+        net: {
+          TcpStream: { kind: "struct", features: ["net"] },
+        },
+      },
+    });
+
+    let consumerCrateScope: RustCrateScope | undefined;
+
+    render(
+      <Output externals={[tokio]}>
+        <CrateDirectory name="my_crate">
+          <SourceFile path="lib">
+            <ScopeCapture
+              onCapture={(_, capturedCrateScope) => {
+                consumerCrateScope = capturedCrateScope;
+              }}
+            >
+              type A = {tokio.runtime.Runtime}; type B = {tokio.net.TcpStream};
+            </ScopeCapture>
+          </SourceFile>
+        </CrateDirectory>
+      </Output>,
+    );
+
+    expect(consumerCrateScope).toBeDefined();
+    const dep = consumerCrateScope!.dependencies.get("tokio");
+    expect(dep).toBeDefined();
+    expect(typeof dep).toBe("object");
+    expect((dep as any).version).toBe("1.42.0");
+    expect((dep as any).features).toEqual(
+      expect.arrayContaining(["rt", "net"]),
+    );
+    expect((dep as any).features).toHaveLength(2);
+  });
+
+  it("omits features from crate dependency when referenced symbols have none", () => {
+    const serde = createCrate({
+      name: "serde",
+      version: "1.0.219",
+      items: {
+        Serialize: { kind: "trait" },
+      },
+    });
+
+    let consumerCrateScope: RustCrateScope | undefined;
+
+    render(
+      <Output externals={[serde]}>
+        <CrateDirectory name="my_crate">
+          <SourceFile path="lib">
+            <ScopeCapture
+              onCapture={(_, capturedCrateScope) => {
+                consumerCrateScope = capturedCrateScope;
+              }}
+            >
+              type A = {serde.Serialize};
+            </ScopeCapture>
+          </SourceFile>
+        </CrateDirectory>
+      </Output>,
+    );
+
+    expect(consumerCrateScope).toBeDefined();
+    const dep = consumerCrateScope!.dependencies.get("serde");
+    expect(dep).toBeDefined();
+    if (typeof dep === "object") {
+      expect(dep).not.toHaveProperty("features");
+    }
+  });
+
+  it("collects features from instance-member refkeys", () => {
+    const reqwest = createCrate({
+      name: "reqwest",
+      version: "0.12.0",
+      items: {
+        RequestBuilder: {
+          kind: "struct",
+          members: {
+            json: { kind: "function", features: ["json"] },
+          },
+        },
+      },
+    });
+
+    let consumerCrateScope: RustCrateScope | undefined;
+
+    render(
+      <Output externals={[reqwest]}>
+        <CrateDirectory name="my_crate">
+          <SourceFile path="lib">
+            <ScopeCapture
+              onCapture={(_, capturedCrateScope) => {
+                consumerCrateScope = capturedCrateScope;
+              }}
+            >
+              {reqwest.RequestBuilder.json}
+            </ScopeCapture>
+          </SourceFile>
+        </CrateDirectory>
+      </Output>,
+    );
+
+    expect(consumerCrateScope).toBeDefined();
+    const dep = consumerCrateScope!.dependencies.get("reqwest");
+    expect(dep).toBeDefined();
+    expect((dep as any).features).toEqual(["json"]);
+  });
 });

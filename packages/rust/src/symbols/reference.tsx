@@ -172,7 +172,19 @@ export function ref(
       }
 
       if (!isSameCrate && !isBuiltinCrate(targetCrate)) {
-        sourceCrate.addDependency(targetCrate.name, targetCrate.version ?? "*");
+        const requiredFeatures = collectFeatures(
+          lexicalDeclaration,
+          memberPath,
+        );
+        sourceCrate.addDependency(
+          targetCrate.name,
+          requiredFeatures.size > 0
+            ? {
+                version: targetCrate.version ?? "*",
+                features: [...requiredFeatures],
+              }
+            : (targetCrate.version ?? "*"),
+        );
       }
     }
 
@@ -222,6 +234,26 @@ function buildReferenceChildren(
   }
 
   return <>{parts}</>;
+}
+
+function collectFeatures(
+  lexicalDeclaration: RustOutputSymbol,
+  memberPath: RustOutputSymbol[],
+): Set<string> {
+  const features = new Set<string>();
+  const symFeatures = lexicalDeclaration.metadata?.features as
+    | readonly string[]
+    | undefined;
+  if (symFeatures) {
+    for (const f of symFeatures) features.add(f);
+  }
+  for (const member of memberPath) {
+    const mf = member.metadata?.features as readonly string[] | undefined;
+    if (mf) {
+      for (const f of mf) features.add(f);
+    }
+  }
+  return features;
 }
 
 function isVisibleFrom(

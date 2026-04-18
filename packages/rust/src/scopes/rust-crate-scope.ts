@@ -75,12 +75,30 @@ export class RustCrateScope extends RustScopeBase {
 
   addDependency(name: string, dependency: CrateDependency) {
     const existing = this.#dependencies.get(name);
-    if (existing) {
-      return existing;
+    if (!existing) {
+      this.#dependencies.set(name, dependency);
+      return dependency;
     }
 
-    this.#dependencies.set(name, dependency);
-    return dependency;
+    // Merge features when the same crate is added again with different features
+    if (typeof dependency !== "string" && dependency.features?.length) {
+      if (typeof existing === "string") {
+        // Upgrade from version-only to detailed with features
+        this.#dependencies.set(name, {
+          version: existing,
+          features: [...dependency.features],
+        });
+      } else {
+        // Merge features into existing details
+        const merged = new Set(existing.features ?? []);
+        for (const f of dependency.features) {
+          merged.add(f);
+        }
+        existing.features = [...merged];
+      }
+    }
+
+    return this.#dependencies.get(name)!;
   }
 
   get types(): OutputSpace {
