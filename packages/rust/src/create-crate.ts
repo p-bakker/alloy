@@ -22,12 +22,16 @@ export interface MemberDescriptor {
   name?: string;
   /** True for associated functions (no self receiver, called with `::`). */
   associated?: boolean;
+  /** Cargo features required for this member to be available. */
+  features?: readonly string[];
   metadata?: Record<string, unknown>;
 }
 
 export interface SymbolDescriptor {
   kind: RustSymbolKind;
   name?: string;
+  /** Cargo features required for this symbol to be available. */
+  features?: readonly string[];
   metadata?: Record<string, unknown>;
   members?: Record<string, MemberDescriptor>;
 }
@@ -281,11 +285,14 @@ function createSymbolFromDescriptor(
 ) {
   const { descriptor, symbolRefkey, exportName } = entry;
   const symbolName = descriptor.name ?? exportName;
+  const metadata = descriptor.features
+    ? { ...descriptor.metadata, features: descriptor.features }
+    : descriptor.metadata;
   const options = {
     binder,
     refkeys: symbolRefkey,
     symbolKind: descriptor.kind,
-    metadata: descriptor.metadata,
+    metadata,
     ignoreNamePolicy: true,
     ignoreNameConflict: true,
   } as const;
@@ -336,11 +343,14 @@ function createSymbolFromDescriptor(
         memberName,
       );
       const memberSymbolName = memberDesc.name ?? memberName;
+      const memberMetadata = memberDesc.features
+        ? { ...memberDesc.metadata, features: memberDesc.features }
+        : memberDesc.metadata;
       const memberOptions = {
         binder,
         refkeys: memberRefkey,
         symbolKind: memberDesc.kind,
-        metadata: memberDesc.metadata,
+        metadata: memberMetadata,
         ignoreNamePolicy: true,
         ignoreNameConflict: true,
       } as const;

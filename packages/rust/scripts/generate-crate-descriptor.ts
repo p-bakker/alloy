@@ -15,6 +15,8 @@
  *   --merge-from PATH      Merge another crate's symbols (repeatable)
  *   --out PATH             Output directory (default: src/builtins/<crate>/)
  *   --skip MOD1,MOD2       Comma-separated modules to skip
+ *   --extract-features     Extract per-symbol feature gates from cfg attributes
+ *   --import-base PKG      Use package imports instead of relative (e.g. "@alloy-js/rust")
  *
  * Examples:
  *   # Standard library crates
@@ -24,8 +26,10 @@
  *     --prelude --prelude-source core.json \
  *     --merge-from core.json --merge-from alloc.json
  *
- *   # Third-party crates
- *   npx tsx scripts/generate-crate-descriptor.ts target/doc/serde.json
+ *   # Third-party crates with features
+ *   # (use --cfg docsrs in RUSTDOCFLAGS for best feature extraction)
+ *   npx tsx scripts/generate-crate-descriptor.ts target/doc/serde.json \
+ *     --extract-features --import-base "@alloy-js/rust"
  */
 
 import { readFileSync, writeFileSync } from "node:fs";
@@ -43,13 +47,15 @@ interface CliArgs {
   mergeFrom: string[]; // paths to other rustdoc JSONs to merge into this crate
   outPath: string | null;
   skipModules: Set<string>;
+  extractFeatures: boolean;
+  importBase: string | null; // package name for imports (e.g. "@alloy-js/rust")
 }
 
 function parseArgs(): CliArgs {
   const args = process.argv.slice(2);
   if (args.length === 0 || args[0] === "--help") {
     console.error(
-      "Usage: npx tsx generate-crate-descriptor.ts <rustdoc.json> [--builtin] [--prelude] [--prelude-source <path>] [--merge-from <path>] [--out <dir>] [--skip <mods>]",
+      "Usage: npx tsx generate-crate-descriptor.ts <rustdoc.json> [--builtin] [--prelude] [--prelude-source <path>] [--merge-from <path>] [--out <dir>] [--skip <mods>] [--extract-features] [--import-base <pkg>]",
     );
     process.exit(args[0] === "--help" ? 0 : 1);
   }
@@ -62,6 +68,8 @@ function parseArgs(): CliArgs {
     mergeFrom: [],
     outPath: null,
     skipModules: new Set(),
+    extractFeatures: false,
+    importBase: null,
   };
 
   let i = 0;
@@ -81,6 +89,10 @@ function parseArgs(): CliArgs {
       for (const mod of args[++i].split(",")) {
         result.skipModules.add(mod.trim());
       }
+    } else if (arg === "--extract-features") {
+      result.extractFeatures = true;
+    } else if (arg === "--import-base" && i + 1 < args.length) {
+      result.importBase = args[++i];
     } else if (!arg.startsWith("--")) {
       result.jsonPath = arg;
     } else {
@@ -182,6 +194,32 @@ function extractStability(item: RustdocItem): string | undefined {
 }
 
 // ---------------------------------------------------------------------------
+// Feature extraction
+// ---------------------------------------------------------------------------
+
+// Matches feature gates in multiple formats found in rustdoc JSON attrs:
+//   cfg(feature = "X")                                      — classic format
+//   CfgTrace([... name: "feature", value: Some("X") ...])   — rustdoc JSON format v57+
+//   doc(cfg(feature = "X"))                                  — docs.rs annotations (with --cfg docsrs)
+const FEATURE_CLASSIC_RE = /feature\s*=\s*"([^"]+)"/g;
+const FEATURE_CFGTRACE_RE = /name:\s*"feature",\s*value:\s*Some\("([^"]+)"\)/g;
+
+function extractFeatures(item: RustdocItem): string[] | undefined {
+  if (!item.attrs) return undefined;
+  const features = new Set<string>();
+  for (const attr of item.attrs) {
+    const text = typeof attr === "string" ? attr : (attr.other ?? "");
+    for (const match of text.matchAll(FEATURE_CLASSIC_RE)) {
+      features.add(match[1]);
+    }
+    for (const match of text.matchAll(FEATURE_CFGTRACE_RE)) {
+      features.add(match[1]);
+    }
+  }
+  return features.size > 0 ? [...features] : undefined;
+}
+
+// ---------------------------------------------------------------------------
 // Kind mapping
 // ---------------------------------------------------------------------------
 
@@ -216,12 +254,14 @@ interface MemberEntry {
   kind: string;
   associated?: boolean;
   since?: string;
+  features?: string[];
 }
 
 interface SymbolEntry {
   name: string;
   kind: string;
   since?: string;
+  features?: string[];
   members?: MemberEntry[];
   /** Rustdoc item ID, used for extracting members after walk */
   itemId?: string;
@@ -231,13 +271,15 @@ interface GeneratorState {
   data: RustdocJson;
   modules: Map<string, SymbolEntry[]>;
   skipModules: Set<string>;
+  extractFeaturesFlag: boolean;
 }
 
 function createGeneratorState(
   data: RustdocJson,
   skipModules: Set<string>,
+  extractFeaturesFlag: boolean = false,
 ): GeneratorState {
-  return { data, modules: new Map(), skipModules };
+  return { data, modules: new Map(), skipModules, extractFeaturesFlag };
 }
 
 function addSymbol(
@@ -247,6 +289,7 @@ function addSymbol(
   kind: string,
   since?: string,
   itemId?: string,
+  features?: string[],
 ) {
   let syms = state.modules.get(modulePath);
   if (!syms) {
@@ -254,7 +297,7 @@ function addSymbol(
     state.modules.set(modulePath, syms);
   }
   if (!syms.some((s) => s.name === name)) {
-    syms.push({ name, kind, since, itemId });
+    syms.push({ name, kind, since, itemId, features });
   }
 }
 
@@ -299,7 +342,8 @@ function walkModule(
       handleUseItem(state, child, modulePath);
     } else if (ACCEPTED_KINDS.has(kind)) {
       const since = extractStability(child);
-      addSymbol(state, modulePath, child.name, mapKind(kind), since, String(childId));
+      const feat = state.extractFeaturesFlag ? extractFeatures(child) : undefined;
+      addSymbol(state, modulePath, child.name, mapKind(kind), since, String(childId), feat);
     }
   }
 }
@@ -341,7 +385,8 @@ function handleUseItem(
       }
     } else {
       const since = target ? extractStability(target) : undefined;
-      addSymbol(state, modulePath, name, mapKind(kind), since, String(useInner.id));
+      const feat = state.extractFeaturesFlag && target ? extractFeatures(target) : undefined;
+      addSymbol(state, modulePath, name, mapKind(kind), since, String(useInner.id), feat);
     }
   }
 }
@@ -709,7 +754,7 @@ if (["std", "core", "alloc"].includes(crateName)) {
 }
 
 // Walk the module tree
-const state = createGeneratorState(data, skipModules);
+const state = createGeneratorState(data, skipModules, cli.extractFeatures);
 walkModule(state, root, "");
 
 // For std-like crates, also walk the prelude to pick up re-exports
@@ -825,6 +870,7 @@ function extractMembers(genState: GeneratorState) {
               kind: "function",
               associated: hasSelfReceiver ? undefined : true,
               since: extractStability(method),
+              features: genState.extractFeaturesFlag ? extractFeatures(method) : undefined,
             });
           }
         }
@@ -856,7 +902,7 @@ for (const mergePath of cli.mergeFrom) {
   if (!mergeRoot) continue;
 
   const mergeName = mergeRoot.name ?? "unknown";
-  const mergeState = createGeneratorState(mergeData, skipModules);
+  const mergeState = createGeneratorState(mergeData, skipModules, cli.extractFeatures);
   walkModule(mergeState, mergeRoot, "");
 
   // Extract members in the merge state BEFORE merging (uses merge data's index)
@@ -868,7 +914,7 @@ for (const mergePath of cli.mergeFrom) {
   for (const [modulePath, symbols] of mergeState.modules) {
     for (const sym of symbols) {
       // Add the symbol — if it already exists, skip (deduplication in addSymbol)
-      addSymbol(state, modulePath, sym.name, sym.kind, sym.since, sym.itemId);
+      addSymbol(state, modulePath, sym.name, sym.kind, sym.since, sym.itemId, sym.features);
       // If the merged symbol has members and the main state's copy doesn't, transfer them
       if (sym.members) {
         let mainSyms = state.modules.get(modulePath);
@@ -929,12 +975,20 @@ for (const [modulePath, symbols] of sortedModules) {
   topLevelModules.get(topLevel)!.push([modulePath, symbols]);
 }
 
+function formatFeaturesField(features: string[] | undefined): string {
+  if (!features || features.length === 0) return "";
+  const items = features.map((f) => `"${f}"`).join(", ");
+  return `, features: [${items}]`;
+}
+
 function generateModuleFile(
   moduleEntries: [string, SymbolEntry[]][],
   formatVersion: number,
+  importBase: string | null,
 ): string {
   const lines: string[] = [];
-  lines.push(`import type { SymbolDescriptor } from "../../create-crate.js";`);
+  const importPath = importBase ? `${importBase}` : "../../create-crate.js";
+  lines.push(`import type { SymbolDescriptor } from "${importPath}";`);
   lines.push(``);
   lines.push(`// Generated by scripts/generate-crate-descriptor.ts`);
   lines.push(`// Source: rustdoc JSON format version ${formatVersion}`);
@@ -949,22 +1003,25 @@ function generateModuleFile(
       `export const ${varName} = {`,
     );
     for (const sym of symbols) {
+      const feat = formatFeaturesField(sym.features);
       if (sym.members && sym.members.length > 0) {
         const meta = sym.since ? `, metadata: { since: "${sym.since}" }` : "";
         lines.push(`  ${sym.name}: {`);
-        lines.push(`    kind: "${sym.kind}"${meta},`);
+        lines.push(`    kind: "${sym.kind}"${feat}${meta},`);
         lines.push(`    members: {`);
         for (const m of sym.members) {
           const mAssoc = m.associated ? ", associated: true" : "";
+          const mFeat = formatFeaturesField(m.features);
           const mMeta = m.since ? `, metadata: { since: "${m.since}" }` : "";
-          lines.push(`      ${m.name}: { kind: "${m.kind}"${mAssoc}${mMeta} },`);
+          lines.push(`      ${m.name}: { kind: "${m.kind}"${mAssoc}${mFeat}${mMeta} },`);
         }
         lines.push(`    },`);
         lines.push(`  },`);
       } else {
-        if (sym.since) {
+        if (sym.since || feat) {
+          const meta = sym.since ? `, metadata: { since: "${sym.since}" }` : "";
           lines.push(
-            `  ${sym.name}: { kind: "${sym.kind}", metadata: { since: "${sym.since}" } },`,
+            `  ${sym.name}: { kind: "${sym.kind}"${feat}${meta} },`,
           );
         } else {
           lines.push(`  ${sym.name}: { kind: "${sym.kind}" },`);
@@ -986,7 +1043,7 @@ const moduleFileNames: { varName: string; fileName: string; modulePath: string }
 for (const [topLevel, entries] of [...topLevelModules.entries()].sort(([a], [b]) => a.localeCompare(b))) {
   const fileName = `${topLevel}.ts`;
   const filePath = join(outDir, fileName);
-  const source = generateModuleFile(entries, data.format_version);
+  const source = generateModuleFile(entries, data.format_version, cli.importBase);
   writeFileSync(filePath, source);
 
   // Track for the index file — variable names are prefixed with mod_ to avoid
@@ -1002,13 +1059,14 @@ for (const [topLevel, entries] of [...topLevelModules.entries()].sort(([a], [b])
 // Write crate index file
 {
   const lines: string[] = [];
+  const crateImportPath = cli.importBase ?? "../../create-crate.js";
   lines.push(`import { type SymbolCreator } from "@alloy-js/core";`);
   lines.push(`import {`);
   lines.push(`  type CrateDescriptor,`);
   lines.push(`  type CrateRef,`);
   lines.push(`  createCrate,`);
   lines.push(`  type ExternalCrate,`);
-  lines.push(`} from "../../create-crate.js";`);
+  lines.push(`} from "${crateImportPath}";`);
 
   // Import each module
   const importsByFile = new Map<string, string[]>();
@@ -1039,9 +1097,14 @@ for (const [topLevel, entries] of [...topLevelModules.entries()].sort(([a], [b])
   }
   lines.push(`  items: {`);
 
+  // Root symbols are spread directly; submodules are keyed by path
+  const rootEntry = moduleFileNames.find((e) => e.modulePath === "");
+  if (rootEntry) {
+    lines.push(`    ...${rootEntry.varName},`);
+  }
   for (const { varName, modulePath } of moduleFileNames) {
-    const key = modulePath === "" ? '""' : `"${modulePath}"`;
-    lines.push(`    ${key}: ${varName},`);
+    if (modulePath === "") continue;
+    lines.push(`    "${modulePath}": ${varName},`);
   }
 
   lines.push(`  },`);

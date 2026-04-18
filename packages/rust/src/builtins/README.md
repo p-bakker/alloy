@@ -149,6 +149,32 @@ npx tsx packages/rust/scripts/generate-crate-descriptor.ts target/doc/serde.json
 
 This generates a descriptor directory with versioned dependency info (the version goes into Cargo.toml `[dependencies]`).
 
+### Feature extraction
+
+Use `--extract-features` to extract per-symbol `cfg(feature = "...")` gates. This enables automatic Cargo.toml feature optimization — only features actually used in generated code are added to `[dependencies]`.
+
+For best results, add `--cfg docsrs` to `RUSTDOCFLAGS` when generating rustdoc JSON. Many crates use `#[cfg_attr(docsrs, doc(cfg(feature = "...")))]` to annotate feature gates, and these annotations are only emitted when `docsrs` is set. Without it, only crates that use `#[cfg(feature = "...")]` directly (like tokio) expose feature info.
+
+```sh
+# Generate rustdoc JSON with docsrs cfg for feature annotations
+RUSTDOCFLAGS="-Z unstable-options --output-format json --cfg docsrs" \
+  cargo +nightly doc --no-deps -p serde
+
+npx tsx packages/rust/scripts/generate-crate-descriptor.ts \
+  target/doc/serde.json \
+  --extract-features \
+  --import-base "@alloy-js/rust" \
+  --out src/externals/serde/
+```
+
+Generated output includes feature arrays on gated symbols:
+
+```ts
+AsyncReadExt: { kind: "trait", features: ["io-util"] },
+TcpStream: { kind: "struct", features: ["net"] },
+Serializer: { kind: "trait" },
+```
+
 ## How the generator works
 
 The generic tool (`scripts/generate-crate-descriptor.ts`):
@@ -178,6 +204,9 @@ npx tsx generate-crate-descriptor.ts <rustdoc.json> [options]
   --merge-from PATH        Merge another crate's symbols (repeatable)
   --out PATH               Output directory (default: src/builtins/<crate>/)
   --skip MOD1,MOD2         Comma-separated modules to skip
+  --extract-features       Extract per-symbol feature gates from cfg attributes
+  --import-base PKG        Use package imports instead of relative paths
+                           (e.g. --import-base "@alloy-js/rust")
 ```
 
 ## Excluded modules
