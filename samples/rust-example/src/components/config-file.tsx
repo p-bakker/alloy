@@ -55,7 +55,7 @@ export function ConfigFile(props: ConfigFileProps) {
         name="Config"
         refkey={configKey}
         pub
-        derives={["Debug", "Clone"]}
+        derives={[std.fmt.Debug, std.clone.Clone]}
       >
         <Field name="max_capacity" pub type="usize" />
         <Field

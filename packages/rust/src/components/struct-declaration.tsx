@@ -13,6 +13,7 @@ import {
   createStructSymbol,
   createTypeParameterSymbol,
 } from "../symbols/factories.js";
+import { resolveSymbolName } from "../symbols/resolve-name.js";
 import { DocComment } from "./doc-comment.js";
 import type { TypeParameterProp } from "./type-parameters.js";
 import { TypeParameters, WhereClause } from "./type-parameters.js";
@@ -102,7 +103,7 @@ export function StructDeclaration(props: StructDeclarationProps) {
         <>
           {"#[derive("}
           <For each={derives} joiner={", "}>
-            {(derive) => derive}
+            {resolveSymbolName}
           </For>
           {")]"}
           <hbr />

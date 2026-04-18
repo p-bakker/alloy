@@ -13,6 +13,7 @@ import {
   createTypeParameterSymbol,
   createVariantSymbol,
 } from "../symbols/factories.js";
+import { resolveSymbolName } from "../symbols/resolve-name.js";
 import { DocComment } from "./doc-comment.js";
 import type { TypeParameterProp } from "./type-parameters.js";
 import { TypeParameters } from "./type-parameters.js";
@@ -98,7 +99,7 @@ export function EnumDeclaration(props: EnumDeclarationProps) {
         <>
           {"#[derive("}
           <For each={derives} joiner={", "}>
-            {(derive) => derive}
+            {resolveSymbolName}
           </For>
           {")]"}
           <hbr />
