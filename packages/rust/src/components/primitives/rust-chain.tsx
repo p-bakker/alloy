@@ -1,6 +1,8 @@
 import type { Children } from "@alloy-js/core";
 import { For } from "@alloy-js/core";
 
+import { useResolvedHeuristics } from "../../context/resolved-heuristics.js";
+
 export interface RustChainProps {
   /** The first segment of the chain — the receiver / base. */
   head: Children;
@@ -32,8 +34,10 @@ export function RustChain(props: RustChainProps) {
     return <>{props.head}</>;
   }
 
+  const { chainWidth } = useResolvedHeuristics();
+
   return (
-    <group>
+    <group max={chainWidth}>
       {props.head}
       <indent>
         <For each={tail} joiner="">
