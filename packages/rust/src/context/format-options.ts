@@ -18,12 +18,40 @@ export interface RustFormatOptions
   maxWidth?: number;
   /** rustfmt `tab_spaces` (core `tabWidth`). Defaults to 4. */
   tabSpaces?: number;
+
+  /**
+   * Resolution strategy for the eight width heuristics.
+   * - `"Default"`: each heuristic resolves to a per-construct percentage of `maxWidth`.
+   * - `"Off"`:     heuristics disabled; each resolves to `maxWidth`.
+   * - `"Max"`:     each heuristic resolves to `maxWidth`.
+   *
+   * Explicit per-heuristic overrides below win regardless of this setting.
+   */
+  useSmallHeuristics?: "Default" | "Off" | "Max";
+
+  /** Override for rustfmt `fn_call_width`. Defaults to 60% of `maxWidth` when unset. */
+  fnCallWidth?: number;
+  /** Override for rustfmt `attr_fn_like_width`. Defaults to 70% of `maxWidth` when unset. */
+  attrFnLikeWidth?: number;
+  /** Override for rustfmt `struct_lit_width`. Defaults to 18% of `maxWidth` when unset. */
+  structLitWidth?: number;
+  /** Override for rustfmt `struct_variant_width`. Defaults to 35% of `maxWidth` when unset. */
+  structVariantWidth?: number;
+  /** Override for rustfmt `array_width`. Defaults to 60% of `maxWidth` when unset. */
+  arrayWidth?: number;
+  /** Override for rustfmt `chain_width`. Defaults to 60% of `maxWidth` when unset. */
+  chainWidth?: number;
+  /** Override for rustfmt `single_line_if_else_max_width`. Defaults to 50% of `maxWidth` when unset. */
+  singleLineIfElseMaxWidth?: number;
+  /** Override for rustfmt `single_line_let_else_max_width`. Defaults to 50% of `maxWidth` when unset. */
+  singleLineLetElseMaxWidth?: number;
 }
 
 /** Defaults applied by the Rust format-options provider. */
 export const DEFAULT_RUST_FORMAT_OPTIONS: RustFormatOptions = {
   maxWidth: 100,
   tabSpaces: 4,
+  useSmallHeuristics: "Default",
 };
 
 /**
@@ -34,7 +62,22 @@ export const DEFAULT_RUST_FORMAT_OPTIONS: RustFormatOptions = {
 export function toCommonFormatOptions(
   opts: RustFormatOptions,
 ): CommonFormatOptions {
-  const { maxWidth, tabSpaces, ...rest } = opts;
+  const {
+    maxWidth,
+    tabSpaces,
+    // Rust-only fields that have no core equivalent — stripped so they
+    // don't leak into the core-facing options object.
+    useSmallHeuristics: _useSmallHeuristics,
+    fnCallWidth: _fnCallWidth,
+    attrFnLikeWidth: _attrFnLikeWidth,
+    structLitWidth: _structLitWidth,
+    structVariantWidth: _structVariantWidth,
+    arrayWidth: _arrayWidth,
+    chainWidth: _chainWidth,
+    singleLineIfElseMaxWidth: _singleLineIfElseMaxWidth,
+    singleLineLetElseMaxWidth: _singleLineLetElseMaxWidth,
+    ...rest
+  } = opts;
   const result: CommonFormatOptions = { ...rest };
   if (maxWidth !== undefined) {
     result.printWidth = maxWidth;
