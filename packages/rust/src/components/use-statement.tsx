@@ -2,6 +2,7 @@ import { code, memo } from "@alloy-js/core";
 
 import { useRustModuleScope } from "../scopes/contexts.js";
 import { type RustVisibility } from "../symbols/rust-output-symbol.js";
+import { BracedList } from "./primitives/braced-list.js";
 import {
   type RustVisibilityProps,
   toRustVisibility,
@@ -41,11 +42,7 @@ function UseStatementLine(props: UseStatementLineProps) {
     sortedSymbols.length === 1 ? (
       sortedSymbols[0]
     ) : (
-      <>
-        {code`{`}
-        {sortedSymbols.join(", ")}
-        {code`}`}
-      </>
+      <BracedList>{sortedSymbols}</BracedList>
     );
 
   return (

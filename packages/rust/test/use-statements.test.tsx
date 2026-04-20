@@ -12,6 +12,8 @@ import {
 import { RustCrateScope } from "../src/scopes/rust-crate-scope.js";
 import { RustModuleScope } from "../src/scopes/rust-module-scope.js";
 import { RustOutputSymbol } from "../src/symbols/rust-output-symbol.js";
+import { checkRustfmtAllEditions } from "./rustfmt.js";
+import { toSourceText } from "./utils.js";
 
 describe("UseStatement", () => {
   it("registers a single import and renders via UseStatements", () => {
@@ -200,5 +202,49 @@ describe("UseStatements", () => {
         </CrateDirectory>
       </Output>,
     ).toRenderTo(d`fn main() {}`);
+  });
+});
+
+describe("use-statement brace list rustfmt conformance", () => {
+  it("keeps a short brace list flat", () => {
+    const source = toSourceText(
+      <>
+        <UseStatement path="std::collections" symbol="HashMap" />
+        <UseStatement path="std::collections" symbol="HashSet" />
+      </>,
+    );
+
+    expect(source.trimEnd()).toBe(`use std::collections::{HashMap, HashSet};`);
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
+  });
+
+  it("wraps a long brace list onto multiple lines", () => {
+    const source = toSourceText(
+      <>
+        <UseStatement
+          path="foo"
+          symbol="AnExtremelyLongIdentifierNumberOneWithLotsOfWords"
+        />
+        <UseStatement
+          path="foo"
+          symbol="AnExtremelyLongIdentifierNumberTwoWithLotsOfWords"
+        />
+        <UseStatement
+          path="foo"
+          symbol="AnExtremelyLongIdentifierNumberThreeWithLotsOfWords"
+        />
+      </>,
+    );
+
+    expect(source.trimEnd()).toBe(
+      [
+        "use foo::{",
+        "    AnExtremelyLongIdentifierNumberOneWithLotsOfWords,",
+        "    AnExtremelyLongIdentifierNumberThreeWithLotsOfWords,",
+        "    AnExtremelyLongIdentifierNumberTwoWithLotsOfWords,",
+        "};",
+      ].join("\n"),
+    );
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
   });
 });
