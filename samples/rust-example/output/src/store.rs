@@ -75,7 +75,10 @@ impl<K: Eq + Hash + Clone, V: Clone + Send + Sync> Store<K, V> {
     }
     /// Removes an entry from the store.
     pub fn remove(&mut self, key: &K) -> Result<V> {
-        self.data.remove(key).map(|entry| entry.value).ok_or(StoreError::NotFound)
+        self.data
+            .remove(key)
+            .map(|entry| entry.value)
+            .ok_or(StoreError::NotFound)
     }
     /// Returns the number of entries in the store.
     #[inline]
