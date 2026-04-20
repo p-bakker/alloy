@@ -148,7 +148,7 @@ describe("namekey support", () => {
         </CrateDirectory>
       </Output>,
     ).toRenderTo(d`
-      pub struct Person {}
+      pub struct Person;
       pub trait Greetable {
           fn greet(&self) -> String;
       }
@@ -249,7 +249,7 @@ describe("namekey support", () => {
         </CrateDirectory>
       </Output>,
     ).toRenderTo(d`
-      pub struct Foo {}
+      pub struct Foo;
       type A = Foo;
       type B = Foo;
     `);

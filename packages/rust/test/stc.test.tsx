@@ -137,7 +137,7 @@ describe("STC wrappers", () => {
         </>,
       ),
     ).toRenderTo(d`
-      struct Item {}
+      struct Item;
       impl Item {
           fn run(&self) {}
       }
@@ -154,7 +154,7 @@ describe("STC wrappers", () => {
         </>,
       ),
     ).toRenderTo(d`
-      struct Item {}
+      struct Item;
       impl Item {
           fn run(&self) {}
       }
@@ -284,7 +284,7 @@ describe("STC wrappers", () => {
         </>,
       ),
     ).toRenderTo(d`
-      struct User {}
+      struct User;
       type UserAlias = User;
     `);
 
@@ -299,7 +299,7 @@ describe("STC wrappers", () => {
         </>,
       ),
     ).toRenderTo(d`
-      struct User {}
+      struct User;
       type UserAlias = User;
     `);
   });

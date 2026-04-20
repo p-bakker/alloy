@@ -64,7 +64,7 @@ describe("DeriveAttribute (via derives prop)", () => {
     ).toRenderTo(d`
       #[repr(C)]
       #[derive(Debug, Clone)]
-      struct Foo {}
+      struct Foo;
     `);
   });
 });

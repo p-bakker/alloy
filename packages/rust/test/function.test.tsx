@@ -270,7 +270,7 @@ describe("FunctionDeclaration", () => {
         </CrateDirectory>
       </Output>,
     ).toRenderTo(d`
-      struct Item {}
+      struct Item;
       impl Item {
           fn run(&self) {}
       }
@@ -293,7 +293,7 @@ describe("FunctionDeclaration", () => {
         </CrateDirectory>
       </Output>,
     ).toRenderTo(d`
-      struct Item {}
+      struct Item;
       impl Item {
           fn run(&mut self) {}
       }
@@ -316,7 +316,7 @@ describe("FunctionDeclaration", () => {
         </CrateDirectory>
       </Output>,
     ).toRenderTo(d`
-      struct Item {}
+      struct Item;
       impl Item {
           fn consume(self) {}
       }
@@ -339,7 +339,7 @@ describe("FunctionDeclaration", () => {
         </CrateDirectory>
       </Output>,
     ).toRenderTo(d`
-      struct Item {}
+      struct Item;
       impl Item {
           fn new() {}
       }
@@ -368,7 +368,7 @@ describe("FunctionDeclaration", () => {
         </CrateDirectory>
       </Output>,
     ).toRenderTo(d`
-      struct Item {}
+      struct Item;
       impl Item {
           fn set(&self, x: i32, y: i32) {}
       }

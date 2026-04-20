@@ -34,7 +34,7 @@ describe("Rust edge cases", () => {
           </CrateDirectory>
         </Output>,
       ).toRenderTo(d`
-        struct Empty {}
+        struct Empty;
         enum Never {}
         fn noop() {}
       `);
@@ -263,7 +263,7 @@ describe("Rust edge cases", () => {
           </CrateDirectory>
         </Output>,
       ).toRenderTo(d`
-        struct Point {}
+        struct Point;
         impl Point {
             fn new() {}
         }

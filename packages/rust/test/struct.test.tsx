@@ -28,27 +28,17 @@ function StructKindProbe(props: { name: string }) {
 
 describe("StructDeclaration", () => {
   it("renders basic struct", () => {
-    expect(
-      <Output>
-        <CrateDirectory name="my_crate">
-          <SourceFile path="lib.rs">
-            <StructDeclaration name="Foo" />
-          </SourceFile>
-        </CrateDirectory>
-      </Output>,
-    ).toRenderTo(d`struct Foo {}`);
+    const source = toSourceText(<StructDeclaration name="Foo" />);
+
+    expect(source).toEqual(d`struct Foo;`);
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
   });
 
   it("renders pub struct", () => {
-    expect(
-      <Output>
-        <CrateDirectory name="my_crate">
-          <SourceFile path="lib.rs">
-            <StructDeclaration name="Foo" pub={true} />
-          </SourceFile>
-        </CrateDirectory>
-      </Output>,
-    ).toRenderTo(d`pub struct Foo {}`);
+    const source = toSourceText(<StructDeclaration name="Foo" pub={true} />);
+
+    expect(source).toEqual(d`pub struct Foo;`);
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
   });
 
   it("renders pub(super) struct", () => {
@@ -60,7 +50,7 @@ describe("StructDeclaration", () => {
           </SourceFile>
         </CrateDirectory>
       </Output>,
-    ).toRenderTo(d`pub(super) struct Foo {}`);
+    ).toRenderTo(d`pub(super) struct Foo;`);
   });
 
   it("renders derives and attributes", () => {
@@ -79,7 +69,7 @@ describe("StructDeclaration", () => {
     ).toRenderTo(d`
       #[repr(C)]
       #[derive(Debug, Clone)]
-      struct Foo {}
+      struct Foo;
     `);
   });
 
@@ -94,7 +84,7 @@ describe("StructDeclaration", () => {
       </Output>,
     ).toRenderTo(d`
       /// Represents foo.
-      struct Foo {}
+      struct Foo;
     `);
   });
 
@@ -137,7 +127,7 @@ describe("StructDeclaration", () => {
     ).toRenderTo(d`
       struct Foo<T, U: Display>
       where
-          U: Clone, {}
+          U: Clone;
     `);
   });
 
@@ -273,7 +263,7 @@ describe("StructDeclaration", () => {
         </CrateDirectory>
       </Output>,
     ).toRenderTo(d`
-      struct Foo {}
+      struct Foo;
       struct
     `);
   });

@@ -48,7 +48,7 @@ describe("T073: doc comment declaration line breaks", () => {
     ).toRenderTo(d`
       //! Module docs
       //! Second line
-      struct Response {}
+      struct Response;
     `);
   });
 });

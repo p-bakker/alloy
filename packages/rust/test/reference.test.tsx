@@ -442,7 +442,7 @@ describe("Rust reference nested scope traversal", () => {
     expect(findFile(output, "src/routes/mod.rs").contents.trim()).toBe(
       d`
       use crate::models::User;
-      struct Router {}
+      struct Router;
       impl Router {
           fn from_user(user: User) -> User {}
       }

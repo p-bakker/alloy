@@ -116,7 +116,7 @@ export function StructDeclaration(props: StructDeclarationProps) {
         {structSymbol.name}
         <TypeParameters params={props.typeParameters} />
         {!props.tuple ? (
-          <WhereClause trailingComma={!props.unit}>
+          <WhereClause trailingComma={!props.unit && members.length > 0}>
             {props.whereClause}
           </WhereClause>
         ) : null}
@@ -146,7 +146,7 @@ export function StructDeclaration(props: StructDeclarationProps) {
             {"}"}
           </>
         ) : (
-          " {}"
+          ";"
         )}
       </CoreDeclaration>
     </>
