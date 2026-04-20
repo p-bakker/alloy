@@ -9,6 +9,7 @@ export function ReturnExpression(props: ReturnExpressionProps) {
     <>
       {"return"}
       {typeof props.children !== "undefined" ? <> {props.children}</> : null}
+      {";"}
     </>
   );
 }

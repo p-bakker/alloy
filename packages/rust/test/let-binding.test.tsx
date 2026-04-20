@@ -6,10 +6,13 @@ import { describe, expect, it } from "vitest";
 
 import {
   CrateDirectory,
+  FunctionDeclaration,
   LetBinding,
   SourceFile,
 } from "../src/components/index.js";
 import * as Stc from "../src/components/stc/index.js";
+import { checkRustfmtAllEditions } from "./rustfmt.js";
+import { toSourceText } from "./utils.js";
 
 function inFile(children: Children) {
   return (
@@ -76,5 +79,19 @@ describe("LetBinding", () => {
     ).toRenderTo(d`
       let mut count = items.len();
     `);
+  });
+
+  it("composes with sibling statements separated by hbr", () => {
+    const source = toSourceText(
+      <FunctionDeclaration name="demo" returnType="i32">
+        <LetBinding name="a">{code`1`}</LetBinding>
+        <hbr />
+        <LetBinding name="b">{code`a + 1`}</LetBinding>
+        <hbr />
+        {code`a + b`}
+      </FunctionDeclaration>,
+    );
+
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
   });
 });
