@@ -1,26 +1,49 @@
 import type { Children } from "@alloy-js/core";
 import { For, Indent } from "@alloy-js/core";
 
+import { useResolvedHeuristics } from "../../context/resolved-heuristics.js";
+
+export type BracedListHeuristic = "structLitWidth" | "structVariantWidth";
+
 export interface BracedListProps {
   /** The list items — one per entry between the braces. */
   children?: Children | Children[];
   /** Emit a trailing comma when the list breaks. Default `true`. */
   trailingComma?: boolean;
+  /**
+   * Pad the flat form with a single space inside each brace —
+   * `{ a, b }` rather than `{a, b}`. Empty lists never pad; they
+   * always render as `{}`. Default `false`.
+   */
+  pad?: boolean;
+  /**
+   * Name of the rustfmt width heuristic that governs this list. When
+   * set, the resolved heuristic is passed as `max` to the inner
+   * `<group>` so that lists whose flat form fits within the heuristic
+   * stay flat, and lists that exceed it break even if the ambient
+   * line has room.
+   *
+   * Pass `"structLitWidth"` for struct literals and
+   * `"structVariantWidth"` for enum struct variants. Leave unset for
+   * primitives governed only by the overall print width (`use a::{…}`
+   * bodies).
+   */
+  heuristic?: BracedListHeuristic;
 }
 
 /**
  * Comma-separated brace-delimited list with fit-or-break layout.
  *
- * Flat: `{item1, item2, …}` with tight delimiters (no inner
- * padding). Broken: each item on its own block-indented line
- * with the closing brace on its own line at the outer indent. When
- * broken, a trailing comma is emitted iff `trailingComma` is true
- * (default).
+ * Flat: `{item1, item2, …}` (or `{ item1, item2, … }` when `pad` is
+ * set). Broken: each item on its own block-indented line with the
+ * closing brace on its own line at the outer indent. When broken, a
+ * trailing comma is emitted iff `trailingComma` is true (default).
  *
  * Used for brace-delimited lists such as `use a::{…}` import bodies,
  * struct-literal bodies, and (future) generic bracket substitutes.
  * Callers whose brace form forbids a trailing comma should pass
- * `trailingComma={false}`.
+ * `trailingComma={false}`. Callers whose flat form wants inner
+ * padding (struct literals) should pass `pad={true}`.
  *
  * Empty lists render as a flat `{}` with no potential break.
  */
@@ -31,14 +54,35 @@ export function BracedList(props: BracedListProps) {
       ? [props.children]
       : [];
   const trailingComma = props.trailingComma ?? true;
+  const pad = props.pad ?? false;
+  const heuristics = useResolvedHeuristics();
+  const max =
+    props.heuristic !== undefined ? heuristics[props.heuristic] : undefined;
 
   if (items.length === 0) {
     return <>{"{}"}</>;
   }
 
-  return (
-    <group>
+  const opener = pad ? (
+    <>
       {"{"}
+      <ifBreak flatContents=" ">{null}</ifBreak>
+    </>
+  ) : (
+    "{"
+  );
+  const closer = pad ? (
+    <>
+      <ifBreak flatContents=" ">{null}</ifBreak>
+      {"}"}
+    </>
+  ) : (
+    "}"
+  );
+
+  return (
+    <group max={max}>
+      {opener}
       <Indent softline trailingBreak>
         <For
           each={items}
@@ -52,7 +96,7 @@ export function BracedList(props: BracedListProps) {
         </For>
         {trailingComma ? <ifBreak>,</ifBreak> : null}
       </Indent>
-      {"}"}
+      {closer}
     </group>
   );
 }

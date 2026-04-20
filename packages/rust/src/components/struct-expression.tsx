@@ -1,5 +1,6 @@
 import type { Children } from "@alloy-js/core";
-import { For, Indent } from "@alloy-js/core";
+
+import { BracedList } from "./primitives/braced-list.js";
 
 export interface StructExpressionProps {
   type: Children;
@@ -22,30 +23,22 @@ export function StructExpression(props: StructExpressionProps) {
       )
     : [];
 
+  const entries: Children[] = [...fields];
+  if (props.spread) {
+    entries.push(
+      <>
+        {".."}
+        {props.spread}
+      </>,
+    );
+  }
+
   return (
     <>
-      {props.type}
-      {" {"}
-      {fields.length > 0 || props.spread ? (
-        <>
-          <Indent>
-            {fields.length > 0 ? (
-              <For each={fields} joiner={<hbr />}>
-                {(field) => field}
-              </For>
-            ) : null}
-            {props.spread ? (
-              <>
-                {fields.length > 0 ? <hbr /> : null}
-                {".."}
-                {props.spread}
-              </>
-            ) : null}
-          </Indent>
-          <hbr />
-        </>
-      ) : null}
-      {"}"}
+      {props.type}{" "}
+      <BracedList pad trailingComma={!props.spread} heuristic="structLitWidth">
+        {entries}
+      </BracedList>
     </>
   );
 }
@@ -56,7 +49,6 @@ export function FieldInit(props: FieldInitProps) {
       {props.name}
       {typeof props.children === "undefined" ? null : ": "}
       {props.children}
-      {","}
     </>
   );
 }
