@@ -285,20 +285,25 @@ export function StoreModule(props: StoreModuleProps) {
         <hbr />
 
         <DocComment>Returns the number of entries in the store.</DocComment>
-        <Attribute name="inline" />
-        <FunctionDeclaration name="len" pub receiver="&self" returnType="usize">
+        <FunctionDeclaration
+          name="len"
+          pub
+          receiver="&self"
+          returnType="usize"
+          attributes={[<Attribute name="inline" />]}
+        >
           self.data.len()
         </FunctionDeclaration>
 
         <hbr />
 
         <DocComment>Returns true if the store is empty.</DocComment>
-        <Attribute name="inline" />
         <FunctionDeclaration
           name="is_empty"
           pub
           receiver="&self"
           returnType="bool"
+          attributes={[<Attribute name="inline" />]}
         >
           self.data.is_empty()
         </FunctionDeclaration>
