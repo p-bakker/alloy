@@ -46,13 +46,15 @@ impl<K: Eq + Hash + Clone, V: Clone + Send + Sync> Store<K, V> {
     pub fn insert(&mut self, key: K, value: V) -> Result<()> {
         if self.data.len() >= self.max_capacity && !self.data.contains_key(&key) {
             return Err(StoreError::StorageFull)
-            ;
-        }let entry = Entry {
+        }
+        let entry = Entry {
             value,
             created_at: Instant::now(),
             ttl: self.default_ttl,
             status: EntryStatus::Active,
-        };self.data.insert(key, entry); Ok(())
+        };
+        self.data.insert(key, entry);
+        Ok(())
     }
     /// Retrieves a value by key, checking for expiration.
     pub fn get(&self, key: &K) -> Result<&V> {
@@ -60,12 +62,10 @@ impl<K: Eq + Hash + Clone, V: Clone + Send + Sync> Store<K, V> {
             Some(entry) => {
                 if entry.status == EntryStatus::Expired {
                     return Err(StoreError::NotFound)
-                    ;
                 }
                 if let Some(ttl) = entry.ttl {
                     if entry.created_at.elapsed() > ttl {
                         return Err(StoreError::NotFound)
-                        ;
                     }
                 }
                 Ok(&entry.value)
@@ -78,22 +78,26 @@ impl<K: Eq + Hash + Clone, V: Clone + Send + Sync> Store<K, V> {
         self.data.remove(key).map(|entry| entry.value).ok_or(StoreError::NotFound)
     }
     /// Returns the number of entries in the store.
-    #[inline]pub fn len(&self) -> usize {
+    #[inline]
+    pub fn len(&self) -> usize {
         self.data.len()
     }
     /// Returns true if the store is empty.
-    #[inline]pub fn is_empty(&self) -> bool {
+    #[inline]
+    pub fn is_empty(&self) -> bool {
         self.data.is_empty()
     }
     /// Evicts all expired entries from the store.
     pub fn evict_expired(&mut self) -> usize {
-        let before = self.data.len();self.data.retain(|_, entry| {
-        if let Some(ttl) = entry.ttl {
-            entry.created_at.elapsed() <= ttl
-        } else {
-            true
-        }
-        });before - self.data.len()
+        let before = self.data.len();
+        self.data.retain(|_, entry| {
+            if let Some(ttl) = entry.ttl {
+                entry.created_at.elapsed() <= ttl
+            } else {
+                true
+            }
+        });
+        before - self.data.len()
     }
 }
 impl<K: Eq + Hash + Clone, V: Clone + Send + Sync> Cacheable<V> for Store<K, V> {

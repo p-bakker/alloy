@@ -90,12 +90,9 @@ export function EnumDeclaration(props: EnumDeclarationProps) {
         </>
       : null}
       {props.attributes && props.attributes.length > 0 ?
-        <>
-          <For each={props.attributes} line>
-            {(attr) => attr}
-          </For>
-          <hbr />
-        </>
+        <For each={props.attributes} joiner={""}>
+          {(attr) => attr}
+        </For>
       : null}
       {derives && derives.length > 0 ?
         <>
@@ -168,12 +165,9 @@ export function EnumVariant(props: EnumVariantProps) {
         </>
       : null}
       {props.attributes && props.attributes.length > 0 ?
-        <>
-          <For each={props.attributes} line>
-            {(attr) => attr}
-          </For>
-          <hbr />
-        </>
+        <For each={props.attributes} joiner={""}>
+          {(attr) => attr}
+        </For>
       : null}
       {variantSymbol.name}
       {variantKind === "tuple" && tupleValues.length > 0 ?

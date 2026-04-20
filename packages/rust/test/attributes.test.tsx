@@ -6,19 +6,24 @@ import {
   Attribute,
   CrateDirectory,
   Declaration,
+  FunctionDeclaration,
   InnerAttribute,
   SourceFile,
   StructDeclaration,
 } from "../src/components/index.js";
 import * as Stc from "../src/components/stc/index.js";
+import { checkRustfmtAllEditions } from "./rustfmt.js";
+import { toSourceText } from "./utils.js";
 
 describe("Attribute", () => {
   it("renders simple attribute", () => {
-    expect(<Attribute name="test" />).toRenderTo(d`#[test]`);
+    expect(<Attribute name="test" />).toRenderTo("#[test]\n\n");
   });
 
   it("renders attribute with args", () => {
-    expect(<Attribute name="cfg" args="test" />).toRenderTo(d`#[cfg(test)]`);
+    expect(<Attribute name="cfg" args="test" />).toRenderTo(
+      "#[cfg(test)]\n\n",
+    );
   });
 
   it("renders refkey attribute names", () => {
@@ -39,10 +44,7 @@ describe("Attribute", () => {
           </SourceFile>
         </CrateDirectory>
       </Output>,
-    ).toRenderTo(d`
-      fn my_custom_attribute() {}
-      #[my_custom_attribute]
-    `);
+    ).toRenderTo("fn my_custom_attribute() {}\n#[my_custom_attribute]\n\n");
   });
 });
 
@@ -70,18 +72,83 @@ describe("DeriveAttribute (via derives prop)", () => {
 
 describe("InnerAttribute", () => {
   it("renders simple inner attribute", () => {
-    expect(<InnerAttribute name="allow" />).toRenderTo(d`#![allow]`);
+    expect(<InnerAttribute name="allow" />).toRenderTo("#![allow]\n\n");
   });
 
   it("renders inner attribute with args", () => {
     expect(<InnerAttribute name="cfg" args="test" />).toRenderTo(
-      d`#![cfg(test)]`,
+      "#![cfg(test)]\n\n",
     );
   });
 
   it("renders stc inner attribute wrapper", () => {
     expect(
       Stc.InnerAttribute({ name: "cfg", args: 'feature = "cli"' }),
-    ).toRenderTo(d`#![cfg(feature = "cli")]`);
+    ).toRenderTo('#![cfg(feature = "cli")]\n\n');
+  });
+});
+
+describe("rustfmt conformance", () => {
+  it("breaks between outer attribute and fn across all editions", () => {
+    const source = toSourceText(
+      <FunctionDeclaration
+        name="with_capacity"
+        pub
+        receiver="self"
+        parameters={[{ name: "capacity", type: "usize" }]}
+        returnType="Self"
+        attributes={[<Attribute name="must_use" />]}
+      >
+        {"self"}
+      </FunctionDeclaration>,
+    );
+
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
+  });
+
+  it("breaks between multiple outer attributes and fn across all editions", () => {
+    const source = toSourceText(
+      <FunctionDeclaration
+        name="handler"
+        pub
+        attributes={[
+          <Attribute name="inline" />,
+          <Attribute name="allow" args="dead_code" />,
+        ]}
+      />,
+    );
+
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
+  });
+
+  it("breaks between a stand-alone sibling Attribute and fn across all editions", () => {
+    const source = toSourceText(
+      <>
+        <Attribute name="must_use" />
+        <FunctionDeclaration name="handler" pub />
+      </>,
+    );
+
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
+  });
+
+  it("does not insert blank lines between multiple attributes on the same item", () => {
+    const source = toSourceText(
+      <FunctionDeclaration
+        name="handler"
+        pub
+        attributes={[
+          <Attribute name="inline" />,
+          <Attribute name="allow" args="dead_code" />,
+        ]}
+      />,
+    );
+
+    expect(source).toEqual(d`
+      #[inline]
+      #[allow(dead_code)]
+      pub fn handler() {}
+    `);
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
   });
 });

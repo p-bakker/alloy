@@ -30,12 +30,9 @@ export function ConstDeclaration(props: ConstDeclarationProps) {
   return (
     <>
       {props.attributes && props.attributes.length > 0 ?
-        <>
-          <For each={props.attributes} line>
-            {(attr) => attr}
-          </For>
-          <hbr />
-        </>
+        <For each={props.attributes} joiner={""}>
+          {(attr) => attr}
+        </For>
       : null}
       <CoreDeclaration symbol={constSymbol}>
         <VisibilityPrefix pub={props.pub} />

@@ -37,6 +37,7 @@ function AttributeBase(props: AttributeBaseProps) {
         </>
       : null}
       {"]"}
+      <hbr />
     </>
   );
 }

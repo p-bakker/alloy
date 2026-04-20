@@ -53,12 +53,9 @@ export function TraitDeclaration(props: TraitDeclarationProps) {
         </>
       : null}
       {props.attributes && props.attributes.length > 0 ?
-        <>
-          <For each={props.attributes} line>
-            {(attr) => attr}
-          </For>
-          <hbr />
-        </>
+        <For each={props.attributes} joiner={""}>
+          {(attr) => attr}
+        </For>
       : null}
       <CoreDeclaration symbol={traitSymbol}>
         <VisibilityPrefix pub={props.pub} />
