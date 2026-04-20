@@ -34,12 +34,11 @@ export function AttributeList(props: { attributes?: Children[] }) {
   if (!items || items.length === 0) return null;
   return (
     <>
-      <For each={items} line>
+      <For each={items} joiner={""}>
         {(attr) =>
           typeof attr === "string" ? <Attribute name={attr} /> : attr
         }
       </For>
-      <hbr />
     </>
   );
 }
@@ -57,6 +56,7 @@ function AttributeBase(props: AttributeBaseProps) {
         </>
       ) : null}
       {"]"}
+      <hbr />
     </>
   );
 }

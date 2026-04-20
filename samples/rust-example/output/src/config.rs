@@ -23,28 +23,32 @@ impl Config {
         }
     }
     /// Sets the maximum number of entries.
-    #[must_use]pub fn with_max_capacity(self, capacity: usize) -> Self {
+    #[must_use]
+    pub fn with_max_capacity(self, capacity: usize) -> Self {
         Self {
             max_capacity: capacity,
             ..self
         }
     }
     /// Sets the default TTL for entries.
-    #[must_use]pub fn with_ttl(self, ttl: Duration) -> Self {
+    #[must_use]
+    pub fn with_ttl(self, ttl: Duration) -> Self {
         Self {
             default_ttl: Some(ttl),
             ..self
         }
     }
     /// Disables automatic eviction of expired entries.
-    #[must_use]pub fn disable_eviction(self) -> Self {
+    #[must_use]
+    pub fn disable_eviction(self) -> Self {
         Self {
             enable_eviction: false,
             ..self
         }
     }
     /// Sets the name of this store instance.
-    #[must_use]pub fn with_name(self, name: &str) -> Self {
+    #[must_use]
+    pub fn with_name(self, name: &str) -> Self {
         Self {
             name: name.to_owned(),
             ..self

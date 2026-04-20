@@ -187,10 +187,10 @@ describe("STC wrappers", () => {
 
   it("Attribute wrapper matches JSX output", () => {
     expect(inFile(<Attribute name="cfg" args="test" />)).toRenderTo(
-      d`#[cfg(test)]`,
+      "#[cfg(test)]\n\n",
     );
     expect(inFile(Stc.Attribute({ name: "cfg", args: "test" }))).toRenderTo(
-      d`#[cfg(test)]`,
+      "#[cfg(test)]\n\n",
     );
   });
 
