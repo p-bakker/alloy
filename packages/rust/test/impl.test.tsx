@@ -116,7 +116,39 @@ describe("ImplBlock", () => {
       </Output>,
     ).toRenderTo(d`
       struct Foo {}
-      impl Foo where T: Clone {}
+      impl Foo
+      where
+          T: Clone, {}
+    `);
+  });
+
+  it("breaks multiple where-clause bounds onto their own indented lines", () => {
+    const typeRef = refkey("box-type");
+
+    expect(
+      <Output>
+        <CrateDirectory name="my_crate">
+          <SourceFile path="lib.rs">
+            <StructDeclaration
+              name="Holder"
+              refkey={typeRef}
+              typeParameters={[{ name: "T" }]}
+            />
+            <hbr />
+            <ImplBlock
+              type={typeRef}
+              typeParameters={[{ name: "T" }]}
+              whereClause={["T: Clone", "T: core::fmt::Debug"]}
+            />
+          </SourceFile>
+        </CrateDirectory>
+      </Output>,
+    ).toRenderTo(d`
+      struct Holder<T> {}
+      impl<T> Holder<T>
+      where
+          T: Clone,
+          T: core::fmt::Debug, {}
     `);
   });
 
@@ -271,7 +303,9 @@ describe("ImplBlock", () => {
       </Output>,
     ).toRenderTo(d`
       enum Result<T, E> {}
-      impl<T, E> Result<T, E> where T: Clone {}
+      impl<T, E> Result<T, E>
+      where
+          T: Clone, {}
     `);
   });
 

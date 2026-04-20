@@ -1,5 +1,5 @@
 import type { Children } from "@alloy-js/core";
-import { For } from "@alloy-js/core";
+import { For, Indent } from "@alloy-js/core";
 
 export interface TypeParameterProp {
   name?: string;
@@ -16,7 +16,22 @@ export interface TypeParametersProps {
 }
 
 export interface WhereClauseProps {
-  children?: Children;
+  /**
+   * The bounds of the where clause. A single `Children` value is treated as
+   * one bound; an array is treated as one bound per element. Each bound is
+   * rendered on its own block-indented line. When empty / undefined, the
+   * component renders nothing — including no leading break — so callers
+   * can drop it in unconditionally alongside the item's signature.
+   */
+  children?: Children | Children[];
+
+  /**
+   * Whether to emit a trailing comma after the last bound. Defaults to
+   * `true`, which is correct whenever a body (`{ … }`) follows the where
+   * clause. Set to `false` for forward-declaration items that terminate
+   * with `;` (e.g. trait method signatures, tuple-struct declarations).
+   */
+  trailingComma?: boolean;
 }
 
 export function TypeParameters(props: TypeParametersProps) {
@@ -67,14 +82,28 @@ export function TypeParameters(props: TypeParametersProps) {
 }
 
 export function WhereClause(props: WhereClauseProps) {
-  if (!props.children) {
+  const bounds = normaliseBounds(props.children);
+  if (bounds.length === 0) {
     return <></>;
   }
 
+  const trailingComma = props.trailingComma ?? true;
+  const lastIndex = bounds.length - 1;
+
   return (
     <>
-      {"where "}
-      {props.children}
+      <hbr />
+      {"where"}
+      <Indent hardline>
+        <For each={bounds} joiner={<hbr />}>
+          {(bound, index) => (
+            <>
+              {bound}
+              {index === lastIndex && !trailingComma ? "" : ","}
+            </>
+          )}
+        </For>
+      </Indent>
     </>
   );
 }
@@ -92,4 +121,16 @@ export function renderConstraints(
       {(bound) => bound}
     </For>
   );
+}
+
+function normaliseBounds(
+  children: Children | Children[] | undefined,
+): Children[] {
+  if (children === undefined || children === null || children === false) {
+    return [];
+  }
+  if (Array.isArray(children)) {
+    return children.filter((bound) => bound !== null && bound !== undefined);
+  }
+  return [children];
 }
