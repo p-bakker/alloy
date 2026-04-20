@@ -1,5 +1,13 @@
-import type { BasePartProps, Children } from "@alloy-js/core";
-import { createAccessExpression, For, Indent, Wrap } from "@alloy-js/core";
+import type { Children } from "@alloy-js/core";
+import {
+  childrenArray,
+  computed,
+  For,
+  isComponentCreator,
+} from "@alloy-js/core";
+
+import { ArgList } from "./primitives/arg-list.js";
+import { RustChain } from "./primitives/rust-chain.js";
 
 export interface MethodChainExpressionProps {
   receiver: Children;
@@ -14,142 +22,58 @@ export interface MethodChainCallProps {
   try?: boolean;
 }
 
-interface MethodChainPartProps extends BasePartProps {
-  receiver?: Children;
-  name?: string;
-  args?: Children[];
-  typeArgs?: Children[];
-  await?: boolean;
-  try?: boolean;
+export function MethodChainCall(_props: MethodChainCallProps): Children {
+  // No-op — props are consumed by the parent MethodChainExpression.
+  return null;
 }
 
-interface MethodChainPartDescriptor {
-  receiver?: Children;
-  name?: string;
-  args: Children[];
-  typeArgs: Children[];
-  await: boolean;
-  try: boolean;
-  call: boolean;
-  [key: string]: unknown;
-}
-
-const { Expression, Part, registerOuterComponent } = createAccessExpression<
-  MethodChainPartProps,
-  MethodChainPartDescriptor
->({
-  createDescriptor(partProps, _symbol, first) {
-    if (first) {
-      if (partProps.receiver === undefined) {
-        throw new Error(
-          "MethodChainExpression requires a receiver before method calls.",
-        );
-      }
-
-      return {
-        receiver: partProps.receiver,
-        args: [],
-        typeArgs: [],
-        await: false,
-        try: false,
-        call: false,
-      };
-    }
-
-    if (!partProps.name) {
-      throw new Error(
-        "MethodChainExpression.Call requires a method name for each chain step.",
-      );
-    }
-
-    return {
-      name: partProps.name,
-      args: partProps.args ?? [],
-      typeArgs: partProps.typeArgs ?? [],
-      await: !!partProps.await,
-      try: !!partProps.try,
-      call: true,
-    };
-  },
-
-  getBase(part) {
-    return part.receiver ?? "";
-  },
-
-  formatPart(part, _prevPart, inCallChain) {
-    if (!part.name) {
-      throw new Error(
-        "MethodChainExpression call part is missing a method name.",
-      );
-    }
-
-    const content = (
-      <>
-        {"."}
-        {part.name}
-        {part.typeArgs.length > 0 ? (
-          <>
-            {"::<"}
-            <For each={part.typeArgs} joiner={", "}>
-              {(typeArg) => typeArg}
-            </For>
-            {">"}
-          </>
-        ) : null}
-        {"("}
-        <Wrap
-          when={part.args.length > 1}
-          with={Indent}
-          props={{ softline: true, trailingBreak: true }}
-        >
-          <For each={part.args} comma line>
-            {(arg) => arg}
-          </For>
-        </Wrap>
-        {")"}
-        {part.await ? ".await" : ""}
-        {part.try ? "?" : ""}
-      </>
-    );
-
-    if (inCallChain) {
-      return (
+function renderSegment(call: MethodChainCallProps): Children {
+  const typeArgs = call.typeArgs ?? [];
+  const args = call.args ?? [];
+  return (
+    <>
+      {call.name}
+      {typeArgs.length > 0 ? (
         <group>
-          <sbr />
-          {content}
+          {"::<"}
+          <For
+            each={typeArgs}
+            joiner={
+              <>
+                , <softline />
+              </>
+            }
+          >
+            {(typeArg) => typeArg}
+          </For>
+          {">"}
         </group>
-      );
-    }
-
-    return (
-      <group>
-        <indent>
-          <sbr />
-          {content}
-        </indent>
-      </group>
-    );
-  },
-
-  isCallPart(part) {
-    return part.call;
-  },
-});
+      ) : null}
+      <ArgList>{args}</ArgList>
+      {call.await ? ".await" : ""}
+      {call.try ? "?" : ""}
+    </>
+  );
+}
 
 export function MethodChainExpression(
   props: MethodChainExpressionProps,
 ): Children {
-  return (
-    <Expression>
-      <Part receiver={props.receiver} />
-      {props.children}
-    </Expression>
-  );
+  return computed(() => {
+    const tail: Children[] = [];
+    for (const child of childrenArray(() => props.children)) {
+      if (isComponentCreator(child, MethodChainCall)) {
+        const callProps = child.props as MethodChainCallProps;
+        if (!callProps.name) {
+          throw new Error(
+            "MethodChainExpression.Call requires a method name for each chain step.",
+          );
+        }
+        tail.push(renderSegment(callProps));
+      }
+    }
+    return <RustChain head={props.receiver} tail={tail} />;
+  });
 }
 
-export const MethodChainCall = Part as (
-  props: MethodChainCallProps,
-) => Children;
-
 MethodChainExpression.Call = MethodChainCall;
-registerOuterComponent(MethodChainExpression);
