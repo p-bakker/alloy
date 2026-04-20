@@ -41,10 +41,10 @@ describe("rustfmt test helper", () => {
     it("accepts a subset of editions and only checks those", () => {
       const subset: readonly Edition[] = ["2021", "2024"];
       expect(() =>
-        checkRustfmtAllEditions(CONFORMANT_SOURCE, subset),
+        checkRustfmtAllEditions(CONFORMANT_SOURCE, { editions: subset }),
       ).not.toThrow();
       expect(() =>
-        checkRustfmtAllEditions(NON_CONFORMANT_SOURCE, subset),
+        checkRustfmtAllEditions(NON_CONFORMANT_SOURCE, { editions: subset }),
       ).toThrow(/edition 2021/);
     });
   });

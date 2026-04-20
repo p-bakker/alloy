@@ -8,6 +8,7 @@ import {
 } from "@alloy-js/core";
 
 import {
+  toCommonFormatOptions,
   useRustFormatOptions,
   type RustFormatOptions,
 } from "../context/format-options.js";
@@ -94,9 +95,10 @@ export function SourceFile(props: SourceFileProps) {
   const declarationScope = getDeclarationScope(props.path, scopeParent, scope);
 
   const opts = useRustFormatOptions({
-    printWidth: props.printWidth,
-    tabWidth: props.tabWidth,
+    maxWidth: props.maxWidth,
+    tabSpaces: props.tabSpaces,
     useTabs: props.useTabs,
+    insertFinalNewLine: props.insertFinalNewLine,
   });
 
   // Plain-string headerComment is the common "module-level docs" case, so
@@ -122,7 +124,7 @@ export function SourceFile(props: SourceFileProps) {
       path={props.path}
       filetype="rust"
       reference={Reference}
-      {...opts}
+      {...toCommonFormatOptions(opts)}
       header={header}
     >
       <Scope value={scope}>

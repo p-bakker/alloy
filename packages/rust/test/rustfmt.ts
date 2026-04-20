@@ -16,11 +16,36 @@ export const SUPPORTED_EDITIONS = ["2015", "2018", "2021", "2024"] as const;
 export type Edition = (typeof SUPPORTED_EDITIONS)[number];
 
 /**
+ * A rustfmt configuration override, keyed by rustfmt config key
+ * (snake_case). Each entry becomes a `--config key=value` flag.
+ */
+export type RustfmtConfig = Record<string, string | number | boolean>;
+
+/**
  * Options accepted by {@link rustfmt} and {@link checkRustfmt}.
  */
 export interface RustfmtRunOptions {
   /** Rust edition to pass to rustfmt via `--edition`. Defaults to `"2024"`. */
   edition?: Edition;
+  /** rustfmt config overrides passed via `--config`. */
+  config?: RustfmtConfig;
+}
+
+function formatConfigOverrides(config: RustfmtConfig | undefined): string[] {
+  if (!config) return [];
+  const args: string[] = [];
+  for (const [key, value] of Object.entries(config)) {
+    args.push("--config", `${key}=${value}`);
+  }
+  return args;
+}
+
+function describeConfig(config: RustfmtConfig | undefined): string {
+  if (!config) return "";
+  const entries = Object.entries(config)
+    .map(([k, v]) => `${k}=${v}`)
+    .join(", ");
+  return entries.length > 0 ? ` with config { ${entries} }` : "";
 }
 
 /**
@@ -36,10 +61,11 @@ export function rustfmt(
   options: RustfmtRunOptions = {},
 ): string {
   const edition: Edition = options.edition ?? "2024";
+  const configArgs = formatConfigOverrides(options.config);
   try {
     const result = execFileSync(
       "rustfmt",
-      ["--emit", "stdout", "--edition", edition],
+      ["--emit", "stdout", "--edition", edition, ...configArgs],
       {
         input: source,
         encoding: "utf-8",
@@ -50,7 +76,7 @@ export function rustfmt(
   } catch (e: any) {
     if (e.stderr) {
       throw new Error(
-        `rustfmt failed (edition ${edition}):\n${e.stderr}\n\nInput was:\n${source}`,
+        `rustfmt failed (edition ${edition}${describeConfig(options.config)}):\n${e.stderr}\n\nInput was:\n${source}`,
       );
     }
     throw e;
@@ -76,6 +102,20 @@ export function checkRustfmt(
 }
 
 /**
+ * Options accepted by {@link checkRustfmtAllEditions}.
+ */
+export interface CheckRustfmtAllEditionsOptions {
+  /** Subset of editions to check. Defaults to {@link SUPPORTED_EDITIONS}. */
+  editions?: readonly Edition[];
+  /**
+   * rustfmt config overrides applied to every edition in the matrix.
+   * Keys are rustfmt config names (snake_case); each entry is passed
+   * through as `--config key=value`.
+   */
+  config?: RustfmtConfig;
+}
+
+/**
  * Asserts that a Rust source string is rustfmt-conformant across every
  * supplied edition (defaulting to {@link SUPPORTED_EDITIONS}).
  *
@@ -86,16 +126,20 @@ export function checkRustfmt(
  * source) defaults it off for snapshot convenience.
  *
  * @param source - Rust source code to check.
- * @param editions - Optional subset of editions to check. Defaults to
- *   {@link SUPPORTED_EDITIONS}.
- * @throws If any edition produces a diff. The error message includes the
- *   offending edition, the expected rustfmt output, and the received
- *   source so the failure is self-contained.
+ * @param options - Optional edition subset and/or rustfmt config
+ *   overrides. When omitted, checks every supported edition with
+ *   rustfmt's defaults.
+ * @throws If any edition produces a diff. The error message includes
+ *   the offending edition, the active config overrides (if any), the
+ *   expected rustfmt output, and the received source so the failure is
+ *   self-contained.
  */
 export function checkRustfmtAllEditions(
   source: string,
-  editions: readonly Edition[] = SUPPORTED_EDITIONS,
+  options: CheckRustfmtAllEditionsOptions = {},
 ): void {
+  const editions = options.editions ?? SUPPORTED_EDITIONS;
+  const config = options.config;
   // Rustfmt insists every source file end with `\n`. The real emitter
   // pipeline (`insertFinalNewLine` defaults to `true` in core) always
   // satisfies this, but `toSourceText` flips that default off so its
@@ -103,10 +147,10 @@ export function checkRustfmtAllEditions(
   // tests check content equivalence, not trailing-whitespace defaults.
   const normalised = source.endsWith("\n") ? source : `${source}\n`;
   for (const edition of editions) {
-    const result = checkRustfmt(normalised, { edition });
+    const result = checkRustfmt(normalised, { edition, config });
     if (!result.pass) {
       throw new Error(
-        `Source is not rustfmt-conformant for edition ${edition}.\n\n` +
+        `Source is not rustfmt-conformant for edition ${edition}${describeConfig(config)}.\n\n` +
           `Expected (rustfmt output):\n${result.formatted}\n\n` +
           `Received:\n${normalised}`,
       );
