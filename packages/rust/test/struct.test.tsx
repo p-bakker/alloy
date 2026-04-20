@@ -151,6 +151,40 @@ describe("StructDeclaration", () => {
     `);
   });
 
+  it("keeps a short tuple struct flat", () => {
+    const source = toSourceText(
+      <StructDeclaration name="Foo" tuple types={["u32", "String"]} />,
+    );
+
+    expect(source).toEqual(d`struct Foo(u32, String);`);
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
+  });
+
+  it("breaks a long tuple struct across lines with a trailing comma", () => {
+    const source = toSourceText(
+      <StructDeclaration
+        name="Foo"
+        tuple
+        types={[
+          "AnExtremelyLongTypeNameOne",
+          "AnExtremelyLongTypeNameTwo",
+          "AnExtremelyLongTypeNameThree",
+          "AnExtremelyLongTypeNameFour",
+        ]}
+      />,
+    );
+
+    expect(source).toEqual(d`
+      struct Foo(
+          AnExtremelyLongTypeNameOne,
+          AnExtremelyLongTypeNameTwo,
+          AnExtremelyLongTypeNameThree,
+          AnExtremelyLongTypeNameFour,
+      );
+    `);
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
+  });
+
   it("renders tuple struct", () => {
     expect(
       <Output>

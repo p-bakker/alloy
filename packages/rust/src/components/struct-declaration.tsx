@@ -18,6 +18,7 @@ import {
 import { resolveSymbolName } from "../symbols/resolve-name.js";
 import { AttributeList } from "./attribute.js";
 import { DocComment } from "./doc-comment.js";
+import { ArgList } from "./primitives/arg-list.js";
 import { FieldList } from "./primitives/field-list.js";
 import type { TypeParameterProp } from "./type-parameters.js";
 import { TypeParameters, WhereClause } from "./type-parameters.js";
@@ -125,11 +126,7 @@ export function StructDeclaration(props: StructDeclarationProps) {
           ";"
         ) : props.tuple ? (
           <>
-            {"("}
-            <For each={tupleTypes} joiner={", "}>
-              {(type) => type}
-            </For>
-            {")"}
+            <ArgList>{tupleTypes}</ArgList>
             <WhereClause trailingComma={false}>{props.whereClause}</WhereClause>
             {";"}
           </>
