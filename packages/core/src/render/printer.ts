@@ -231,7 +231,18 @@ function fits(
       case "group": {
         const broken = isGroupBroken(el);
         if (mustBeFlat && broken) return false;
-        const groupMode: Mode = broken ? MODE_BREAK : mode;
+        const groupMax = (el.data as { max?: number } | undefined)?.max;
+        // A `max` group's mode depends only on its own flat width, so it
+        // has to be decided here too: inheriting the ambient mode would
+        // let a line inside a group that will actually print flat end
+        // this measurement early, leaving the enclosing group flat
+        // around content that never breaks.
+        const groupMode: Mode =
+          groupMax !== undefined
+            ? maxGroupMode(el, cmd.ind, groupMax, hasLineSuffix, groupModeMap)
+            : broken
+              ? MODE_BREAK
+              : mode;
         // alloy doesn't use expandedStates — descend into children.
         for (let c = el.lastChild; c !== null; c = c.previousSibling) {
           if (c.nodeType === COMMENT_NODE) continue;
@@ -296,6 +307,41 @@ function fits(
   }
   void dummyInd;
   return false;
+}
+
+/**
+ * Decide the mode of a group carrying `max`: it is measured against its
+ * own flat width rather than the remaining print width, so the answer is
+ * the same whether the group is reached while printing or while being
+ * measured inside an enclosing group. Measures the children rather than
+ * `el` itself so that `fits` doesn't recurse back in here.
+ */
+function maxGroupMode(
+  el: ElementNode,
+  ind: Indent,
+  max: number,
+  hasLineSuffix: boolean,
+  groupModeMap: Record<symbol, Mode>,
+): Mode {
+  if (isGroupBroken(el)) return MODE_BREAK;
+  // Collected fresh rather than through `collectChildren`: that cache is
+  // never invalidated, and a `max` group can gain children between two
+  // prints of the same tree.
+  const items: Frame[] = [];
+  for (let c = el.firstChild; c !== null; c = c.nextSibling) {
+    if (c.nodeType === COMMENT_NODE) continue;
+    items.push(c);
+  }
+  const children: SynthFrame = { [SYNTH]: true, kind: "list", items };
+  const flat = fits(
+    { ind, mode: MODE_FLAT, frame: children },
+    [],
+    max,
+    hasLineSuffix,
+    groupModeMap,
+    true,
+  );
+  return flat ? MODE_FLAT : MODE_BREAK;
 }
 
 // #endregion
@@ -576,9 +622,21 @@ export function printNodeToString(
   }
 
   function handleGroup(el: ElementNode, ind: Indent, mode: Mode): void {
-    const data = el.data as { shouldBreak?: boolean; id?: symbol } | undefined;
+    const data = el.data as
+      | { shouldBreak?: boolean; id?: symbol; max?: number }
+      | undefined;
     const broken = isGroupBroken(el);
     const groupId = data?.id;
+    const max = data?.max;
+
+    // `max` is measured on the group's own flat form, not against the
+    // remaining width, so the outcome is independent of the start column.
+    if (max !== undefined) {
+      const m = maxGroupMode(el, ind, max, lineSuffix.length > 0, groupModeMap);
+      pushChildrenReversedAtMode(el, ind, m);
+      if (groupId) groupModeMap[groupId] = m;
+      return;
+    }
 
     switch (mode) {
       case MODE_FLAT: {
