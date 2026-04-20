@@ -18,6 +18,7 @@ import {
 import { resolveSymbolName } from "../symbols/resolve-name.js";
 import { AttributeList } from "./attribute.js";
 import { DocComment } from "./doc-comment.js";
+import { FieldList } from "./primitives/field-list.js";
 import type { TypeParameterProp } from "./type-parameters.js";
 import { TypeParameters, WhereClause } from "./type-parameters.js";
 import {
@@ -134,16 +135,10 @@ export function StructDeclaration(props: StructDeclarationProps) {
           </>
         ) : members.length > 0 ? (
           <>
-            {" {"}
+            {" "}
             <Scope value={structScope}>
-              <Indent>
-                <For each={members} joiner={<hbr />}>
-                  {(child) => child}
-                </For>
-              </Indent>
+              <FieldList>{members}</FieldList>
             </Scope>
-            <hbr />
-            {"}"}
           </>
         ) : (
           ";"
@@ -171,7 +166,6 @@ export function Field(props: FieldProps) {
       {fieldSymbol.name}
       {": "}
       {props.type}
-      {","}
     </CoreDeclaration>
   );
 }

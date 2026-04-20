@@ -108,6 +108,26 @@ describe("StructDeclaration", () => {
     `);
   });
 
+  it("breaks a multi-field record struct one field per line with a trailing comma", () => {
+    const source = toSourceText(
+      <StructDeclaration name="Config">
+        <Field name="host" type="String" />
+        <Field name="port" type="u16" />
+        <Field name="retries" type="u32" />
+      </StructDeclaration>,
+    );
+
+    expect(source).toEqual(d`
+      struct Config {
+          host: String,
+          port: u16,
+          retries: u32,
+      }
+    `);
+    expect(source.trimEnd().endsWith(",\n}")).toBe(true);
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
+  });
+
   it("renders type parameters and where clause", () => {
     expect(
       <Output>

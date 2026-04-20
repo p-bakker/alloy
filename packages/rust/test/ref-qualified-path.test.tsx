@@ -103,7 +103,7 @@ describe("ref() qualified path rendering", () => {
       </Output>,
     ).toRenderTo(d`
       pub struct Config {
-          timeout: u64
+          timeout: u64,
       }
       impl Config {
           pub fn new() -> Self {

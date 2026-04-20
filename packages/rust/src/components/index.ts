@@ -26,6 +26,7 @@ export * from "./module-directory.js";
 export * from "./parameters.js";
 export * from "./primitives/arg-list.js";
 export * from "./primitives/braced-list.js";
+export * from "./primitives/field-list.js";
 export * from "./primitives/param-list.js";
 export * from "./primitives/rust-chain.js";
 export * from "./reference.js";
