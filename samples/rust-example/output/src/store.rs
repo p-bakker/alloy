@@ -45,7 +45,7 @@ impl<K: Eq + Hash + Clone, V: Clone + Send + Sync> Store<K, V> {
     /// Inserts a value into the store, returning an error if full.
     pub fn insert(&mut self, key: K, value: V) -> Result<()> {
         if self.data.len() >= self.max_capacity && !self.data.contains_key(&key) {
-            return Err(StoreError::StorageFull)
+            return Err(StoreError::StorageFull);
         }
         let entry = Entry {
             value,
@@ -61,11 +61,11 @@ impl<K: Eq + Hash + Clone, V: Clone + Send + Sync> Store<K, V> {
         match self.data.get(key) {
             Some(entry) => {
                 if entry.status == EntryStatus::Expired {
-                    return Err(StoreError::NotFound)
+                    return Err(StoreError::NotFound);
                 }
                 if let Some(ttl) = entry.ttl {
                     if entry.created_at.elapsed() > ttl {
-                        return Err(StoreError::NotFound)
+                        return Err(StoreError::NotFound);
                     }
                 }
                 Ok(&entry.value)

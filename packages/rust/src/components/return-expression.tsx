@@ -11,6 +11,7 @@ export function ReturnExpression(props: ReturnExpressionProps) {
       {typeof props.children !== "undefined" ?
         <> {props.children}</>
       : null}
+      {";"}
     </>
   );
 }

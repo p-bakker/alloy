@@ -193,10 +193,9 @@ export function StoreModule(props: StoreModuleProps) {
           }
         >
           <IfExpression condition="self.data.len() >= self.max_capacity && !self.data.contains_key(&key)">
-            <>
-              <ReturnExpression>Err(StoreError::StorageFull)</ReturnExpression>;
-            </>
+            <ReturnExpression>Err(StoreError::StorageFull)</ReturnExpression>
           </IfExpression>
+          <hbr />
           <LetBinding name="entry">
             <StructExpression type="Entry">
               <FieldInit name="value" />
@@ -205,7 +204,10 @@ export function StoreModule(props: StoreModuleProps) {
               <FieldInit name="status">EntryStatus::Active</FieldInit>
             </StructExpression>
           </LetBinding>
-          self.data.insert(key, entry); Ok(())
+          <hbr />
+          {code`self.data.insert(key, entry);`}
+          <hbr />
+          {code`Ok(())`}
         </FunctionDeclaration>
 
         <hbr />
@@ -228,19 +230,11 @@ export function StoreModule(props: StoreModuleProps) {
           <MatchExpression expression="self.data.get(key)">
             <MatchArm pattern="Some(entry)">
               <IfExpression condition="entry.status == EntryStatus::Expired">
-                <>
-                  <ReturnExpression>Err(StoreError::NotFound)</ReturnExpression>
-                  ;
-                </>
+                <ReturnExpression>Err(StoreError::NotFound)</ReturnExpression>
               </IfExpression>
               <IfExpression condition="let Some(ttl) = entry.ttl">
                 <IfExpression condition="entry.created_at.elapsed() &gt; ttl">
-                  <>
-                    <ReturnExpression>
-                      Err(StoreError::NotFound)
-                    </ReturnExpression>
-                    ;
-                  </>
+                  <ReturnExpression>Err(StoreError::NotFound)</ReturnExpression>
                 </IfExpression>
               </IfExpression>
               Ok(&entry.value)
@@ -317,14 +311,18 @@ export function StoreModule(props: StoreModuleProps) {
           returnType="usize"
         >
           <LetBinding name="before">self.data.len()</LetBinding>
-          {code`self.data.retain(|_, entry| {
+          <hbr />
+          {code`
+            self.data.retain(|_, entry| {
                 if let Some(ttl) = entry.ttl {
                     entry.created_at.elapsed() <= ttl
                 } else {
                     true
                 }
-            });`}
-          before - self.data.len()
+            });
+          `}
+          <hbr />
+          {code`before - self.data.len()`}
         </FunctionDeclaration>
       </ImplBlock>
 
