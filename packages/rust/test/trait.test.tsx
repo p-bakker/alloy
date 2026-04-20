@@ -15,6 +15,8 @@ import {
   useRustScope,
 } from "../src/scopes/index.js";
 import { NamedTypeSymbol } from "../src/symbols/named-type-symbol.js";
+import { checkRustfmtAllEditions } from "./rustfmt.js";
+import { toSourceText } from "./utils.js";
 
 function TraitKindProbe(props: { name: string }) {
   const scope = useRustModuleScope();
@@ -44,6 +46,13 @@ function TraitVisibilityProbe(props: { name: string }) {
 }
 
 describe("TraitDeclaration", () => {
+  it("keeps an empty trait body on one line", () => {
+    const source = toSourceText(<TraitDeclaration name="T" />);
+
+    expect(source).toEqual(d`trait T {}`);
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
+  });
+
   it("renders basic trait", () => {
     expect(
       <Output>

@@ -15,6 +15,8 @@ import {
 } from "../src/components/index.js";
 import { useRustModuleScope } from "../src/scopes/index.js";
 import { NamedTypeSymbol } from "../src/symbols/named-type-symbol.js";
+import { checkRustfmtAllEditions } from "./rustfmt.js";
+import { toSourceText } from "./utils.js";
 
 function TypeMemberNamesProbe(props: { name: string }) {
   const scope = useRustModuleScope();
@@ -29,6 +31,22 @@ function TypeMemberNamesProbe(props: { name: string }) {
 }
 
 describe("ImplBlock", () => {
+  it("keeps an empty impl body on one line", () => {
+    const source = toSourceText(
+      <>
+        <StructDeclaration name="T" />
+        <hbr />
+        <ImplBlock type="T" />
+      </>,
+    );
+
+    expect(source).toEqual(d`
+      struct T;
+      impl T {}
+    `);
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
+  });
+
   it("renders inherent impl", () => {
     const typeRef = refkey("foo-type");
 

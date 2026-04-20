@@ -142,6 +142,16 @@ export function ImplBlock(props: ImplBlockProps) {
     inferredTypeParameters,
   );
 
+  const bodyChildren = props.children
+    ? (Array.isArray(props.children)
+        ? props.children
+        : [props.children]
+      ).filter(
+        (child) => !(typeof child === "string" && child.trim().length === 0),
+      )
+    : [];
+  const hasBody = bodyChildren.length > 0;
+
   return (
     <>
       <AttributeList attributes={props.attributes} />
@@ -155,11 +165,11 @@ export function ImplBlock(props: ImplBlockProps) {
       ) : null}
       {renderedTypeWithTypeParameters}
       <WhereClause>{props.whereClause}</WhereClause>
-      {props.children ? (
+      {hasBody ? (
         <>
           {code` {`}
           <Scope value={implScope}>
-            <Indent>{props.children}</Indent>
+            <Indent>{bodyChildren}</Indent>
           </Scope>
           <hbr />
           {code`}`}

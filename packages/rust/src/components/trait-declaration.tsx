@@ -44,6 +44,16 @@ export function TraitDeclaration(props: TraitDeclarationProps) {
 
   traitSymbol.visibility = toRustVisibility(props.pub);
 
+  const bodyChildren = props.children
+    ? (Array.isArray(props.children)
+        ? props.children
+        : [props.children]
+      ).filter(
+        (child) => !(typeof child === "string" && child.trim().length === 0),
+      )
+    : [];
+  const hasBody = bodyChildren.length > 0;
+
   return (
     <>
       {props.doc ? (
@@ -66,11 +76,11 @@ export function TraitDeclaration(props: TraitDeclarationProps) {
           </>
         ) : null}
         <WhereClause>{props.whereClause}</WhereClause>
-        {props.children ? (
+        {hasBody ? (
           <>
             {code` {`}
             <Scope value={traitScope}>
-              <Indent>{props.children}</Indent>
+              <Indent>{bodyChildren}</Indent>
             </Scope>
             <hbr />
             {code`}`}

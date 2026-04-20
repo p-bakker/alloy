@@ -55,6 +55,13 @@ describe("FunctionDeclaration", () => {
     ).toRenderTo(d`fn foo() {}`);
   });
 
+  it("keeps an empty function body on one line", () => {
+    const source = toSourceText(<FunctionDeclaration name="f" />);
+
+    expect(source).toEqual(d`fn f() {}`);
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
+  });
+
   it("renders qualifiers in rust order", () => {
     expect(
       <Output>

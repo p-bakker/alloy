@@ -75,12 +75,20 @@ export function FunctionDeclaration(props: FunctionDeclarationProps) {
   functionSymbol.receiverType =
     effectiveReceiver === "none" ? undefined : effectiveReceiver;
 
-  const isForwardDecl =
-    !props.children && parentScope instanceof RustTraitScope;
-  const body = props.children ? (
+  const bodyChildren = props.children
+    ? (Array.isArray(props.children)
+        ? props.children
+        : [props.children]
+      ).filter(
+        (child) => !(typeof child === "string" && child.trim().length === 0),
+      )
+    : [];
+  const hasBody = bodyChildren.length > 0;
+  const isForwardDecl = !hasBody && parentScope instanceof RustTraitScope;
+  const body = hasBody ? (
     <>
       {" {"}
-      <Indent>{props.children}</Indent>
+      <Indent>{bodyChildren}</Indent>
       <hbr />
       {"}"}
     </>
