@@ -121,6 +121,118 @@ describe("FunctionDeclaration", () => {
     ).toRenderTo(d`fn process(mut input-value: &mut String, count: usize) {}`);
   });
 
+  it("keeps a short parameter list on a single line", () => {
+    const source = toSourceText(
+      <FunctionDeclaration
+        name="add"
+        parameters={[
+          { name: "x", type: "i32" },
+          { name: "y", type: "i32" },
+        ]}
+        returnType="i32"
+      >
+        {"x + y"}
+      </FunctionDeclaration>,
+    );
+
+    expect(source).toEqual(d`
+      fn add(x: i32, y: i32) -> i32 {
+          x + y
+      }
+    `);
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
+  });
+
+  it("breaks a long parameter list vertically with a trailing comma", () => {
+    const source = toSourceText(
+      <FunctionDeclaration
+        name="long_signature"
+        parameters={[
+          { name: "first_parameter", type: "SomeLongTypeName" },
+          { name: "second_parameter", type: "AnotherLongTypeName" },
+          { name: "third_parameter", type: "YetAnotherLongTypeName" },
+          { name: "fourth_parameter", type: "AndOneMoreLongTypeName" },
+        ]}
+        returnType="ResultType"
+      >
+        {"todo!()"}
+      </FunctionDeclaration>,
+    );
+
+    expect(source).toEqual(d`
+      fn long_signature(
+          first_parameter: SomeLongTypeName,
+          second_parameter: AnotherLongTypeName,
+          third_parameter: YetAnotherLongTypeName,
+          fourth_parameter: AndOneMoreLongTypeName,
+      ) -> ResultType {
+          todo!()
+      }
+    `);
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
+  });
+
+  it("keeps a method receiver plus params flat when they fit", () => {
+    const itemRef = refkey("item");
+    const source = toSourceText(
+      <>
+        <StructDeclaration name="Item" refkey={itemRef} />
+        <hbr />
+        <ImplBlock type={itemRef}>
+          <FunctionDeclaration
+            name="foo"
+            parameters={[{ name: "bar", type: "T" }]}
+          />
+        </ImplBlock>
+      </>,
+    );
+
+    expect(source).toEqual(d`
+      struct Item;
+      impl Item {
+          fn foo(&self, bar: T) {}
+      }
+    `);
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
+  });
+
+  it("breaks a method signature vertically when receiver plus params overflow", () => {
+    const itemRef = refkey("item");
+    const source = toSourceText(
+      <>
+        <StructDeclaration name="Item" refkey={itemRef} />
+        <hbr />
+        <ImplBlock type={itemRef}>
+          <FunctionDeclaration
+            name="configure_item_with_many_options"
+            parameters={[
+              { name: "first_option", type: "FirstOptionType" },
+              { name: "second_option", type: "SecondOptionType" },
+              { name: "third_option", type: "ThirdOptionType" },
+            ]}
+          >
+            {"todo!()"}
+          </FunctionDeclaration>
+        </ImplBlock>
+      </>,
+    );
+
+    expect(source).toEqual(d`
+      struct Item;
+      impl Item {
+          fn configure_item_with_many_options(
+              &self,
+              first_option: FirstOptionType,
+              second_option: SecondOptionType,
+              third_option: ThirdOptionType,
+          ) {
+              todo!()
+          }
+      }
+    `);
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
+  });
+
   it("renders return type, type parameters, and where clause", () => {
     expect(
       <Output>

@@ -1,11 +1,18 @@
-import { Declaration as CoreDeclaration, For } from "@alloy-js/core";
+import type { Children } from "@alloy-js/core";
+import { Declaration as CoreDeclaration } from "@alloy-js/core";
 
 import type { ParameterDescriptor } from "../parameter-descriptor.js";
 import { createParameterSymbol } from "../symbols/factories.js";
+import { ParamList } from "./primitives/param-list.js";
 
 export interface ParametersProps {
   parameters?: readonly ParameterDescriptor[];
-  wrap?: boolean;
+  /**
+   * Optional method receiver rendered as the first entry (e.g. `&self`,
+   * `&mut self`, `self`). When present, it is emitted verbatim ahead of
+   * any named parameters.
+   */
+  receiver?: Children;
 }
 
 function Parameter(props: { parameter: ParameterDescriptor }) {
@@ -30,17 +37,15 @@ function Parameter(props: { parameter: ParameterDescriptor }) {
 }
 
 export function Parameters(props: ParametersProps) {
-  const shouldWrap = props.wrap ?? true;
+  const entries: Children[] = [];
+  if (props.receiver !== undefined && props.receiver !== null) {
+    entries.push(props.receiver);
+  }
+  if (props.parameters) {
+    for (const parameter of props.parameters) {
+      entries.push(<Parameter parameter={parameter} />);
+    }
+  }
 
-  return (
-    <>
-      {shouldWrap ? "(" : null}
-      {props.parameters && props.parameters.length > 0 ? (
-        <For each={props.parameters} joiner={", "}>
-          {(parameter) => <Parameter parameter={parameter} />}
-        </For>
-      ) : null}
-      {shouldWrap ? ")" : null}
-    </>
-  );
+  return <ParamList>{entries}</ParamList>;
 }

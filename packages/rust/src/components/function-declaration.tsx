@@ -115,15 +115,12 @@ export function FunctionDeclaration(props: FunctionDeclarationProps) {
         {functionSymbol.name}
         <Scope value={functionScope}>
           <TypeParameters params={props.typeParameters} />
-          {"("}
-          {effectiveReceiver !== "none" ? (
-            <>
-              {effectiveReceiver}
-              {props.parameters && props.parameters.length > 0 ? ", " : ""}
-            </>
-          ) : null}
-          <Parameters parameters={props.parameters} wrap={false} />
-          {")"}
+          <Parameters
+            parameters={props.parameters}
+            receiver={
+              effectiveReceiver !== "none" ? effectiveReceiver : undefined
+            }
+          />
           {props.returnType ? (
             <>
               {" -> "}
