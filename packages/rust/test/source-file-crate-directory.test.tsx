@@ -5,11 +5,13 @@ import { describe, expect, it } from "vitest";
 import { CargoTomlFile } from "../src/components/cargo-toml-file.js";
 import { CrateDirectory } from "../src/components/crate-directory.js";
 import { InnerDocComment } from "../src/components/doc-comment.js";
+import { FunctionDeclaration } from "../src/components/function-declaration.js";
 import { ModuleDirectory } from "../src/components/module-directory.js";
 import { SourceFile } from "../src/components/source-file.js";
 import { useCrateContext } from "../src/context/crate-context.js";
 import { useRustModuleScope } from "../src/scopes/index.js";
 import { RustCrateScope } from "../src/scopes/rust-crate-scope.js";
+import { checkRustfmtAllEditions } from "./rustfmt.js";
 import { findFile } from "./utils.js";
 
 function CrateContextProbe() {
@@ -90,6 +92,51 @@ describe("SourceFile", () => {
 
       fn main() {}
     `);
+  });
+
+  it("propagates maxWidth into the core printer and rustfmt config", () => {
+    const output = render(
+      <Output>
+        <CrateDirectory name="my_crate">
+          <SourceFile path="lib.rs" maxWidth={80}>
+            <FunctionDeclaration
+              name="greet"
+              parameters={[{ name: "name", type: "&str" }]}
+            >
+              {code`println!("hello, {name}");`}
+            </FunctionDeclaration>
+          </SourceFile>
+        </CrateDirectory>
+      </Output>,
+    );
+
+    const source = findFile(output, "src/lib.rs").contents;
+    expect(() =>
+      checkRustfmtAllEditions(source, { config: { max_width: 80 } }),
+    ).not.toThrow();
+  });
+
+  it("propagates tabSpaces into the core printer and rustfmt config", () => {
+    const output = render(
+      <Output>
+        <CrateDirectory name="my_crate">
+          <SourceFile path="lib.rs" tabSpaces={2}>
+            <FunctionDeclaration
+              name="greet"
+              parameters={[{ name: "name", type: "&str" }]}
+            >
+              {code`println!("hello, {name}");`}
+            </FunctionDeclaration>
+          </SourceFile>
+        </CrateDirectory>
+      </Output>,
+    );
+
+    const source = findFile(output, "src/lib.rs").contents;
+    expect(source).toContain("\n  println!");
+    expect(() =>
+      checkRustfmtAllEditions(source, { config: { tab_spaces: 2 } }),
+    ).not.toThrow();
   });
 
   it("registers standalone source files with pub(super) visibility", () => {
