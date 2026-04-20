@@ -86,16 +86,47 @@ describe("TypeParameters", () => {
 });
 
 describe("WhereClause", () => {
-  it("renders a single where clause constraint", () => {
-    expect(<WhereClause>T: Display + Clone</WhereClause>).toRenderTo(
-      d`where T: Display + Clone`,
-    );
+  it("renders a single bound on its own indented line", () => {
+    expect(
+      <>
+        {"impl<T> Thing"}
+        <WhereClause>T: Display + Clone</WhereClause>
+      </>,
+    ).toRenderTo(d`
+      impl<T> Thing
+      where
+        T: Display + Clone,
+    `);
   });
 
-  it("renders multiple where clause constraints", () => {
-    expect(<WhereClause>T: Display + Clone, U: Debug</WhereClause>).toRenderTo(
-      d`where T: Display + Clone, U: Debug`,
-    );
+  it("renders each bound in an array on its own indented line", () => {
+    expect(
+      <>
+        {"impl<T> Thing"}
+        <WhereClause>{["T: Display + Clone", "U: Debug"]}</WhereClause>
+      </>,
+    ).toRenderTo(d`
+      impl<T> Thing
+      where
+        T: Display + Clone,
+        U: Debug,
+    `);
+  });
+
+  it("omits the trailing comma on the last bound when trailingComma is false", () => {
+    expect(
+      <>
+        {"impl<T> Thing"}
+        <WhereClause trailingComma={false}>
+          {["T: Clone", "U: Debug"]}
+        </WhereClause>
+      </>,
+    ).toRenderTo(d`
+      impl<T> Thing
+      where
+        T: Clone,
+        U: Debug
+    `);
   });
 
   it("renders nothing when children are missing", () => {

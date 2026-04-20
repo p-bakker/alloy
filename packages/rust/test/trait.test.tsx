@@ -115,7 +115,11 @@ describe("TraitDeclaration", () => {
           </SourceFile>
         </CrateDirectory>
       </Output>,
-    ).toRenderTo(d`trait Sink<T, E: Display> where T: Clone {}`);
+    ).toRenderTo(d`
+      trait Sink<T, E: Display>
+      where
+          T: Clone, {}
+    `);
   });
 
   it("renders trait with method signature and default implementation", () => {

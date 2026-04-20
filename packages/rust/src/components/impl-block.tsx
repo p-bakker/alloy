@@ -154,12 +154,7 @@ export function ImplBlock(props: ImplBlockProps) {
         </>
       : null}
       {renderedTypeWithTypeParameters}
-      {props.whereClause ?
-        <>
-          {" "}
-          <WhereClause>{props.whereClause}</WhereClause>
-        </>
-      : null}
+      <WhereClause>{props.whereClause}</WhereClause>
       {props.children ?
         <>
           {code` {`}

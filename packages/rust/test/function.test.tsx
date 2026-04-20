@@ -17,6 +17,8 @@ import {
   useRustScope,
 } from "../src/scopes/index.js";
 import { FunctionSymbol } from "../src/symbols/function-symbol.js";
+import { checkRustfmtAllEditions } from "./rustfmt.js";
+import { toSourceText } from "./utils.js";
 
 function FunctionFlagsProbe(props: { name: string }) {
   const scope = useRustModuleScope();
@@ -129,7 +131,58 @@ describe("FunctionDeclaration", () => {
           </SourceFile>
         </CrateDirectory>
       </Output>,
-    ).toRenderTo(d`fn map<T, U: Display>(item: T) -> U where U: Clone {}`);
+    ).toRenderTo(d`
+      fn map<T, U: Display>(item: T) -> U
+      where
+          U: Clone, {}
+    `);
+  });
+
+  it("breaks a trait method where-clause across lines with no trailing comma", () => {
+    const source = toSourceText(
+      <TraitDeclaration name="Serializable">
+        <FunctionDeclaration
+          name="from_bytes"
+          receiver="none"
+          parameters={[{ name: "bytes", type: "&[u8]" }]}
+          returnType="Self"
+          whereClause="Self: Sized"
+        />
+      </TraitDeclaration>,
+    );
+
+    expect(source).toEqual(d`
+      trait Serializable {
+          fn from_bytes(bytes: &[u8]) -> Self
+          where
+              Self: Sized;
+      }
+    `);
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
+  });
+
+  it("breaks a trait method where-clause with multiple bounds", () => {
+    const source = toSourceText(
+      <TraitDeclaration name="Convert">
+        <FunctionDeclaration
+          name="convert"
+          receiver="none"
+          typeParameters={[{ name: "T" }]}
+          returnType="T"
+          whereClause={["T: Clone", "T: core::fmt::Debug"]}
+        />
+      </TraitDeclaration>,
+    );
+
+    expect(source).toEqual(d`
+      trait Convert {
+          fn convert<T>() -> T
+          where
+              T: Clone,
+              T: core::fmt::Debug;
+      }
+    `);
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
   });
 
   it("renders multiline doc comments and indented body", () => {

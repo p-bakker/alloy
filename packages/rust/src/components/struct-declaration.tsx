@@ -122,11 +122,10 @@ export function StructDeclaration(props: StructDeclarationProps) {
         {"struct "}
         {structSymbol.name}
         <TypeParameters params={props.typeParameters} />
-        {props.whereClause && !props.tuple ?
-          <>
-            {" "}
-            <WhereClause>{props.whereClause}</WhereClause>
-          </>
+        {!props.tuple ?
+          <WhereClause trailingComma={!props.unit}>
+            {props.whereClause}
+          </WhereClause>
         : null}
         {props.unit ?
           ";"
@@ -137,12 +136,7 @@ export function StructDeclaration(props: StructDeclarationProps) {
               {(type) => type}
             </For>
             {")"}
-            {props.whereClause ?
-              <>
-                {" "}
-                <WhereClause>{props.whereClause}</WhereClause>
-              </>
-            : null}
+            <WhereClause trailingComma={false}>{props.whereClause}</WhereClause>
             {";"}
           </>
         : members.length > 0 ?

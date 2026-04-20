@@ -11,6 +11,8 @@ import {
 } from "../src/components/index.js";
 import { useRustModuleScope } from "../src/scopes/index.js";
 import { NamedTypeSymbol } from "../src/symbols/named-type-symbol.js";
+import { checkRustfmtAllEditions } from "./rustfmt.js";
+import { toSourceText } from "./utils.js";
 
 function StructKindProbe(props: { name: string }) {
   const scope = useRustModuleScope();
@@ -131,7 +133,11 @@ describe("StructDeclaration", () => {
           </SourceFile>
         </CrateDirectory>
       </Output>,
-    ).toRenderTo(d`struct Foo<T, U: Display> where U: Clone {}`);
+    ).toRenderTo(d`
+      struct Foo<T, U: Display>
+      where
+          U: Clone, {}
+    `);
   });
 
   it("renders tuple struct", () => {
@@ -173,9 +179,50 @@ describe("StructDeclaration", () => {
     ).toRenderTo(
       d`
         #[derive(Debug, Clone)]
-        pub struct Foo<T, U: Display>(T, U) where U: Clone;
+        pub struct Foo<T, U: Display>(T, U)
+        where
+            U: Clone;
       `,
     );
+  });
+
+  it("breaks a tuple struct where-clause across lines with no trailing comma", () => {
+    const source = toSourceText(
+      <StructDeclaration
+        name="Holder"
+        tuple
+        types={["T"]}
+        typeParameters={[{ name: "T" }]}
+        whereClause="T: Clone"
+      />,
+    );
+
+    expect(source).toEqual(d`
+      struct Holder<T>(T)
+      where
+          T: Clone;
+    `);
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
+  });
+
+  it("breaks a tuple struct where-clause with multiple bounds", () => {
+    const source = toSourceText(
+      <StructDeclaration
+        name="Pair"
+        tuple
+        types={["T", "U"]}
+        typeParameters={[{ name: "T" }, { name: "U" }]}
+        whereClause={["T: Clone", "U: core::fmt::Debug"]}
+      />,
+    );
+
+    expect(source).toEqual(d`
+      struct Pair<T, U>(T, U)
+      where
+          T: Clone,
+          U: core::fmt::Debug;
+    `);
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
   });
 
   it("renders unit struct", () => {

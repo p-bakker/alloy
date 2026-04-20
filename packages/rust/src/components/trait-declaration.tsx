@@ -70,12 +70,7 @@ export function TraitDeclaration(props: TraitDeclarationProps) {
             </For>
           </>
         : null}
-        {props.whereClause ?
-          <>
-            {" "}
-            <WhereClause>{props.whereClause}</WhereClause>
-          </>
-        : null}
+        <WhereClause>{props.whereClause}</WhereClause>
         {props.children ?
           <>
             {code` {`}

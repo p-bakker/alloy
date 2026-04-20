@@ -79,6 +79,19 @@ export function FunctionDeclaration(props: FunctionDeclarationProps) {
   functionSymbol.receiverType =
     effectiveReceiver === "none" ? undefined : effectiveReceiver;
 
+  const isForwardDecl =
+    !props.children && parentScope instanceof RustTraitScope;
+  const body =
+    props.children ?
+      <>
+        {" {"}
+        <Indent>{props.children}</Indent>
+        <hbr />
+        {"}"}
+      </>
+    : isForwardDecl ? ";"
+    : " {}";
+
   return (
     <>
       {props.doc ?
@@ -115,22 +128,10 @@ export function FunctionDeclaration(props: FunctionDeclarationProps) {
               {props.returnType}
             </>
           : null}
-          {props.whereClause ?
-            <>
-              {" "}
-              <WhereClause>{props.whereClause}</WhereClause>
-            </>
-          : null}
-          {props.children ?
-            <>
-              {" {"}
-              <Indent>{props.children}</Indent>
-              <hbr />
-              {"}"}
-            </>
-          : parentScope instanceof RustTraitScope ?
-            ";"
-          : " {}"}
+          <WhereClause trailingComma={!isForwardDecl}>
+            {props.whereClause}
+          </WhereClause>
+          {body}
         </Scope>
       </CoreDeclaration>
     </>
