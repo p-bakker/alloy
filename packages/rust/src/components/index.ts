@@ -24,6 +24,7 @@ export * from "./method-chain-expression.js";
 export * from "./mod-declarations.js";
 export * from "./module-directory.js";
 export * from "./parameters.js";
+export * from "./primitives/arg-list.js";
 export * from "./reference.js";
 export * from "./return-expression.js";
 export * from "./source-file.js";
