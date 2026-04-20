@@ -1,8 +1,4 @@
 types/
-
-# Claude Code harness scratch
-.claude/
-
 # Logs
 logs
 *.log
