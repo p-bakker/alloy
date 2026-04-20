@@ -707,12 +707,14 @@ function appendChild(node: RenderedTextTree, rawChild: Child) {
           return formatHookWithChildren(fill as any);
         case "group":
           {
+            const { id, shouldBreak, max } = child.props;
             const hook = createRenderTreeHook(newNode, {
               print(tree, print) {
-                return group(print(tree), {
-                  id: child.props.id,
-                  shouldBreak: child.props.shouldBreak,
-                });
+                const inner = print(tree);
+                const mustBreak =
+                  shouldBreak === true ||
+                  (max !== undefined && !flatFitsWithin(inner, max));
+                return group(inner, { id, shouldBreak: mustBreak });
               },
             });
             debug.render.appendPrintHook(
@@ -1129,6 +1131,25 @@ export function printTree(tree: RenderedTextTree, options?: PrintTreeOptions) {
   return options.insertFinalNewLine && !result.endsWith("\n") ?
       `${result}\n`
     : result;
+}
+
+/**
+ * Render `d` to its flat form (ignoring the ambient print width) and test
+ * whether it fits within `max` columns on a single line.
+ *
+ * The doc is wrapped in a `group` so that `line` / `softline` builders
+ * render in their flat form (space / empty). Returns `false` when the
+ * rendering still contains a newline (e.g. a `hardline` inside the
+ * subtree), since such a subtree cannot be rendered on one line
+ * regardless of threshold.
+ */
+function flatFitsWithin(d: Doc, max: number): boolean {
+  const formatted = doc.printer.printDocToString(group(d), {
+    printWidth: Number.POSITIVE_INFINITY,
+    tabWidth: 2,
+  }).formatted;
+  if (formatted.includes("\n")) return false;
+  return formatted.length <= max;
 }
 
 function printTreeWorker(tree: RenderedTextTree): Doc {

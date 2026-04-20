@@ -4,8 +4,19 @@ export interface IntrinsicElements {
    * Attempt to render the children on a single line if possible. If a group
    * contains `<breakParent />` or a hard line, or if the group exceeds the
    * print width, all linebreaks in the group will be broken.
+   *
+   * When `max` is provided, the group also breaks when the children's
+   * flat form exceeds `max` characters (or the subtree contains content
+   * that cannot be rendered flat, such as a hard line) — useful for
+   * construct-specific heuristics (e.g. breaking a call or chain narrower
+   * than the overall print width).
    */
-  group: { shouldBreak?: boolean; id?: symbol; children: Children };
+  group: {
+    shouldBreak?: boolean;
+    max?: number;
+    id?: symbol;
+    children: Children;
+  };
 
   /**
    * A regular line break. This will break if the line exceeds the print

@@ -25,6 +25,134 @@ describe("group", () => {
     );
   });
 });
+
+describe("group with max", () => {
+  it("breaks when the flat form exceeds max even if it fits in printWidth", () => {
+    expect(
+      <group max={10}>
+        1234567890
+        <sbr />
+        1234567890
+      </group>,
+    ).toRenderTo(
+      `
+        1234567890
+        1234567890
+      `,
+      { printWidth: 80 },
+    );
+  });
+
+  it("behaves like <group> when max equals printWidth", () => {
+    expect(
+      <group max={25}>
+        1234567890
+        <softline />
+        1234567890
+      </group>,
+    ).toRenderTo(`12345678901234567890`, { printWidth: 25 });
+    expect(
+      <group max={15}>
+        1234567890
+        <softline />
+        1234567890
+      </group>,
+    ).toRenderTo(
+      `
+        1234567890
+        1234567890
+      `,
+      { printWidth: 15 },
+    );
+  });
+
+  it("keeps the flat form when within max and printWidth", () => {
+    expect(
+      <group max={30}>
+        1234567890
+        <softline />
+        1234567890
+      </group>,
+    ).toRenderTo(`12345678901234567890`, { printWidth: 80 });
+  });
+
+  it("always breaks when the subtree contains a hard line", () => {
+    expect(
+      <group max={1000}>
+        a
+        <hardline />b
+      </group>,
+    ).toRenderTo(
+      `
+        a
+        b
+      `,
+      { printWidth: 80 },
+    );
+  });
+
+  it("composes: inner threshold is independent of the outer", () => {
+    // Outer max is generous (flat form fits) so the outer doesn't force a
+    // break. The inner max is tight, so the inner forces its own break.
+    expect(
+      <group max={100}>
+        outer(
+        <group max={10}>
+          1234567890
+          <softline />
+          1234567890
+        </group>
+        )
+      </group>,
+    ).toRenderTo(
+      `
+        outer(1234567890
+        1234567890)
+      `,
+      { printWidth: 80 },
+    );
+  });
+
+  it("composes: tight outer breaks without forcing an unrelated inner", () => {
+    // Inner fits within its own max, so it stays flat. Outer flat form
+    // exceeds its max, so the outer breaks around the inner.
+    expect(
+      <group max={5}>
+        before
+        <sbr />
+        <group max={100}>
+          ab
+          <softline />
+          cd
+        </group>
+        <sbr />
+        after
+      </group>,
+    ).toRenderTo(
+      `
+        before
+        abcd
+        after
+      `,
+      { printWidth: 80 },
+    );
+  });
+
+  it("forces a break when shouldBreak is explicitly set", () => {
+    expect(
+      <group max={1000} shouldBreak>
+        hi
+        <sbr />
+        bye
+      </group>,
+    ).toRenderTo(
+      `
+        hi
+        bye
+      `,
+    );
+  });
+});
 describe("indent", () => {
   it("indents its children", () => {
     expect(
