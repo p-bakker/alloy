@@ -92,13 +92,13 @@ export function ConfigFile(props: ConfigFileProps) {
         <hbr />
 
         <DocComment>Sets the maximum number of entries.</DocComment>
-        <Attribute name="must_use" />
         <FunctionDeclaration
           name="with_max_capacity"
           pub
           receiver="self"
           parameters={[{ name: "capacity", type: "usize" }]}
           returnType="Self"
+          attributes={[<Attribute name="must_use" />]}
         >
           <StructExpression type="Self" spread="self">
             <FieldInit name="max_capacity">capacity</FieldInit>
@@ -108,13 +108,13 @@ export function ConfigFile(props: ConfigFileProps) {
         <hbr />
 
         <DocComment>Sets the default TTL for entries.</DocComment>
-        <Attribute name="must_use" />
         <FunctionDeclaration
           name="with_ttl"
           pub
           receiver="self"
           parameters={[{ name: "ttl", type: std.time.Duration }]}
           returnType="Self"
+          attributes={[<Attribute name="must_use" />]}
         >
           <StructExpression type="Self" spread="self">
             <FieldInit name="default_ttl">Some(ttl)</FieldInit>
@@ -124,12 +124,12 @@ export function ConfigFile(props: ConfigFileProps) {
         <hbr />
 
         <DocComment>Disables automatic eviction of expired entries.</DocComment>
-        <Attribute name="must_use" />
         <FunctionDeclaration
           name="disable_eviction"
           pub
           receiver="self"
           returnType="Self"
+          attributes={[<Attribute name="must_use" />]}
         >
           <StructExpression type="Self" spread="self">
             <FieldInit name="enable_eviction">false</FieldInit>
@@ -139,13 +139,13 @@ export function ConfigFile(props: ConfigFileProps) {
         <hbr />
 
         <DocComment>Sets the name of this store instance.</DocComment>
-        <Attribute name="must_use" />
         <FunctionDeclaration
           name="with_name"
           pub
           receiver="self"
           parameters={[{ name: "name", type: "&str" }]}
           returnType="Self"
+          attributes={[<Attribute name="must_use" />]}
         >
           <StructExpression type="Self" spread="self">
             <FieldInit name="name">name.to_owned()</FieldInit>
