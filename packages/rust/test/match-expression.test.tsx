@@ -9,6 +9,8 @@ import {
   SourceFile,
 } from "../src/components/index.js";
 import * as Stc from "../src/components/stc/index.js";
+import { checkRustfmtAllEditions } from "./rustfmt.js";
+import { toSourceText } from "./utils.js";
 
 function inFile(children: Children) {
   return (
@@ -72,9 +74,29 @@ describe("MatchExpression", () => {
           Some(x) => {
               println!("got value");
               x + 1
-          },
+          }
       }
     `);
+  });
+
+  it("emits rustfmt-conformant block arms across all editions", () => {
+    const source = toSourceText(
+      code`
+        fn demo(option: Option<i32>) -> i32 {
+            ${(
+              <MatchExpression expression="option">
+                <MatchArm pattern="Some(x)">
+                  {code`println!("got value");`}
+                  {code`x + 1`}
+                </MatchArm>
+                <MatchArm pattern="None">{code`0`}</MatchArm>
+              </MatchExpression>
+            )}
+        }
+      `,
+    );
+
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
   });
 
   it("stc wrappers render the same output", () => {

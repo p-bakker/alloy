@@ -69,7 +69,7 @@ impl<K: Eq + Hash + Clone, V: Clone + Send + Sync> Store<K, V> {
                     }
                 }
                 Ok(&entry.value)
-            },
+            }
             None => Err(StoreError::NotFound),
         }
     }

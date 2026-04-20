@@ -71,7 +71,7 @@ export function MatchArm(props: MatchArmProps) {
             </For>
           </Indent>
           <hbr />
-          {"},"}
+          {"}"}
         </>
       }
     </>
