@@ -231,6 +231,34 @@ describe("use-statement brace list rustfmt conformance", () => {
     expect(() => checkRustfmtAllEditions(source)).not.toThrow();
   });
 
+  it("forces the enclosing brace list to break when an entry is itself a nested brace list", () => {
+    const source = toSourceText(
+      <>
+        <UseStatement path="std" symbol="fmt::Display" />
+        <UseStatement path="std" symbol="io::{self, Read}" />
+      </>,
+    );
+
+    expect(source.trimEnd()).toBe(
+      ["use std::{", "    fmt::Display,", "    io::{self, Read},", "};"].join(
+        "\n",
+      ),
+    );
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
+  });
+
+  it("keeps a short non-nested brace list flat (regression for the nested-list predicate)", () => {
+    const source = toSourceText(
+      <>
+        <UseStatement path="std::fmt" symbol="Debug" />
+        <UseStatement path="std::fmt" symbol="Display" />
+      </>,
+    );
+
+    expect(source.trimEnd()).toBe(`use std::fmt::{Debug, Display};`);
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
+  });
+
   it("wraps a long brace list onto multiple lines", () => {
     const source = toSourceText(
       <>

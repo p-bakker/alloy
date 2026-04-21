@@ -29,6 +29,16 @@ export interface BracedListProps {
    * bodies).
    */
   heuristic?: BracedListHeuristic;
+  /**
+   * When provided, the predicate is invoked for each item. If any item
+   * returns true, the list is forced to break regardless of whether its
+   * flat form fits the heuristic or the ambient print width.
+   *
+   * Intended for rules that require multi-line layout for structural
+   * reasons (e.g. a nested brace list inside a `use` statement: rustfmt
+   * forces the enclosing list to break even when it would fit).
+   */
+  forceBreakIf?: (child: Children) => boolean;
 }
 
 /**
@@ -58,6 +68,8 @@ export function BracedList(props: BracedListProps) {
   const heuristics = useResolvedHeuristics();
   const max =
     props.heuristic !== undefined ? heuristics[props.heuristic] : undefined;
+  const forceBreak =
+    props.forceBreakIf !== undefined && items.some(props.forceBreakIf);
 
   if (items.length === 0) {
     return <>{"{}"}</>;
@@ -82,6 +94,7 @@ export function BracedList(props: BracedListProps) {
 
   return (
     <group max={max}>
+      {forceBreak ? <breakParent /> : null}
       {opener}
       <Indent softline trailingBreak>
         <For

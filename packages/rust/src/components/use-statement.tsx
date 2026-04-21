@@ -40,11 +40,22 @@ function UseStatementLine(props: UseStatementLineProps) {
   const compare = compareImportEntry(ctx?.edition);
   const sortedSymbols = [...props.symbols].sort(compare);
 
+  // Rustfmt forces a `use a::{…}` brace list onto multiple lines whenever
+  // any entry is itself a nested brace list (e.g. `io::{self, Read}`),
+  // regardless of whether the flat form would fit. We don't have an
+  // AST-level representation of nested use trees today: callers encode a
+  // nested entry by embedding a `{` in the symbol string. Detect that
+  // textually here. If/when a structural nested-use model lands, swap
+  // this heuristic for a type-safe check.
   const body =
     sortedSymbols.length === 1 ? (
       sortedSymbols[0]
     ) : (
-      <BracedList>{sortedSymbols}</BracedList>
+      <BracedList
+        forceBreakIf={(s) => typeof s === "string" && s.includes("{")}
+      >
+        {sortedSymbols}
+      </BracedList>
     );
 
   return (
