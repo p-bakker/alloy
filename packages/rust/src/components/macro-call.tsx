@@ -25,7 +25,9 @@ export function MacroCall(props: MacroCallProps) {
         <>
           {props.name}
           {"!"}
-          <ArgList trailingComma={false}>{args}</ArgList>
+          <ArgList trailingComma={false} heuristic="attrFnLikeWidth">
+            {args}
+          </ArgList>
         </>
       );
     case "bracket":
@@ -33,7 +35,7 @@ export function MacroCall(props: MacroCallProps) {
         <>
           {props.name}
           {"!"}
-          <ArgList open="[" close="]">
+          <ArgList open="[" close="]" heuristic="attrFnLikeWidth">
             {args}
           </ArgList>
         </>

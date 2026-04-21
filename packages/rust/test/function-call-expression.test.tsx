@@ -4,6 +4,7 @@ import { d } from "@alloy-js/core/testing";
 import { describe, expect, it } from "vitest";
 
 import { FunctionCallExpression } from "../src/components/function-call-expression.js";
+import { FunctionDeclaration } from "../src/components/function-declaration.js";
 import { checkRustfmtAllEditions } from "./rustfmt.js";
 import { toSourceText } from "./utils.js";
 
@@ -116,6 +117,36 @@ describe("FunctionCallExpression", () => {
         `,
       );
 
+      expect(() => checkRustfmtAllEditions(source)).not.toThrow();
+    });
+
+    it("breaks args when they exceed fn_call_width even if the line fits", () => {
+      // Args exceed fn_call_width=60 (74 chars) while the whole line
+      // still fits max_width=100. rustfmt breaks the call vertically
+      // because of the narrower heuristic.
+      const source = toSourceText(
+        <FunctionDeclaration name="demo">
+          <>
+            <FunctionCallExpression
+              target="fn_name"
+              args={[
+                "argument_one_very_long",
+                "argument_two_very_long",
+                "argument_three_extra_long",
+              ]}
+            />
+            {";"}
+          </>
+        </FunctionDeclaration>,
+      );
+      const expected = [
+        "    fn_name(",
+        "        argument_one_very_long,",
+        "        argument_two_very_long,",
+        "        argument_three_extra_long,",
+        "    );",
+      ].join("\n");
+      expect(source).toContain(expected);
       expect(() => checkRustfmtAllEditions(source)).not.toThrow();
     });
 

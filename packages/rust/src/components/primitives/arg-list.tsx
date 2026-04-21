@@ -1,6 +1,9 @@
 import type { Children } from "@alloy-js/core";
 import { For, Indent } from "@alloy-js/core";
 
+import { useResolvedHeuristics } from "../../context/resolved-heuristics.js";
+export type ArgListHeuristic = "fnCallWidth" | "attrFnLikeWidth";
+
 export interface ArgListProps {
   /** The list items — one per argument. */
   children?: Children | Children[];
@@ -10,6 +13,17 @@ export interface ArgListProps {
   close?: string;
   /** Emit a trailing comma when the list breaks. Default `true`. */
   trailingComma?: boolean;
+  /**
+   * Name of the rustfmt width heuristic that governs this list. When set,
+   * the resolved heuristic is passed as `max` to the inner `<group>` so
+   * that lists whose flat form fits within the heuristic stay flat, and
+   * lists that exceed it break even if the ambient line has room.
+   *
+   * Pass `"fnCallWidth"` for function-call arg lists and `"attrFnLikeWidth"`
+   * for attribute / macro-call arg lists. Leave unset for primitives that
+   * are governed only by the overall print width (tuples, derives, etc).
+   */
+  heuristic?: ArgListHeuristic;
 }
 
 /**
@@ -35,6 +49,9 @@ export function ArgList(props: ArgListProps) {
   const open = props.open ?? "(";
   const close = props.close ?? ")";
   const trailingComma = props.trailingComma ?? true;
+  const heuristics = useResolvedHeuristics();
+  const max =
+    props.heuristic !== undefined ? heuristics[props.heuristic] : undefined;
 
   if (items.length === 0) {
     return (
@@ -46,7 +63,7 @@ export function ArgList(props: ArgListProps) {
   }
 
   return (
-    <group>
+    <group max={max}>
       {open}
       <Indent softline trailingBreak>
         <For

@@ -29,7 +29,7 @@ export function FunctionCallExpression(props: FunctionCallExpressionProps) {
           {">"}
         </group>
       ) : null}
-      <ArgList>{props.args ?? []}</ArgList>
+      <ArgList heuristic="fnCallWidth">{props.args ?? []}</ArgList>
     </group>
   );
 }

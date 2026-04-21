@@ -51,7 +51,9 @@ function AttributeBase(props: AttributeBaseProps) {
       {props.marker}
       {props.name}
       {props.args !== undefined ? (
-        <ArgList trailingComma={false}>{props.args}</ArgList>
+        <ArgList trailingComma={false} heuristic="attrFnLikeWidth">
+          {props.args}
+        </ArgList>
       ) : null}
       {"]"}
       <hbr />
