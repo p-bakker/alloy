@@ -47,7 +47,6 @@ export function MatchExpression(props: MatchExpressionProps) {
 
 export function MatchArm(props: MatchArmProps) {
   const statements = normalizeChildren(props.children);
-  const renderInline = statements.length === 1;
 
   return (
     <>
@@ -59,23 +58,16 @@ export function MatchArm(props: MatchArmProps) {
         </>
       ) : null}
       {" => "}
-      {renderInline ? (
-        <>
-          {statements[0]}
-          {","}
-        </>
-      ) : (
-        <>
-          {"{"}
-          <Indent>
-            <For each={statements} joiner={<hbr />}>
-              {(statement) => statement}
-            </For>
-          </Indent>
-          <hbr />
-          {"}"}
-        </>
-      )}
+      <group>
+        <ifBreak>{"{"}</ifBreak>
+        <Indent softline trailingBreak>
+          <For each={statements} joiner={<hbr />}>
+            {(statement) => statement}
+          </For>
+          <ifBreak flatContents=",">{null}</ifBreak>
+        </Indent>
+        <ifBreak>{"}"}</ifBreak>
+      </group>
     </>
   );
 }

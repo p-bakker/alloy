@@ -81,6 +81,50 @@ describe("MatchExpression", () => {
     `);
   });
 
+  it("breaks a single-statement arm to block form when the inline form overflows", () => {
+    expect(
+      toSourceText(
+        code`
+          fn demo(err: &SerializationError) {
+              ${(
+                <MatchExpression expression="err">
+                  <MatchArm pattern="Self::SerializationError(msg)">
+                    {code`a_very_long_identifier_name_that_cannot_be_broken_apart_at_all_by_rustfmt_okay`}
+                  </MatchArm>
+                </MatchExpression>
+              )}
+          }
+        `,
+      ),
+    ).toBe(d`
+      fn demo(err: &SerializationError) {
+          match err {
+              Self::SerializationError(msg) => {
+                  a_very_long_identifier_name_that_cannot_be_broken_apart_at_all_by_rustfmt_okay
+              }
+          }
+      }
+    `);
+  });
+
+  it("emits rustfmt-conformant overflow-block arms across all editions", () => {
+    const source = toSourceText(
+      code`
+        fn demo(err: &SerializationError) {
+            ${(
+              <MatchExpression expression="err">
+                <MatchArm pattern="Self::SerializationError(msg)">
+                  {code`a_very_long_identifier_name_that_cannot_be_broken_apart_at_all_by_rustfmt_okay`}
+                </MatchArm>
+              </MatchExpression>
+            )}
+        }
+      `,
+    );
+
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
+  });
+
   it("emits rustfmt-conformant block arms across all editions", () => {
     const source = toSourceText(
       code`
