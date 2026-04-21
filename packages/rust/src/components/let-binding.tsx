@@ -16,9 +16,12 @@ export interface LetBindingProps {
    * and the ambient column budget; otherwise the `else` body breaks and
    * the closing `};` sits on its own line at outer indent.
    *
-   * Callers should pass a single expression as the else body;
-   * multi-statement and comment-carrying bodies are out of scope for
-   * this component today.
+   * Multi-statement bodies (passed as an array) and comment-bearing bodies
+   * always render in the broken form: the hardline separators between
+   * items — and the hardlines emitted by comment components — propagate
+   * `breakParent` through the enclosing heuristic group, matching the
+   * rustfmt rule that the single-line form is reserved for a single
+   * comment-free expression.
    */
   elseBody?: Children;
 }

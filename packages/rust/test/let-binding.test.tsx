@@ -13,6 +13,7 @@ import {
   FunctionDeclaration,
   IfExpression,
   LetBinding,
+  LineComment,
   MatchArm,
   MatchExpression,
   SourceFile,
@@ -266,6 +267,53 @@ describe("LetBinding rustfmt conformance", () => {
           let Some(x) = opt else { 0 };
       }
     `);
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
+  });
+
+  it("breaks a let-else whose body carries multiple statements", () => {
+    const source = toSourceText(
+      inFn(
+        <LetBinding
+          name="Some(x)"
+          elseBody={[code`log("bailing out");`, code`return 0;`]}
+        >
+          {code`opt`}
+        </LetBinding>,
+      ),
+    );
+
+    expect(source).toBe(d`
+      fn demo(opt: Option<i32>) -> i32 {
+          let Some(x) = opt else {
+              log("bailing out");
+              return 0;
+          };
+      }
+    `);
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
+  });
+
+  it("breaks a let-else whose body carries a line comment", () => {
+    const source = toSourceText(
+      inFn(
+        <LetBinding
+          name="Some(x)"
+          elseBody={
+            <>
+              <LineComment>bailing out</LineComment>
+              {code`return 0;`}
+            </>
+          }
+        >
+          {code`opt`}
+        </LetBinding>,
+      ),
+    );
+
+    expect(source).toContain("let Some(x) = opt else {\n");
+    expect(source).toContain("// bailing out");
+    expect(source).toContain("return 0;");
+    expect(source).not.toContain("else { //");
     expect(() => checkRustfmtAllEditions(source)).not.toThrow();
   });
 
