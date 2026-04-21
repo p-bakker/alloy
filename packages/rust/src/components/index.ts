@@ -28,6 +28,7 @@ export * from "./primitives/arg-list.js";
 export * from "./primitives/braced-list.js";
 export * from "./primitives/field-list.js";
 export * from "./primitives/param-list.js";
+export * from "./primitives/rust-block.js";
 export * from "./primitives/rust-chain.js";
 export * from "./reference.js";
 export * from "./return-expression.js";

@@ -1,5 +1,7 @@
 import type { Children } from "@alloy-js/core";
-import { For, Indent, isComponentCreator } from "@alloy-js/core";
+import { isComponentCreator } from "@alloy-js/core";
+
+import { RustBlock } from "./primitives/rust-block.js";
 
 export interface IfExpressionProps {
   condition: Children;
@@ -52,27 +54,6 @@ function isClause(child: Children) {
   return child.component === ElseIfClause || child.component === ElseClause;
 }
 
-function renderBlock(children: Children | undefined) {
-  const statements = normalizeChildren(children);
-
-  return (
-    <>
-      {"{"}
-      {statements.length > 0 ? (
-        <>
-          <Indent>
-            <For each={statements} joiner={<hbr />}>
-              {(statement) => statement}
-            </For>
-          </Indent>
-          <hbr />
-        </>
-      ) : null}
-      {"}"}
-    </>
-  );
-}
-
 export function IfExpression(props: IfExpressionProps) {
   const children = normalizeChildren(props.children);
   const bodyChildren = children.filter((child) => !isClause(child));
@@ -81,7 +62,8 @@ export function IfExpression(props: IfExpressionProps) {
   return (
     <>
       {"if "}
-      {props.condition} {renderBlock(bodyChildren)}
+      {props.condition}
+      <RustBlock>{bodyChildren}</RustBlock>
       {clauses}
     </>
   );
@@ -91,7 +73,8 @@ export function ElseIfClause(props: ElseIfClauseProps) {
   return (
     <>
       {" else if "}
-      {props.condition} {renderBlock(props.children)}
+      {props.condition}
+      <RustBlock>{props.children}</RustBlock>
     </>
   );
 }
@@ -99,8 +82,8 @@ export function ElseIfClause(props: ElseIfClauseProps) {
 export function ElseClause(props: ElseClauseProps) {
   return (
     <>
-      {" else "}
-      {renderBlock(props.children)}
+      {" else"}
+      <RustBlock>{props.children}</RustBlock>
     </>
   );
 }
