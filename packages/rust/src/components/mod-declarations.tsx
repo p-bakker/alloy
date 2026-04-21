@@ -3,6 +3,7 @@ import { type Children, code, For, memo } from "@alloy-js/core";
 import type { RustCrateScope } from "../scopes/rust-crate-scope.js";
 import type { RustModuleScope } from "../scopes/rust-module-scope.js";
 import { AttributeList } from "./attribute.js";
+import { compareModuleEntry } from "../style/sort-comparator.js";
 import { type RustVisibilityProps, VisibilityPrefix } from "./visibility.js";
 
 interface ModDeclaration extends RustVisibilityProps {
@@ -29,7 +30,7 @@ function ModDeclarationLine(props: ModDeclaration) {
 export function ModDeclarations(props: ModDeclarationsProps) {
   return memo(() => {
     const declarations = Array.from(props.scope.childModules.values()).sort(
-      (left, right) => left.name.localeCompare(right.name),
+      (left, right) => compareModuleEntry(left.name, right.name),
     );
 
     if (declarations.length === 0) {

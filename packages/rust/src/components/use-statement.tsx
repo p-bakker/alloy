@@ -1,6 +1,8 @@
 import { code, memo } from "@alloy-js/core";
 
+import { useCrateContext } from "../context/crate-context.js";
 import { useRustModuleScope } from "../scopes/contexts.js";
+import { compareImportEntry } from "../style/sort-comparator.js";
 import { type RustVisibility } from "../symbols/rust-output-symbol.js";
 import { BracedList } from "./primitives/braced-list.js";
 import {
@@ -34,9 +36,9 @@ export function UseStatement(props: UseStatementProps) {
 }
 
 function UseStatementLine(props: UseStatementLineProps) {
-  const sortedSymbols = [...props.symbols].sort((left, right) =>
-    left.localeCompare(right),
-  );
+  const ctx = useCrateContext();
+  const compare = compareImportEntry(ctx?.edition);
+  const sortedSymbols = [...props.symbols].sort(compare);
 
   const body =
     sortedSymbols.length === 1 ? (
@@ -78,18 +80,30 @@ function UseStatementGroup(props: UseStatementGroupProps) {
  * Order for entries within a bucket: by path ascending, then private-first
  * (undefined visibility) before `pub` variants. Keeps `pub use` re-exports
  * after the plain imports for the same path — the idiomatic layout.
+ *
+ * The path comparison routes through the edition-aware rustfmt comparator
+ * so digit-laden paths sort correctly under the 2024 style edition
+ * (version-sort) while pre-2024 editions stay ASCII-lex.
  */
-function compareEntries(
-  left: UseStatementLineProps,
-  right: UseStatementLineProps,
-): number {
-  const byPath = left.path.localeCompare(right.path);
-  if (byPath !== 0) return byPath;
-  return (left.visibility ?? "").localeCompare(right.visibility ?? "");
+function makeCompareEntries(
+  edition: string | undefined,
+): (left: UseStatementLineProps, right: UseStatementLineProps) => number {
+  const comparePath = compareImportEntry(edition);
+  return (left, right) => {
+    const byPath = comparePath(left.path, right.path);
+    if (byPath !== 0) return byPath;
+    const leftVis = left.visibility ?? "";
+    const rightVis = right.visibility ?? "";
+    if (leftVis < rightVis) return -1;
+    if (leftVis > rightVis) return 1;
+    return 0;
+  };
 }
 
 export function UseStatements() {
   const moduleScope = useRustModuleScope();
+  const ctx = useCrateContext();
+  const compareEntries = makeCompareEntries(ctx?.edition);
   return memo(() => {
     const stdEntries: UseStatementLineProps[] = [];
     const externalEntries: UseStatementLineProps[] = [];
