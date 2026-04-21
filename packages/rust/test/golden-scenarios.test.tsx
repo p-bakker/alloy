@@ -178,10 +178,10 @@ describe("Golden scenarios", () => {
         <CrateDirectory name="shapes">
           <SourceFile path="lib.rs">
             <EnumDeclaration name="Shape" pub>
-              <EnumVariant name="Circle">{"radius: f64,"}</EnumVariant>
+              <EnumVariant name="Circle">{"radius: f64"}</EnumVariant>
               <EnumVariant name="Rectangle">
-                {"width: f64,"}
-                {"height: f64,"}
+                {"width: f64"}
+                {"height: f64"}
               </EnumVariant>
               <EnumVariant name="Point" fields={["f64", "f64"]} />
               <EnumVariant name="Nothing" />
@@ -191,13 +191,8 @@ describe("Golden scenarios", () => {
       </Output>,
     ).toRenderTo(d`
         pub enum Shape {
-            Circle {
-                radius: f64,
-            },
-            Rectangle {
-                width: f64,
-                height: f64,
-            },
+            Circle { radius: f64 },
+            Rectangle { width: f64, height: f64 },
             Point(f64, f64),
             Nothing,
         }

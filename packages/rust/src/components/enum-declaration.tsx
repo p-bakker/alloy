@@ -18,6 +18,9 @@ import {
 import { resolveSymbolName } from "../symbols/resolve-name.js";
 import { AttributeList } from "./attribute.js";
 import { DocComment } from "./doc-comment.js";
+import { ArgList } from "./primitives/arg-list.js";
+import { BracedList } from "./primitives/braced-list.js";
+import { FieldList } from "./primitives/field-list.js";
 import type { TypeParameterProp } from "./type-parameters.js";
 import { TypeParameters } from "./type-parameters.js";
 import {
@@ -110,22 +113,13 @@ export function EnumDeclaration(props: EnumDeclarationProps) {
         <VisibilityPrefix pub={props.pub} />
         {"enum "}
         {enumSymbol.name}
-        <TypeParameters params={props.typeParameters} />
+        <TypeParameters params={props.typeParameters} />{" "}
         {variants.length > 0 ? (
-          <>
-            {" {"}
-            <Scope value={enumScope}>
-              <Indent>
-                <For each={variants} joiner={<hbr />}>
-                  {(child) => child}
-                </For>
-              </Indent>
-            </Scope>
-            <hbr />
-            {"}"}
-          </>
+          <Scope value={enumScope}>
+            <FieldList>{variants}</FieldList>
+          </Scope>
         ) : (
-          " {}"
+          "{}"
         )}
       </CoreDeclaration>
     </>
@@ -163,27 +157,13 @@ export function EnumVariant(props: EnumVariantProps) {
       <AttributeList attributes={props.attributes} />
       {variantSymbol.name}
       {variantKind === "tuple" && tupleValues.length > 0 ? (
-        <>
-          {"("}
-          <For each={tupleValues} joiner={", "}>
-            {(field) => field}
-          </For>
-          {"),"}
-        </>
+        <ArgList>{tupleValues}</ArgList>
       ) : variantKind === "struct" ? (
         <>
-          {" {"}
-          <Indent>
-            <For each={members} joiner={<hbr />}>
-              {(child) => child}
-            </For>
-          </Indent>
-          <hbr />
-          {"},"}
+          {" "}
+          <BracedList pad>{members}</BracedList>
         </>
-      ) : (
-        ","
-      )}
+      ) : null}
     </CoreDeclaration>
   );
 }

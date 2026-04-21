@@ -12,6 +12,8 @@ import {
 } from "../src/components/index.js";
 import { useRustModuleScope } from "../src/scopes/index.js";
 import { NamedTypeSymbol } from "../src/symbols/named-type-symbol.js";
+import { checkRustfmtAllEditions } from "./rustfmt.js";
+import { toSourceText } from "./utils.js";
 
 function EnumKindProbe(props: { name: string }) {
   const scope = useRustModuleScope();
@@ -221,8 +223,8 @@ describe("EnumVariant", () => {
           <SourceFile path="lib.rs">
             <EnumDeclaration name="Message">
               <EnumVariant name="Data" kind="struct">
-                {"id: u64,"}
-                {"payload: String,"}
+                {"id: u64"}
+                {"payload: String"}
               </EnumVariant>
             </EnumDeclaration>
           </SourceFile>
@@ -230,10 +232,7 @@ describe("EnumVariant", () => {
       </Output>,
     ).toRenderTo(d`
         enum Message {
-            Data {
-                id: u64,
-                payload: String,
-            },
+            Data { id: u64, payload: String },
         }
     `);
   });
@@ -266,8 +265,8 @@ describe("EnumVariant", () => {
               <EnumVariant name="Ready" />
               <EnumVariant name="Data" kind="tuple" fields={["String"]} />
               <EnumVariant name="Error" kind="struct">
-                {"code: u32,"}
-                {"message: String,"}
+                {"code: u32"}
+                {"message: String"}
               </EnumVariant>
             </EnumDeclaration>
           </SourceFile>
@@ -277,10 +276,7 @@ describe("EnumVariant", () => {
         pub enum Event {
             Ready,
             Data(String),
-            Error {
-                code: u32,
-                message: String,
-            },
+            Error { code: u32, message: String },
         }
     `);
   });
@@ -356,6 +352,56 @@ describe("EnumVariant", () => {
           Red,
       }
     `);
+  });
+
+  it("wraps a long tuple variant across lines with a trailing comma", () => {
+    const source = toSourceText(
+      <EnumDeclaration name="Payload">
+        <EnumVariant
+          name="Bytes"
+          fields={[
+            "AnExtremelyLongTypeNameOne",
+            "AnExtremelyLongTypeNameTwo",
+            "AnExtremelyLongTypeNameThree",
+            "AnExtremelyLongTypeNameFour",
+          ]}
+        />
+      </EnumDeclaration>,
+    );
+
+    expect(source).toEqual(d`
+      enum Payload {
+          Bytes(
+              AnExtremelyLongTypeNameOne,
+              AnExtremelyLongTypeNameTwo,
+              AnExtremelyLongTypeNameThree,
+              AnExtremelyLongTypeNameFour,
+          ),
+      }
+    `);
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
+  });
+
+  it("renders unit, tuple, and struct variants rustfmt-conformantly", () => {
+    const source = toSourceText(
+      <EnumDeclaration name="Event">
+        <EnumVariant name="Ready" />
+        <EnumVariant name="Data" kind="tuple" fields={["String"]} />
+        <EnumVariant name="Error" kind="struct">
+          {"code: u32"}
+          {"message: String"}
+        </EnumVariant>
+      </EnumDeclaration>,
+    );
+
+    expect(source).toEqual(d`
+      enum Event {
+          Ready,
+          Data(String),
+          Error { code: u32, message: String },
+      }
+    `);
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
   });
 
   it("renders attributes on tuple variant", () => {
