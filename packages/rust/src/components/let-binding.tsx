@@ -8,27 +8,44 @@ export interface LetBindingProps {
 }
 
 export function LetBinding(props: LetBindingProps) {
-  const hasType = typeof props.type !== "undefined";
-  const hasInitializer = typeof props.children !== "undefined";
+  const mut = props.mutable ? "mut " : "";
+  const typed =
+    props.type !== undefined ? (
+      <>
+        {": "}
+        {props.type}
+      </>
+    ) : null;
+
+  if (props.children === undefined) {
+    return (
+      <>
+        {"let "}
+        {mut}
+        {props.name}
+        {typed}
+        {";"}
+      </>
+    );
+  }
+
+  const gid = Symbol("let-assignment");
 
   return (
-    <>
+    <group>
       {"let "}
-      {props.mutable ? "mut " : ""}
+      {mut}
       {props.name}
-      {hasType ? (
-        <>
-          {": "}
-          {props.type}
-        </>
-      ) : null}
-      {hasInitializer ? (
-        <>
-          {" = "}
-          {props.children}
-        </>
-      ) : null}
+      {typed}
+      {" ="}
+      <group id={gid}>
+        <indent>
+          <line />
+        </indent>
+      </group>
+      <lineSuffixBoundary />
+      <indentIfBreak groupId={gid}>{props.children}</indentIfBreak>
       {";"}
-    </>
+    </group>
   );
 }
