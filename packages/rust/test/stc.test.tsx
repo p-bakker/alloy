@@ -4,6 +4,7 @@ import { d } from "@alloy-js/core/testing";
 import { describe, expect, it } from "vitest";
 
 import {
+  ArrayExpression,
   Attribute,
   CargoTomlFile,
   ConstDeclaration,
@@ -383,5 +384,19 @@ describe("STC wrappers", () => {
         args: ["key", "entry"],
       }),
     ).toRenderTo(d`self.data.insert::<String>(key, entry)`);
+  });
+
+  it("ArrayExpression wrapper matches JSX output", () => {
+    expect(
+      <ArrayExpression>
+        {"1"}
+        {"2"}
+        {"3"}
+      </ArrayExpression>,
+    ).toRenderTo(d`[1, 2, 3]`);
+
+    expect(Stc.ArrayExpression().children("1", "2", "3")).toRenderTo(
+      d`[1, 2, 3]`,
+    );
   });
 });

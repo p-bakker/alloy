@@ -1,5 +1,6 @@
 import { stc } from "@alloy-js/core";
 
+import { ArrayExpression as ArrayExpressionComponent } from "../array-expression.js";
 import { AssociatedType as AssociatedTypeComponent } from "../associated-type.js";
 import {
   Attribute as AttributeComponent,
@@ -67,6 +68,7 @@ import { UnsafeBlock as UnsafeBlockComponent } from "../unsafe-block.js";
 import { Value as ValueComponent } from "../value.js";
 import { WhileExpression as WhileExpressionComponent } from "../while-expression.js";
 
+export const ArrayExpression = stc(ArrayExpressionComponent);
 export const Attribute = stc(AttributeComponent);
 export const InnerAttribute = stc(InnerAttributeComponent);
 export const AssociatedType = stc(AssociatedTypeComponent);

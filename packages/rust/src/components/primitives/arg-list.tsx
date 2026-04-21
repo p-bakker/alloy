@@ -2,7 +2,8 @@ import type { Children } from "@alloy-js/core";
 import { For, Indent } from "@alloy-js/core";
 
 import { useResolvedHeuristics } from "../../context/resolved-heuristics.js";
-export type ArgListHeuristic = "fnCallWidth" | "attrFnLikeWidth";
+
+export type ArgListHeuristic = "fnCallWidth" | "attrFnLikeWidth" | "arrayWidth";
 
 export interface ArgListProps {
   /** The list items — one per argument. */
@@ -19,9 +20,10 @@ export interface ArgListProps {
    * that lists whose flat form fits within the heuristic stay flat, and
    * lists that exceed it break even if the ambient line has room.
    *
-   * Pass `"fnCallWidth"` for function-call arg lists and `"attrFnLikeWidth"`
-   * for attribute / macro-call arg lists. Leave unset for primitives that
-   * are governed only by the overall print width (tuples, derives, etc).
+   * Pass `"fnCallWidth"` for function-call arg lists, `"attrFnLikeWidth"`
+   * for attribute / macro-call arg lists, and `"arrayWidth"` for array
+   * literals. Leave unset for primitives that are governed only by the
+   * overall print width (tuples, derives, etc).
    */
   heuristic?: ArgListHeuristic;
 }

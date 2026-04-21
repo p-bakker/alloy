@@ -1,3 +1,4 @@
+export * from "./array-expression.js";
 export * from "./associated-type.js";
 export * from "./attribute.js";
 export * from "./await-expression.js";
