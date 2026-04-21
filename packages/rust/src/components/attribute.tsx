@@ -1,14 +1,16 @@
 import type { Children, Refkey } from "@alloy-js/core";
 import { For } from "@alloy-js/core";
 
+import { ArgList } from "./primitives/arg-list.js";
+
 export interface AttributeProps {
   name: string | Refkey;
-  args?: Children;
+  args?: Children | Children[];
 }
 
 export interface InnerAttributeProps {
   name: string | Refkey;
-  args?: Children;
+  args?: Children | Children[];
 }
 
 export function Attribute(props: AttributeProps) {
@@ -22,7 +24,7 @@ export function InnerAttribute(props: InnerAttributeProps) {
 interface AttributeBaseProps {
   marker: "#[" | "#![";
   name: string | Refkey;
-  args?: Children;
+  args?: Children | Children[];
 }
 
 /**
@@ -49,11 +51,7 @@ function AttributeBase(props: AttributeBaseProps) {
       {props.marker}
       {props.name}
       {props.args !== undefined ? (
-        <>
-          {"("}
-          {props.args}
-          {")"}
-        </>
+        <ArgList trailingComma={false}>{props.args}</ArgList>
       ) : null}
       {"]"}
       <hbr />

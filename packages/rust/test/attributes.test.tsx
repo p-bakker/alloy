@@ -150,4 +150,45 @@ describe("rustfmt conformance", () => {
     `);
     expect(() => checkRustfmtAllEditions(source)).not.toThrow();
   });
+
+  it("keeps a short attribute argument list flat across all editions", () => {
+    const source = toSourceText(
+      <StructDeclaration
+        name="Entry"
+        attributes={[<Attribute name="repr" args="C" />]}
+      />,
+    );
+
+    expect(source).toEqual(d`
+      #[repr(C)]
+      struct Entry;
+    `);
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
+  });
+
+  it("wraps a long attribute argument list without a trailing comma", () => {
+    const source = toSourceText(
+      <StructDeclaration
+        name="X"
+        attributes={[
+          <Attribute
+            name="clippy::disallowed_method"
+            args={[
+              'name = "ExtremelyLongNameOneIsHereAndReallyVeryLong"',
+              'reason = "ExtremelyLongReasonOneIsHereAndExplainsWhyItIsDisallowed"',
+            ]}
+          />,
+        ]}
+      />,
+    );
+
+    expect(source).toEqual(d`
+      #[clippy::disallowed_method(
+          name = "ExtremelyLongNameOneIsHereAndReallyVeryLong",
+          reason = "ExtremelyLongReasonOneIsHereAndExplainsWhyItIsDisallowed"
+      )]
+      struct X;
+    `);
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
+  });
 });
