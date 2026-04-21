@@ -22,6 +22,18 @@ import * as Stc from "../src/components/stc/index.js";
 import { checkRustfmtAllEditions } from "./rustfmt.js";
 import { toSourceText } from "./utils.js";
 
+function inFn(children: Children, returnType = "i32") {
+  return (
+    <FunctionDeclaration
+      name="demo"
+      parameters={[{ name: "opt", type: "Option<i32>" }]}
+      returnType={returnType}
+    >
+      {children}
+    </FunctionDeclaration>
+  );
+}
+
 function inFile(children: Children) {
   return (
     <Output>
@@ -237,6 +249,45 @@ describe("LetBinding rustfmt conformance", () => {
       "        some_function_that_takes_args(argument_one_long, argument_two_long);",
     ].join("\n");
     expect(source).toContain(expected);
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
+  });
+
+  it("keeps a short let-else on one line within single_line_let_else_max_width", () => {
+    const source = toSourceText(
+      inFn(
+        <LetBinding name="Some(x)" elseBody={code`0`}>
+          {code`opt`}
+        </LetBinding>,
+      ),
+    );
+
+    expect(source).toBe(d`
+      fn demo(opt: Option<i32>) -> i32 {
+          let Some(x) = opt else { 0 };
+      }
+    `);
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
+  });
+
+  it("breaks a let-else whose flat form exceeds single_line_let_else_max_width", () => {
+    const source = toSourceText(
+      inFn(
+        <LetBinding
+          name="Some(very_long_binding_name)"
+          elseBody={code`some_longer_fallback_expression`}
+        >
+          {code`opt`}
+        </LetBinding>,
+      ),
+    );
+
+    expect(source).toBe(d`
+      fn demo(opt: Option<i32>) -> i32 {
+          let Some(very_long_binding_name) = opt else {
+              some_longer_fallback_expression
+          };
+      }
+    `);
     expect(() => checkRustfmtAllEditions(source)).not.toThrow();
   });
 
