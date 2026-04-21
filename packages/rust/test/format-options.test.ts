@@ -27,6 +27,7 @@ describe("toCommonFormatOptions", () => {
       singleLineIfElseMaxWidth: 45,
       singleLineLetElseMaxWidth: 55,
       shortArrayElementWidthThreshold: 12,
+      fnParamsLayout: "Vertical",
     });
 
     expect(result).toEqual({ printWidth: 100, tabWidth: 4 });
@@ -36,5 +37,9 @@ describe("toCommonFormatOptions", () => {
     expect(DEFAULT_RUST_FORMAT_OPTIONS.shortArrayElementWidthThreshold).toBe(
       10,
     );
+  });
+
+  it("defaults fnParamsLayout to 'Tall'", () => {
+    expect(DEFAULT_RUST_FORMAT_OPTIONS.fnParamsLayout).toBe("Tall");
   });
 });

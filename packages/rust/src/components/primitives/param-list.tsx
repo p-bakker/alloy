@@ -1,5 +1,6 @@
 import type { Children } from "@alloy-js/core";
 
+import { useRustFormatOptions } from "../../context/format-options.js";
 import { ArgList } from "./arg-list.js";
 
 export interface ParamListProps {
@@ -24,7 +25,13 @@ export interface ParamListProps {
  * receiver) before handing it over. `ParamList` does not distinguish
  * the receiver from the rest of the list because the layout is
  * identical.
+ *
+ * Reads `fnParamsLayout` from the Rust format-options context: `"Tall"`
+ * (default) preserves the fit-or-break layout; `"Vertical"` forces the
+ * broken form even when the flat form would fit.
  */
 export function ParamList(props: ParamListProps) {
-  return <ArgList>{props.children}</ArgList>;
+  const { fnParamsLayout } = useRustFormatOptions();
+  const forceBreak = fnParamsLayout === "Vertical";
+  return <ArgList forceBreak={forceBreak}>{props.children}</ArgList>;
 }

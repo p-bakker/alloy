@@ -26,6 +26,16 @@ export interface ArgListProps {
    * overall print width (tuples, derives, etc).
    */
   heuristic?: ArgListHeuristic;
+  /**
+   * When `true`, force the list to render in its broken form regardless
+   * of whether the flat form would fit the heuristic or the ambient
+   * print width. Implemented by emitting `<breakParent />` inside the
+   * group. Default `false`.
+   *
+   * Intended for callers whose layout setting forbids the flat form
+   * (e.g. `fnParamsLayout = "Vertical"` on function parameter lists).
+   */
+  forceBreak?: boolean;
 }
 
 /**
@@ -51,6 +61,7 @@ export function ArgList(props: ArgListProps) {
   const open = props.open ?? "(";
   const close = props.close ?? ")";
   const trailingComma = props.trailingComma ?? true;
+  const forceBreak = props.forceBreak ?? false;
   const heuristics = useResolvedHeuristics();
   const max =
     props.heuristic !== undefined ? heuristics[props.heuristic] : undefined;
@@ -66,6 +77,7 @@ export function ArgList(props: ArgListProps) {
 
   return (
     <group max={max}>
+      {forceBreak ? <breakParent /> : null}
       {open}
       <Indent softline trailingBreak>
         <For

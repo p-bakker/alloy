@@ -1,4 +1,4 @@
-import { Output, refkey } from "@alloy-js/core";
+import { Output, refkey, render } from "@alloy-js/core";
 import "@alloy-js/core/testing";
 import { d } from "@alloy-js/core/testing";
 import { describe, expect, it } from "vitest";
@@ -12,6 +12,7 @@ import {
   StructDeclaration,
   TraitDeclaration,
 } from "../src/components/index.js";
+import { RustFormatOptions } from "../src/context/format-options.js";
 import {
   RustFunctionScope,
   useRustModuleScope,
@@ -19,7 +20,7 @@ import {
 } from "../src/scopes/index.js";
 import { FunctionSymbol } from "../src/symbols/function-symbol.js";
 import { checkRustfmtAllEditions } from "./rustfmt.js";
-import { toSourceText } from "./utils.js";
+import { findFile, toSourceText } from "./utils.js";
 
 function FunctionFlagsProbe(props: { name: string }) {
   const scope = useRustModuleScope();
@@ -665,5 +666,145 @@ describe("FunctionDeclaration", () => {
       #[allow(unused_variables)]
       pub async fn handler() {}
     `);
+  });
+
+  describe("fnParamsLayout", () => {
+    it("keeps a short signature flat under the default 'Tall' layout", () => {
+      const source = toSourceText(
+        <FunctionDeclaration
+          name="demo"
+          parameters={[
+            { name: "a", type: "i32" },
+            { name: "b", type: "i32" },
+            { name: "c", type: "i32" },
+          ]}
+          returnType="i32"
+        >
+          {"a + b + c"}
+        </FunctionDeclaration>,
+      );
+
+      expect(source).toEqual(d`
+        fn demo(a: i32, b: i32, c: i32) -> i32 {
+            a + b + c
+        }
+      `);
+      expect(() => checkRustfmtAllEditions(source)).not.toThrow();
+    });
+
+    it("breaks a short signature vertically when fnParamsLayout is 'Vertical'", () => {
+      const res = render(
+        <RustFormatOptions value={{ fnParamsLayout: "Vertical" }}>
+          <Output>
+            <CrateDirectory name="test_crate">
+              <SourceFile path="test.rs">
+                <FunctionDeclaration
+                  name="demo"
+                  parameters={[
+                    { name: "a", type: "i32" },
+                    { name: "b", type: "i32" },
+                    { name: "c", type: "i32" },
+                  ]}
+                  returnType="i32"
+                >
+                  {"a + b + c"}
+                </FunctionDeclaration>
+              </SourceFile>
+            </CrateDirectory>
+          </Output>
+        </RustFormatOptions>,
+        { insertFinalNewLine: false },
+      );
+      const source = findFile(res, "src/test.rs").contents;
+
+      expect(source).toEqual(d`
+        fn demo(
+            a: i32,
+            b: i32,
+            c: i32,
+        ) -> i32 {
+            a + b + c
+        }
+      `);
+      expect(() =>
+        checkRustfmtAllEditions(source, {
+          config: { fn_params_layout: "Vertical" },
+        }),
+      ).not.toThrow();
+    });
+
+    it("composes with a where clause under 'Vertical'", () => {
+      const res = render(
+        <RustFormatOptions value={{ fnParamsLayout: "Vertical" }}>
+          <Output>
+            <CrateDirectory name="test_crate">
+              <SourceFile path="test.rs">
+                <FunctionDeclaration
+                  name="demo"
+                  typeParameters={[{ name: "T" }]}
+                  parameters={[
+                    { name: "a", type: "i32" },
+                    { name: "b", type: "i32" },
+                  ]}
+                  returnType="i32"
+                  whereClause="T: Display"
+                >
+                  {"42"}
+                </FunctionDeclaration>
+              </SourceFile>
+            </CrateDirectory>
+          </Output>
+        </RustFormatOptions>,
+        { insertFinalNewLine: false },
+      );
+      const source = findFile(res, "src/test.rs").contents;
+
+      expect(source).toEqual(d`
+        fn demo<T>(
+            a: i32,
+            b: i32,
+        ) -> i32
+        where
+            T: Display,
+        {
+            42
+        }
+      `);
+      expect(() =>
+        checkRustfmtAllEditions(source, {
+          config: { fn_params_layout: "Vertical" },
+        }),
+      ).not.toThrow();
+    });
+
+    it("forces the break on a single-parameter signature under 'Vertical'", () => {
+      const res = render(
+        <RustFormatOptions value={{ fnParamsLayout: "Vertical" }}>
+          <Output>
+            <CrateDirectory name="test_crate">
+              <SourceFile path="test.rs">
+                <FunctionDeclaration
+                  name="demo"
+                  parameters={[{ name: "x", type: "i32" }]}
+                  returnType="i32"
+                >
+                  {"x"}
+                </FunctionDeclaration>
+              </SourceFile>
+            </CrateDirectory>
+          </Output>
+        </RustFormatOptions>,
+        { insertFinalNewLine: false },
+      );
+      const source = findFile(res, "src/test.rs").contents;
+
+      expect(source).toEqual(d`
+        fn demo(
+            x: i32,
+        ) -> i32 {
+            x
+        }
+      `);
+    });
   });
 });

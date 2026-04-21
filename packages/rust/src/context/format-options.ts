@@ -52,6 +52,14 @@ export interface RustFormatOptions extends Omit<
    * `maxWidth`). Defaults to 10.
    */
   shortArrayElementWidthThreshold?: number;
+
+  /**
+   * rustfmt `fn_params_layout`. `"Tall"` — default fit-or-break: short
+   * signatures stay flat, long ones break one-per-line. `"Vertical"` —
+   * always break, even when the flat form fits. rustfmt's
+   * `"Compressed"` (fill-style horizontal packing) is deferred.
+   */
+  fnParamsLayout?: "Tall" | "Vertical";
 }
 
 /** Defaults applied by the Rust format-options provider. */
@@ -60,6 +68,7 @@ export const DEFAULT_RUST_FORMAT_OPTIONS: RustFormatOptions = {
   tabSpaces: 4,
   useSmallHeuristics: "Default",
   shortArrayElementWidthThreshold: 10,
+  fnParamsLayout: "Tall",
 };
 
 /**
@@ -85,6 +94,7 @@ export function toCommonFormatOptions(
     singleLineIfElseMaxWidth: _singleLineIfElseMaxWidth,
     singleLineLetElseMaxWidth: _singleLineLetElseMaxWidth,
     shortArrayElementWidthThreshold: _shortArrayElementWidthThreshold,
+    fnParamsLayout: _fnParamsLayout,
     ...rest
   } = opts;
   const result: CommonFormatOptions = { ...rest };
