@@ -96,11 +96,9 @@ export function EnumDeclaration(props: EnumDeclarationProps) {
       <AttributeList attributes={props.attributes} />
       {derives && derives.length > 0 ? (
         <>
-          {"#[derive("}
-          <For each={derives} joiner={", "}>
-            {resolveSymbolName}
-          </For>
-          {")]"}
+          {"#[derive"}
+          <ArgList>{derives.map(resolveSymbolName)}</ArgList>
+          {"]"}
           <hbr />
         </>
       ) : null}

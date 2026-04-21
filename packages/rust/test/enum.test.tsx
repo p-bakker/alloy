@@ -94,6 +94,60 @@ describe("EnumDeclaration", () => {
     `);
   });
 
+  it("keeps a short derive list flat", () => {
+    const source = toSourceText(
+      <EnumDeclaration name="Foo" derives={["Debug", "Clone", "PartialEq"]} />,
+    );
+
+    expect(source).toEqual(d`
+      #[derive(Debug, Clone, PartialEq)]
+      enum Foo {}
+    `);
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
+  });
+
+  it("wraps a long derive list one-per-line with a trailing comma", () => {
+    const source = toSourceText(
+      <EnumDeclaration
+        name="MyEnum"
+        pub={true}
+        derives={[
+          "Clone",
+          "Debug",
+          "PartialEq",
+          "Eq",
+          "Hash",
+          "PartialOrd",
+          "Ord",
+          "Default",
+          "Serialize",
+          "Deserialize",
+          "Something",
+          "Another",
+        ]}
+      />,
+    );
+
+    expect(source).toEqual(d`
+      #[derive(
+          Clone,
+          Debug,
+          PartialEq,
+          Eq,
+          Hash,
+          PartialOrd,
+          Ord,
+          Default,
+          Serialize,
+          Deserialize,
+          Something,
+          Another,
+      )]
+      pub enum MyEnum {}
+    `);
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
+  });
+
   it("renders enum doc comment", () => {
     expect(
       <Output>

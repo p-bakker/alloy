@@ -73,6 +73,63 @@ describe("StructDeclaration", () => {
     `);
   });
 
+  it("keeps a short derive list flat", () => {
+    const source = toSourceText(
+      <StructDeclaration
+        name="Foo"
+        derives={["Debug", "Clone", "PartialEq"]}
+      />,
+    );
+
+    expect(source).toEqual(d`
+      #[derive(Debug, Clone, PartialEq)]
+      struct Foo;
+    `);
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
+  });
+
+  it("wraps a long derive list one-per-line with a trailing comma", () => {
+    const source = toSourceText(
+      <StructDeclaration
+        name="MyType"
+        pub={true}
+        derives={[
+          "Clone",
+          "Debug",
+          "PartialEq",
+          "Eq",
+          "Hash",
+          "PartialOrd",
+          "Ord",
+          "Default",
+          "Serialize",
+          "Deserialize",
+          "Something",
+          "Another",
+        ]}
+      />,
+    );
+
+    expect(source).toEqual(d`
+      #[derive(
+          Clone,
+          Debug,
+          PartialEq,
+          Eq,
+          Hash,
+          PartialOrd,
+          Ord,
+          Default,
+          Serialize,
+          Deserialize,
+          Something,
+          Another,
+      )]
+      pub struct MyType;
+    `);
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
+  });
+
   it("renders struct doc comment", () => {
     expect(
       <Output>
