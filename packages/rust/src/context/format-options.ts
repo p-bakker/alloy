@@ -45,6 +45,13 @@ export interface RustFormatOptions extends Omit<
   singleLineIfElseMaxWidth?: number;
   /** Override for rustfmt `single_line_let_else_max_width`. Defaults to 50% of `maxWidth` when unset. */
   singleLineLetElseMaxWidth?: number;
+
+  /**
+   * rustfmt `short_array_element_width_threshold`. Array element width
+   * below which packing is allowed. Fixed integer (not a percentage of
+   * `maxWidth`). Defaults to 10.
+   */
+  shortArrayElementWidthThreshold?: number;
 }
 
 /** Defaults applied by the Rust format-options provider. */
@@ -52,6 +59,7 @@ export const DEFAULT_RUST_FORMAT_OPTIONS: RustFormatOptions = {
   maxWidth: 100,
   tabSpaces: 4,
   useSmallHeuristics: "Default",
+  shortArrayElementWidthThreshold: 10,
 };
 
 /**
@@ -76,6 +84,7 @@ export function toCommonFormatOptions(
     chainWidth: _chainWidth,
     singleLineIfElseMaxWidth: _singleLineIfElseMaxWidth,
     singleLineLetElseMaxWidth: _singleLineLetElseMaxWidth,
+    shortArrayElementWidthThreshold: _shortArrayElementWidthThreshold,
     ...rest
   } = opts;
   const result: CommonFormatOptions = { ...rest };
