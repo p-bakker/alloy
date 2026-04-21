@@ -159,7 +159,9 @@ export function EnumVariant(props: EnumVariantProps) {
       ) : variantKind === "struct" ? (
         <>
           {" "}
-          <BracedList pad>{members}</BracedList>
+          <BracedList pad heuristic="structVariantWidth">
+            {members}
+          </BracedList>
         </>
       ) : null}
     </CoreDeclaration>

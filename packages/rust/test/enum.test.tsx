@@ -458,6 +458,29 @@ describe("EnumVariant", () => {
     expect(() => checkRustfmtAllEditions(source)).not.toThrow();
   });
 
+  it("breaks a struct variant when the flat body exceeds struct_variant_width", () => {
+    const source = toSourceText(
+      <EnumDeclaration name="Message">
+        <EnumVariant name="Data" kind="struct">
+          {"id: u64"}
+          {"name: String"}
+          {"description: String"}
+        </EnumVariant>
+      </EnumDeclaration>,
+    );
+
+    expect(source).toEqual(d`
+      enum Message {
+          Data {
+              id: u64,
+              name: String,
+              description: String,
+          },
+      }
+    `);
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
+  });
+
   it("renders attributes on tuple variant", () => {
     expect(
       <Output>
