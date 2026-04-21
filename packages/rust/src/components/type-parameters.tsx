@@ -1,6 +1,8 @@
 import type { Children } from "@alloy-js/core";
 import { For, Indent } from "@alloy-js/core";
 
+import { ArgList } from "./primitives/arg-list.js";
+
 export interface TypeParameterProp {
   name?: string;
   lifetime?: string;
@@ -61,23 +63,19 @@ export function TypeParameters(props: TypeParametersProps) {
   const orderedParams = [...lifetimes, ...typeParameters];
 
   return (
-    <>
-      {"<"}
-      <For each={orderedParams} joiner={", "}>
-        {(param) => (
-          <>
-            {param.lifetime ?? param.name}
-            {param.constraints ? (
-              <>
-                {": "}
-                {renderConstraints(param.constraints)}
-              </>
-            ) : null}
-          </>
-        )}
-      </For>
-      {">"}
-    </>
+    <ArgList open="<" close=">">
+      {orderedParams.map((param) => (
+        <>
+          {param.lifetime ?? param.name}
+          {param.constraints ? (
+            <>
+              {": "}
+              {renderConstraints(param.constraints)}
+            </>
+          ) : null}
+        </>
+      ))}
+    </ArgList>
   );
 }
 

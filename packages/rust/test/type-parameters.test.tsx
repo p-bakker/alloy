@@ -2,10 +2,13 @@ import "@alloy-js/core/testing";
 import { d } from "@alloy-js/core/testing";
 import { describe, expect, it } from "vitest";
 
+import { FunctionDeclaration } from "../src/components/function-declaration.js";
 import {
   TypeParameters,
   WhereClause,
 } from "../src/components/type-parameters.js";
+import { checkRustfmtAllEditions } from "./rustfmt.js";
+import { toSourceText } from "./utils.js";
 
 describe("TypeParameters", () => {
   it("renders a single type parameter", () => {
@@ -83,6 +86,36 @@ describe("TypeParameters", () => {
         <TypeParameters />
       </>,
     ).toRenderTo(d`fn value`);
+  });
+
+  it("breaks a long generic list vertically with a trailing comma", () => {
+    const source = toSourceText(
+      <FunctionDeclaration
+        name="long_generics"
+        typeParameters={[
+          { name: "TypeParameterAAAAAA" },
+          { name: "TypeParameterBBBBBB" },
+          { name: "TypeParameterCCCCCC" },
+          { name: "TypeParameterDDDDDD" },
+          { name: "TypeParameterEEEEEEEE" },
+        ]}
+      >
+        {"todo!()"}
+      </FunctionDeclaration>,
+    );
+
+    expect(source).toEqual(d`
+      fn long_generics<
+          TypeParameterAAAAAA,
+          TypeParameterBBBBBB,
+          TypeParameterCCCCCC,
+          TypeParameterDDDDDD,
+          TypeParameterEEEEEEEE,
+      >() {
+          todo!()
+      }
+    `);
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
   });
 });
 
