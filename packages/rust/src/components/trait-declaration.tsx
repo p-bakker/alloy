@@ -53,6 +53,8 @@ export function TraitDeclaration(props: TraitDeclarationProps) {
       )
     : [];
   const hasBody = bodyChildren.length > 0;
+  const hasSupertraits = !!(props.supertraits && props.supertraits.length > 0);
+  const supertraitGroupId = Symbol("trait-supertraits");
 
   return (
     <>
@@ -67,27 +69,41 @@ export function TraitDeclaration(props: TraitDeclarationProps) {
         {code`trait `}
         {traitSymbol.name}
         <TypeParameters params={props.typeParameters} />
-        {props.supertraits && props.supertraits.length > 0 ? (
-          <>
-            {code`: `}
-            <For each={props.supertraits} joiner={code` + `}>
-              {(supertrait) => supertrait}
-            </For>
-          </>
+        {hasSupertraits ? (
+          <group id={supertraitGroupId}>
+            {":"}
+            <Indent line>
+              <For
+                each={props.supertraits!}
+                joiner={
+                  <>
+                    <br />+{" "}
+                  </>
+                }
+              >
+                {(supertrait) => supertrait}
+              </For>
+            </Indent>
+            <br />
+            {"{"}
+          </group>
         ) : null}
         <WhereClause>{props.whereClause}</WhereClause>
+        {!hasSupertraits ? (hasBody ? code` {` : code` {}`) : null}
         {hasBody ? (
           <>
-            {code` {`}
             <Scope value={traitScope}>
               <Indent>{bodyChildren}</Indent>
             </Scope>
             <hbr />
             {code`}`}
           </>
-        ) : (
-          code` {}`
-        )}
+        ) : hasSupertraits ? (
+          <ifBreak groupId={supertraitGroupId} flatContents="}">
+            <hbr />
+            {"}"}
+          </ifBreak>
+        ) : null}
       </CoreDeclaration>
     </>
   );

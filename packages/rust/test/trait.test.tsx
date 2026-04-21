@@ -95,18 +95,40 @@ describe("TraitDeclaration", () => {
   });
 
   it("renders supertraits", () => {
-    expect(
-      <Output>
-        <CrateDirectory name="my_crate">
-          <SourceFile path="lib.rs">
-            <TraitDeclaration
-              name="Printable"
-              supertraits={["Display", "Debug"]}
-            />
-          </SourceFile>
-        </CrateDirectory>
-      </Output>,
-    ).toRenderTo(d`trait Printable: Display + Debug {}`);
+    const source = toSourceText(
+      <TraitDeclaration name="Printable" supertraits={["Display", "Debug"]} />,
+    );
+    expect(source.trimEnd()).toBe("trait Printable: Display + Debug {}");
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
+  });
+
+  it("wraps a long supertrait list one bound per line before +", () => {
+    const source = toSourceText(
+      <TraitDeclaration
+        pub
+        name="LongTraitName"
+        supertraits={[
+          "ExtremelyLongSuperTraitOne",
+          "ExtremelyLongSuperTraitTwo",
+          "ExtremelyLongSuperTraitThree",
+          "ExtremelyLongSuperTraitFour",
+          "ExtremelyLongSuperTraitFive",
+        ]}
+      />,
+    );
+    expect(source.trimEnd()).toBe(
+      [
+        "pub trait LongTraitName:",
+        "    ExtremelyLongSuperTraitOne",
+        "    + ExtremelyLongSuperTraitTwo",
+        "    + ExtremelyLongSuperTraitThree",
+        "    + ExtremelyLongSuperTraitFour",
+        "    + ExtremelyLongSuperTraitFive",
+        "{",
+        "}",
+      ].join("\n"),
+    );
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
   });
 
   it("renders type parameters and where clause", () => {
