@@ -386,6 +386,12 @@ describe("STC wrappers", () => {
     ).toRenderTo(d`self.data.insert::<String>(key, entry)`);
   });
 
+  it("BinaryExpression wrapper matches JSX output", () => {
+    expect(
+      Stc.BinaryExpression({ left: "a", operator: "+", right: "b" }),
+    ).toRenderTo(d`a + b`);
+  });
+
   it("ArrayExpression wrapper matches JSX output", () => {
     expect(
       <ArrayExpression>

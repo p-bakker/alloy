@@ -7,6 +7,7 @@ import {
   InnerAttribute as InnerAttributeComponent,
 } from "../attribute.js";
 import { AwaitExpression as AwaitExpressionComponent } from "../await-expression.js";
+import { BinaryExpression as BinaryExpressionComponent } from "../binary-expression.js";
 import { BlockExpression as BlockExpressionComponent } from "../block-expression.js";
 import { BreakExpression as BreakExpressionComponent } from "../break-expression.js";
 import { CargoTomlFile as CargoTomlFileComponent } from "../cargo-toml-file.js";
@@ -73,6 +74,7 @@ export const Attribute = stc(AttributeComponent);
 export const InnerAttribute = stc(InnerAttributeComponent);
 export const AssociatedType = stc(AssociatedTypeComponent);
 export const AwaitExpression = stc(AwaitExpressionComponent);
+export const BinaryExpression = stc(BinaryExpressionComponent);
 export const BlockExpression = stc(BlockExpressionComponent);
 export const CargoTomlFile = stc(CargoTomlFileComponent);
 export const ClosureExpression = stc(ClosureExpressionComponent);

@@ -2,6 +2,7 @@ export * from "./array-expression.js";
 export * from "./associated-type.js";
 export * from "./attribute.js";
 export * from "./await-expression.js";
+export * from "./binary-expression.js";
 export * from "./block-expression.js";
 export * from "./break-expression.js";
 export * from "./cargo-toml-file.js";
