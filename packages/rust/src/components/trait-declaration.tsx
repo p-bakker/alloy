@@ -15,7 +15,11 @@ import { createTraitSymbol } from "../symbols/factories.js";
 import { AttributeList } from "./attribute.js";
 import { DocComment } from "./doc-comment.js";
 import type { TypeParameterProp } from "./type-parameters.js";
-import { TypeParameters, WhereClause } from "./type-parameters.js";
+import {
+  hasWhereClauseBounds,
+  TypeParameters,
+  WhereClause,
+} from "./type-parameters.js";
 import {
   type RustVisibilityProps,
   toRustVisibility,
@@ -54,6 +58,7 @@ export function TraitDeclaration(props: TraitDeclarationProps) {
     : [];
   const hasBody = bodyChildren.length > 0;
   const hasSupertraits = !!(props.supertraits && props.supertraits.length > 0);
+  const whereClausePresent = hasWhereClauseBounds(props.whereClause);
   const supertraitGroupId = Symbol("trait-supertraits");
 
   return (
@@ -84,12 +89,27 @@ export function TraitDeclaration(props: TraitDeclarationProps) {
                 {(supertrait) => supertrait}
               </For>
             </Indent>
-            <br />
-            {"{"}
+            {whereClausePresent ? null : (
+              <>
+                <br />
+                {"{"}
+              </>
+            )}
           </group>
         ) : null}
         <WhereClause>{props.whereClause}</WhereClause>
-        {!hasSupertraits ? (hasBody ? code` {` : code` {}`) : null}
+        {whereClausePresent ? (
+          <>
+            <hbr />
+            {"{"}
+          </>
+        ) : !hasSupertraits ? (
+          hasBody ? (
+            code` {`
+          ) : (
+            code` {}`
+          )
+        ) : null}
         {hasBody ? (
           <>
             <Scope value={traitScope}>
@@ -97,6 +117,11 @@ export function TraitDeclaration(props: TraitDeclarationProps) {
             </Scope>
             <hbr />
             {code`}`}
+          </>
+        ) : whereClausePresent ? (
+          <>
+            <hbr />
+            {"}"}
           </>
         ) : hasSupertraits ? (
           <ifBreak groupId={supertraitGroupId} flatContents="}">

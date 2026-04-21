@@ -136,8 +136,35 @@ describe("ImplBlock", () => {
       struct Foo;
       impl Foo
       where
-          T: Clone, {}
+          T: Clone,
+      {
+      }
     `);
+  });
+
+  it("moves body opening brace to its own line when where clause is present", () => {
+    const typeRef = refkey("foo-type");
+
+    const source = toSourceText(
+      <>
+        <StructDeclaration name="Foo" refkey={typeRef} />
+        <hbr />
+        <ImplBlock type={typeRef} whereClause="T: Clone">
+          <FunctionDeclaration name="run" />
+        </ImplBlock>
+      </>,
+    );
+
+    expect(source).toEqual(d`
+      struct Foo;
+      impl Foo
+      where
+          T: Clone,
+      {
+          fn run(&self) {}
+      }
+    `);
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
   });
 
   it("breaks multiple where-clause bounds onto their own indented lines", () => {
@@ -166,7 +193,9 @@ describe("ImplBlock", () => {
       impl<T> Holder<T>
       where
           T: Clone,
-          T: core::fmt::Debug, {}
+          T: core::fmt::Debug,
+      {
+      }
     `);
   });
 
@@ -323,7 +352,9 @@ describe("ImplBlock", () => {
       enum Result<T, E> {}
       impl<T, E> Result<T, E>
       where
-          T: Clone, {}
+          T: Clone,
+      {
+      }
     `);
   });
 

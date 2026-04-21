@@ -150,8 +150,55 @@ describe("TraitDeclaration", () => {
     ).toRenderTo(d`
       trait Sink<T, E: Display>
       where
-          T: Clone, {}
+          T: Clone,
+      {
+      }
     `);
+  });
+
+  it("moves body opening brace to its own line when where clause is present", () => {
+    const source = toSourceText(
+      <TraitDeclaration
+        name="Sink"
+        typeParameters={[{ name: "T" }]}
+        whereClause="T: Clone"
+      >
+        {"fn run(&self);"}
+      </TraitDeclaration>,
+    );
+
+    expect(source).toEqual(d`
+      trait Sink<T>
+      where
+          T: Clone,
+      {
+          fn run(&self);
+      }
+    `);
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
+  });
+
+  it("keeps body opening brace on its own line when both supertraits and where clause are present", () => {
+    const source = toSourceText(
+      <TraitDeclaration
+        name="Sink"
+        typeParameters={[{ name: "T" }]}
+        supertraits={["Display"]}
+        whereClause="T: Clone"
+      >
+        {"fn run(&self);"}
+      </TraitDeclaration>,
+    );
+
+    expect(source).toEqual(d`
+      trait Sink<T>: Display
+      where
+          T: Clone,
+      {
+          fn run(&self);
+      }
+    `);
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
   });
 
   it("renders trait with method signature and default implementation", () => {

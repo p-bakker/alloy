@@ -22,7 +22,11 @@ import { NamedTypeSymbol } from "../symbols/named-type-symbol.js";
 import { RustOutputSymbol } from "../symbols/rust-output-symbol.js";
 import { AttributeList } from "./attribute.js";
 import type { TypeParameterProp } from "./type-parameters.js";
-import { TypeParameters, WhereClause } from "./type-parameters.js";
+import {
+  hasWhereClauseBounds,
+  TypeParameters,
+  WhereClause,
+} from "./type-parameters.js";
 
 export type TypeParameterProps = TypeParameterProp;
 
@@ -151,6 +155,7 @@ export function ImplBlock(props: ImplBlockProps) {
       )
     : [];
   const hasBody = bodyChildren.length > 0;
+  const whereClausePresent = hasWhereClauseBounds(props.whereClause);
 
   return (
     <>
@@ -167,12 +172,26 @@ export function ImplBlock(props: ImplBlockProps) {
       <WhereClause>{props.whereClause}</WhereClause>
       {hasBody ? (
         <>
-          {code` {`}
+          {whereClausePresent ? (
+            <>
+              <hbr />
+              {"{"}
+            </>
+          ) : (
+            code` {`
+          )}
           <Scope value={implScope}>
             <Indent>{bodyChildren}</Indent>
           </Scope>
           <hbr />
           {code`}`}
+        </>
+      ) : whereClausePresent ? (
+        <>
+          <hbr />
+          {"{"}
+          <hbr />
+          {"}"}
         </>
       ) : (
         code` {}`

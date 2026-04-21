@@ -22,7 +22,11 @@ import { AttributeList } from "./attribute.js";
 import { DocComment } from "./doc-comment.js";
 import { Parameters } from "./parameters.js";
 import type { TypeParameterProp } from "./type-parameters.js";
-import { TypeParameters, WhereClause } from "./type-parameters.js";
+import {
+  hasWhereClauseBounds,
+  TypeParameters,
+  WhereClause,
+} from "./type-parameters.js";
 import {
   type RustVisibilityProps,
   toRustVisibility,
@@ -85,15 +89,30 @@ export function FunctionDeclaration(props: FunctionDeclarationProps) {
     : [];
   const hasBody = bodyChildren.length > 0;
   const isForwardDecl = !hasBody && parentScope instanceof RustTraitScope;
+  const whereClausePresent = hasWhereClauseBounds(props.whereClause);
+  const openBrace = whereClausePresent ? (
+    <>
+      <hbr />
+      {"{"}
+    </>
+  ) : (
+    " {"
+  );
   const body = hasBody ? (
     <>
-      {" {"}
+      {openBrace}
       <Indent>{bodyChildren}</Indent>
       <hbr />
       {"}"}
     </>
   ) : isForwardDecl ? (
     ";"
+  ) : whereClausePresent ? (
+    <>
+      {openBrace}
+      <hbr />
+      {"}"}
+    </>
   ) : (
     " {}"
   );

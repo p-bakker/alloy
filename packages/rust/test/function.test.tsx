@@ -254,8 +254,62 @@ describe("FunctionDeclaration", () => {
     ).toRenderTo(d`
       fn map<T, U: Display>(item: T) -> U
       where
-          U: Clone, {}
+          U: Clone,
+      {
+      }
     `);
+  });
+
+  it("moves body opening brace to its own line when where clause is present", () => {
+    const source = toSourceText(
+      <FunctionDeclaration
+        name="map"
+        parameters={[{ name: "item", type: "T" }]}
+        returnType="U"
+        typeParameters={[{ name: "T" }, { name: "U", constraint: "Display" }]}
+        whereClause="U: Clone"
+      >
+        {"item"}
+      </FunctionDeclaration>,
+    );
+
+    expect(source).toEqual(d`
+      fn map<T, U: Display>(item: T) -> U
+      where
+          U: Clone,
+      {
+          item
+      }
+    `);
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
+  });
+
+  it("keeps body opening brace glued when no where clause is present", () => {
+    const source = toSourceText(
+      <FunctionDeclaration name="run">{"let x = 1;"}</FunctionDeclaration>,
+    );
+
+    expect(source).toEqual(d`
+      fn run() {
+          let x = 1;
+      }
+    `);
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
+  });
+
+  it("treats an empty whereClause array as no where clause", () => {
+    const source = toSourceText(
+      <FunctionDeclaration name="run" whereClause={[]}>
+        {"let x = 1;"}
+      </FunctionDeclaration>,
+    );
+
+    expect(source).toEqual(d`
+      fn run() {
+          let x = 1;
+      }
+    `);
+    expect(() => checkRustfmtAllEditions(source)).not.toThrow();
   });
 
   it("breaks a trait method where-clause across lines with no trailing comma", () => {

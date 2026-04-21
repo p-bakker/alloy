@@ -79,6 +79,18 @@ export function TypeParameters(props: TypeParametersProps) {
   );
 }
 
+/**
+ * Returns `true` when the given `whereClause` children would emit at least one
+ * bound. Used by item callers (`fn`, `impl`, `trait`) to decide whether the
+ * body `{` must move to its own line — rustfmt requires the opening brace on
+ * its own line whenever a where clause is present.
+ */
+export function hasWhereClauseBounds(
+  children: Children | Children[] | undefined,
+): boolean {
+  return normaliseBounds(children).length > 0;
+}
+
 export function WhereClause(props: WhereClauseProps) {
   const bounds = normaliseBounds(props.children);
   if (bounds.length === 0) {
