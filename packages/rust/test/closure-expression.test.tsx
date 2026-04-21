@@ -96,6 +96,56 @@ describe("ClosureExpression", () => {
     `);
   });
 
+  it("renders a no-parameter closure", () => {
+    expect(inFile(<ClosureExpression>{code`value`}</ClosureExpression>))
+      .toRenderTo(d`
+      || value
+    `);
+  });
+
+  it("keeps a short parameter list flat", () => {
+    expect(
+      inFile(
+        <ClosureExpression parameters={[{ name: "a" }, { name: "b" }]}>
+          {code`a + b`}
+        </ClosureExpression>,
+      ),
+    ).toRenderTo(d`
+      |a, b| a + b
+    `);
+  });
+
+  it("wraps a long parameter list", () => {
+    expect(
+      inFile(
+        <ClosureExpression
+          parameters={[
+            {
+              name: "first_long_parameter_name",
+              type: "SomeExtremelyLongTypeName",
+            },
+            {
+              name: "second_long_parameter_name",
+              type: "AnotherVeryLongTypeName",
+            },
+            {
+              name: "third_long_parameter_name",
+              type: "ThirdExtremelyLongTypeName",
+            },
+          ]}
+        >
+          {code`body`}
+        </ClosureExpression>,
+      ),
+    ).toRenderTo(d`
+      |
+          first_long_parameter_name: SomeExtremelyLongTypeName,
+          second_long_parameter_name: AnotherVeryLongTypeName,
+          third_long_parameter_name: ThirdExtremelyLongTypeName
+      | body
+    `);
+  });
+
   it("stc wrappers render the same output", () => {
     expect(
       inFile(

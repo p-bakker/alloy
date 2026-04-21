@@ -1,6 +1,8 @@
 import type { Children } from "@alloy-js/core";
 import { For, Indent, isComponentCreator } from "@alloy-js/core";
 
+import { ArgList } from "./primitives/arg-list.js";
+
 export interface ClosureParameter {
   name: string;
   type?: Children;
@@ -75,19 +77,19 @@ export function ClosureExpression(props: ClosureExpressionProps) {
   const hasReturnType = typeof props.returnType !== "undefined";
   const renderAsBlock = shouldRenderBlock(bodyStatements, hasReturnType);
 
+  const paramItems = parameters.map((parameter) => (
+    <>
+      {parameter.name}
+      {parameter.type ? <>: {parameter.type}</> : null}
+    </>
+  ));
+
   return (
     <>
       {props.move ? "move " : ""}
-      {"|"}
-      <For each={parameters} joiner={", "}>
-        {(parameter) => (
-          <>
-            {parameter.name}
-            {parameter.type ? <>: {parameter.type}</> : null}
-          </>
-        )}
-      </For>
-      {"|"}
+      <ArgList open="|" close="|" trailingComma={false}>
+        {paramItems}
+      </ArgList>
       {hasReturnType ? (
         <>
           {" "}
