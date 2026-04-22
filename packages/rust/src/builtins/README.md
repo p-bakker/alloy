@@ -116,13 +116,13 @@ This produces `~/rustdoc-output/doc/{core,alloc,std}.json`.
 From the repository root:
 
 ```sh
-npx tsx packages/rust/scripts/generate-crate-descriptor.ts \
+npx tsx packages/rust/scripts/generate-crate-descriptor.tsx \
   ~/rustdoc-output/doc/core.json --builtin
 
-npx tsx packages/rust/scripts/generate-crate-descriptor.ts \
+npx tsx packages/rust/scripts/generate-crate-descriptor.tsx \
   ~/rustdoc-output/doc/alloc.json --builtin
 
-npx tsx packages/rust/scripts/generate-crate-descriptor.ts \
+npx tsx packages/rust/scripts/generate-crate-descriptor.tsx \
   ~/rustdoc-output/doc/std.json --builtin \
   --prelude --prelude-source ~/rustdoc-output/doc/core.json \
   --merge-from ~/rustdoc-output/doc/core.json \
@@ -144,7 +144,7 @@ The generator works with any crate's rustdoc JSON:
 ```sh
 # In a project that depends on serde
 RUSTDOCFLAGS="-Z unstable-options --output-format json" cargo +nightly doc
-npx tsx packages/rust/scripts/generate-crate-descriptor.ts target/doc/serde.json
+npx tsx packages/rust/scripts/generate-crate-descriptor.tsx target/doc/serde.json
 ```
 
 This generates a descriptor directory with versioned dependency info (the version goes into Cargo.toml `[dependencies]`).
@@ -160,7 +160,7 @@ For best results, add `--cfg docsrs` to `RUSTDOCFLAGS` when generating rustdoc J
 RUSTDOCFLAGS="-Z unstable-options --output-format json --cfg docsrs" \
   cargo +nightly doc --no-deps -p serde
 
-npx tsx packages/rust/scripts/generate-crate-descriptor.ts \
+npx tsx packages/rust/scripts/generate-crate-descriptor.tsx \
   target/doc/serde.json \
   --extract-features \
   --import-base "@alloy-js/rust" \
@@ -177,7 +177,7 @@ Serializer: { kind: "trait" },
 
 ## How the generator works
 
-The generic tool (`scripts/generate-crate-descriptor.ts`):
+The generic tool (`scripts/generate-crate-descriptor.tsx`):
 
 1. **Walks the module tree** from the root, recording public symbols with their rustdoc item IDs.
 
@@ -196,7 +196,7 @@ The generic tool (`scripts/generate-crate-descriptor.ts`):
 ### CLI options
 
 ```
-npx tsx generate-crate-descriptor.ts <rustdoc.json> [options]
+npx tsx generate-crate-descriptor.tsx <rustdoc.json> [options]
 
   --builtin                Mark as builtin (no Cargo.toml dependency)
   --prelude                Generate prelude.ts with PRELUDE_TYPES sets
