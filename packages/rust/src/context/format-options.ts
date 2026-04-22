@@ -60,6 +60,40 @@ export interface RustFormatOptions extends Omit<
    * `"Compressed"` (fill-style horizontal packing) is deferred.
    */
   fnParamsLayout?: "Tall" | "Vertical";
+
+  /**
+   * Emitter-policy options that influence rendering but don't
+   * correspond to a rustfmt configuration key. Grouped under their own
+   * sub-object so "emitter.<name>" reads clearly in documentation and
+   * so future emitter knobs (`emitter.groupImportsByOrigin`, …) slot in
+   * beside `autoBlankLines` without cluttering the top level.
+   */
+  emitter?: RustEmitterOptions;
+}
+
+/**
+ * Emitter-policy sub-object on `RustFormatOptions`. These fields
+ * influence how the Rust emitter lays out output at seams rustfmt
+ * doesn't have an opinion about, and live apart from the rustfmt-
+ * aligned fields so the two groups never get confused.
+ */
+export interface RustEmitterOptions {
+  /**
+   * When true (default), the Rust emitter auto-inserts a single blank
+   * line at the idiomatic places: between top-level items in a source
+   * file (where the two adjacent items are not both the same
+   * "packable" kind — `const`, `static`, `type`), and between methods
+   * or between associated-item groups in `impl` and `trait` bodies. A
+   * manual break already authored by the caller suppresses the
+   * auto-insertion at that seam.
+   *
+   * Detection is shallow — opaque user components whose output ends in
+   * a hardline are not inspected. If a user wraps items in such
+   * components and gets doubled blank lines as a result, they can set
+   * this flag to false to fall back to the legacy single-hardline
+   * joining.
+   */
+  autoBlankLines?: boolean;
 }
 
 /** Defaults applied by the Rust format-options provider. */
@@ -69,6 +103,7 @@ export const DEFAULT_RUST_FORMAT_OPTIONS: RustFormatOptions = {
   useSmallHeuristics: "Default",
   shortArrayElementWidthThreshold: 10,
   fnParamsLayout: "Tall",
+  emitter: { autoBlankLines: true },
 };
 
 /**
@@ -95,6 +130,7 @@ export function toCommonFormatOptions(
     singleLineLetElseMaxWidth: _singleLineLetElseMaxWidth,
     shortArrayElementWidthThreshold: _shortArrayElementWidthThreshold,
     fnParamsLayout: _fnParamsLayout,
+    emitter: _emitter,
     ...rest
   } = opts;
   const result: CommonFormatOptions = { ...rest };

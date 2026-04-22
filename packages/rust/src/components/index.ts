@@ -29,6 +29,7 @@ export * from "./parameters.js";
 export * from "./primitives/arg-list.js";
 export * from "./primitives/braced-list.js";
 export * from "./primitives/field-list.js";
+export * from "./primitives/item-list.js";
 export * from "./primitives/param-list.js";
 export * from "./primitives/rust-block.js";
 export * from "./primitives/rust-chain.js";
