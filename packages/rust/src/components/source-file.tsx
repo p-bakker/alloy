@@ -2,7 +2,6 @@ import {
   SourceFile as CoreSourceFile,
   createScope,
   Scope,
-  Show,
   useScope,
   type Children,
 } from "@alloy-js/core";
@@ -16,6 +15,7 @@ import { RustCrateScope } from "../scopes/rust-crate-scope.js";
 import { RustModuleScope } from "../scopes/rust-module-scope.js";
 import { InnerDocComment } from "./doc-comment.js";
 import { ModDeclarations } from "./mod-declarations.js";
+import { ItemList } from "./primitives/item-list.js";
 import { Reference } from "./reference.js";
 import { UseStatements } from "./use-statement.js";
 import { type RustVisibilityProps } from "./visibility.js";
@@ -132,13 +132,15 @@ export function SourceFile(props: SourceFileProps) {
         {declarationScope &&
         declarationScope.childModules.size > 0 &&
         (scope.imports.size > 0 || props.children !== undefined) ? (
-          <hbr />
+          <>
+            <hbr />
+            <hbr />
+          </>
         ) : null}
         <UseStatements />
-        <Show when={scope.imports.size > 0}>
-          <hbr />
-        </Show>
-        {props.children}
+        <ItemList mode="topLevel" leadingBlankIfImports>
+          {props.children}
+        </ItemList>
       </Scope>
     </CoreSourceFile>
   );

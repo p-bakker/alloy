@@ -362,6 +362,7 @@ describe("Rust reference nested scope traversal", () => {
     expect(findFile(output, "src/routes/mod.rs").contents.trim()).toBe(
       d`
       use crate::models::User;
+
       struct Response {
           user: User,
       }
@@ -400,6 +401,7 @@ describe("Rust reference nested scope traversal", () => {
     expect(findFile(output, "src/routes/mod.rs").contents.trim()).toBe(
       d`
       use crate::models::User;
+
       fn lookup(user: User) -> User {}
     `.trim(),
     );
@@ -442,7 +444,9 @@ describe("Rust reference nested scope traversal", () => {
     expect(findFile(output, "src/routes/mod.rs").contents.trim()).toBe(
       d`
       use crate::models::User;
+
       struct Router;
+
       impl Router {
           fn from_user(user: User) -> User {}
       }
@@ -484,6 +488,7 @@ describe("Rust reference nested scope traversal", () => {
     expect(findFile(output, "src/routes/mod.rs").contents.trim()).toBe(
       d`
       use crate::models::User;
+
       trait UserMapper {
           fn map_user(user: User) -> User;
       }

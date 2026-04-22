@@ -191,6 +191,7 @@ describe("EnumDeclaration", () => {
       </Output>,
     ).toRenderTo(d`
       enum Status {}
+
       enum
     `);
   });
@@ -208,6 +209,7 @@ describe("EnumDeclaration", () => {
       </Output>,
     ).toRenderTo(d`
       pub enum Status {}
+
       pub
     `);
   });
@@ -354,6 +356,7 @@ describe("EnumVariant", () => {
       enum Status {
           Pending,
       }
+
       Status::Pending
     `);
   });

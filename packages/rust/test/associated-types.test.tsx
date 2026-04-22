@@ -51,6 +51,7 @@ describe("AssociatedType", () => {
       trait Iterable {
           type Item;
       }
+
       Item:associated-type
     `);
   });
@@ -93,7 +94,9 @@ describe("AssociatedType", () => {
       </Output>,
     ).toRenderTo(d`
       trait Iterable {}
+
       struct Numbers;
+
       impl Iterable for Numbers {
           type Item = u32;
       }

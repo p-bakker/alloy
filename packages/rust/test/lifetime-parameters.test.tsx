@@ -60,9 +60,13 @@ describe("lifetime parameter integration", () => {
       </Output>,
     ).toRenderTo(d`
       fn longest<'a>(a: &'a str, b: &'a str) -> &'a str {}
+
       struct Ref<'a, T: 'a + Clone>;
+
       enum EitherRef<'a, T> {}
+
       trait Reader<'a, T> {}
+
       impl<'a, 'b: 'a, T: 'a + Clone> Ref<'a, T> {}
     `);
   });

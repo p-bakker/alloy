@@ -30,6 +30,7 @@ describe("Rust imports integration", () => {
     expect(findFile(output, "src/lib.rs").contents.trim()).toBe(
       d`
       pub struct User;
+
       type UserAlias = User;
     `.trim(),
     );
@@ -58,6 +59,7 @@ describe("Rust imports integration", () => {
     expect(findFile(output, "src/routes/mod.rs").contents.trim()).toBe(
       d`
       use crate::models::User;
+
       type UserAlias = User;
     `.trim(),
     );
@@ -100,7 +102,9 @@ describe("Rust imports integration", () => {
     expect(findFile(output, "src/routes/mod.rs").contents.trim()).toBe(
       d`
       use crate::models::{Account, User};
+
       type UserAlias = User;
+
       type AccountAlias = Account;
     `.trim(),
     );
@@ -164,8 +168,11 @@ describe("Rust imports integration", () => {
       use serde::de::DeserializeOwned;
 
       use crate::models::User;
+
       type MapAlias = HashMap;
+
       type DeserializeAlias = DeserializeOwned;
+
       type UserAlias = User;
     `.trim(),
     );
@@ -206,8 +213,11 @@ describe("Rust imports integration", () => {
     expect(findFile(output, "src/lib.rs").contents.trim()).toBe(
       d`
       use crate::types::{Option, Result, Vec};
+
       type OptionAlias = Option;
+
       type ResultAlias = Result;
+
       type VecAlias = Vec;
     `.trim(),
     );

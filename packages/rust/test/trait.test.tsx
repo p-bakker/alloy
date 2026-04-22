@@ -90,6 +90,7 @@ describe("TraitDeclaration", () => {
       </Output>,
     ).toRenderTo(d`
       pub(crate) trait CrateVisible {}
+
       pub(super) trait ParentVisible {}
     `);
   });
@@ -278,7 +279,9 @@ describe("TraitDeclaration", () => {
       </Output>,
     ).toRenderTo(d`
       trait Serialize {}
+
       type Alias = Serialize;
+
       trait
     `);
   });
@@ -296,6 +299,7 @@ describe("TraitDeclaration", () => {
       </Output>,
     ).toRenderTo(d`
       pub trait Serialize {}
+
       pub
     `);
   });

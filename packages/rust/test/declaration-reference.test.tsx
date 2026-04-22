@@ -82,6 +82,7 @@ describe("Reference", () => {
       </Output>,
     ).toRenderTo(d`
       struct UserType;
+
       type Alias = UserType;
     `);
   });
@@ -106,6 +107,7 @@ describe("Reference", () => {
       </Output>,
     ).toRenderTo(d`
       struct ResponseType;
+
       type Alias = ResponseType;
     `);
   });

@@ -21,6 +21,7 @@ import {
 import { NamedTypeSymbol } from "../symbols/named-type-symbol.js";
 import { RustOutputSymbol } from "../symbols/rust-output-symbol.js";
 import { AttributeList } from "./attribute.js";
+import { ItemList } from "./primitives/item-list.js";
 import type { TypeParameterProp } from "./type-parameters.js";
 import {
   hasWhereClauseBounds,
@@ -181,7 +182,9 @@ export function ImplBlock(props: ImplBlockProps) {
             code` {`
           )}
           <Scope value={implScope}>
-            <Indent>{bodyChildren}</Indent>
+            <Indent>
+              <ItemList mode="associated">{bodyChildren}</ItemList>
+            </Indent>
           </Scope>
           <hbr />
           {code`}`}

@@ -43,7 +43,7 @@ describe("Attribute", () => {
           </SourceFile>
         </CrateDirectory>
       </Output>,
-    ).toRenderTo("fn my_custom_attribute() {}\n#[my_custom_attribute]\n\n");
+    ).toRenderTo("fn my_custom_attribute() {}\n\n#[my_custom_attribute]\n\n");
   });
 });
 

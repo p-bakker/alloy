@@ -35,7 +35,9 @@ describe("Rust edge cases", () => {
         </Output>,
       ).toRenderTo(d`
         struct Empty;
+
         enum Never {}
+
         fn noop() {}
       `);
     });
@@ -59,6 +61,7 @@ describe("Rust edge cases", () => {
         struct Wrapper {
             value: i32,
         }
+
         enum Unit {
             Only,
         }
@@ -117,7 +120,9 @@ describe("Rust edge cases", () => {
       expect(findFile(output, "src/routes/mod.rs").contents.trim()).toBe(
         d`
           use crate::models::User;
+
           type FirstAlias = User;
+
           type SecondAlias = User;
         `.trim(),
       );
@@ -160,7 +165,9 @@ describe("Rust edge cases", () => {
       expect(findFile(output, "src/routes/mod.rs").contents.trim()).toBe(
         d`
           use crate::models::{Account, User};
+
           type UserAlias = User;
+
           type AccountAlias = Account;
         `.trim(),
       );
@@ -211,8 +218,11 @@ describe("Rust edge cases", () => {
       expect(findFile(output, "src/lib.rs").contents.trim()).toBe(
         d`
           use crate::types::{Option, String, Vec};
+
           type Maybe = Option;
+
           type Items = Vec;
+
           type Name = String;
         `.trim(),
       );
@@ -264,9 +274,11 @@ describe("Rust edge cases", () => {
         </Output>,
       ).toRenderTo(d`
         struct Point;
+
         impl Point {
             fn new() {}
         }
+
         impl Point {
             fn distance(&self) {}
         }

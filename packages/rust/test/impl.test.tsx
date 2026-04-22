@@ -42,6 +42,7 @@ describe("ImplBlock", () => {
 
     expect(source).toEqual(d`
       struct T;
+
       impl T {}
     `);
     expect(() => checkRustfmtAllEditions(source)).not.toThrow();
@@ -64,6 +65,7 @@ describe("ImplBlock", () => {
       </Output>,
     ).toRenderTo(d`
       struct Foo;
+
       impl Foo {
           fn new(&self) {}
       }
@@ -90,7 +92,9 @@ describe("ImplBlock", () => {
       </Output>,
     ).toRenderTo(d`
       trait Printable {}
+
       struct Foo;
+
       impl Printable for Foo {
           fn print(&self) {}
       }
@@ -115,6 +119,7 @@ describe("ImplBlock", () => {
       </Output>,
     ).toRenderTo(d`
       struct Foo;
+
       impl<T, U> Foo {}
     `);
   });
@@ -134,6 +139,7 @@ describe("ImplBlock", () => {
       </Output>,
     ).toRenderTo(d`
       struct Foo;
+
       impl Foo
       where
           T: Clone,
@@ -157,6 +163,7 @@ describe("ImplBlock", () => {
 
     expect(source).toEqual(d`
       struct Foo;
+
       impl Foo
       where
           T: Clone,
@@ -190,6 +197,7 @@ describe("ImplBlock", () => {
       </Output>,
     ).toRenderTo(d`
       struct Holder<T>;
+
       impl<T> Holder<T>
       where
           T: Clone,
@@ -218,9 +226,11 @@ describe("ImplBlock", () => {
       </Output>,
     ).toRenderTo(d`
       struct Foo;
+
       impl Foo {
           fn run(&self) {}
       }
+
       run
     `);
   });
@@ -242,7 +252,9 @@ describe("ImplBlock", () => {
       </Output>,
     ).toRenderTo(d`
       struct Foo;
+
       impl Foo {}
+
       impl Vec<T> {}
     `);
   });
@@ -267,8 +279,11 @@ describe("ImplBlock", () => {
       </Output>,
     ).toRenderTo(d`
       trait Displayable {}
+
       struct Foo;
+
       impl Displayable for Foo {}
+
       impl Display for Vec<T> {}
     `);
   });
@@ -294,6 +309,7 @@ describe("ImplBlock", () => {
       </Output>,
     ).toRenderTo(d`
       struct Store<K, V>;
+
       impl<K, V> Store<K, V> {
           fn new(&self) {}
       }
@@ -324,7 +340,9 @@ describe("ImplBlock", () => {
       </Output>,
     ).toRenderTo(d`
       trait Displayable {}
+
       struct Store<K, V>;
+
       impl<K, V> Displayable for Store<K, V> {
           fn fmt(&self) {}
       }
@@ -350,6 +368,7 @@ describe("ImplBlock", () => {
       </Output>,
     ).toRenderTo(d`
       enum Result<T, E> {}
+
       impl<T, E> Result<T, E>
       where
           T: Clone,
@@ -376,6 +395,7 @@ describe("ImplBlock", () => {
       </Output>,
     ).toRenderTo(d`
       struct Foo;
+
       #[automatically_derived]
       impl Foo {}
     `);
@@ -405,7 +425,9 @@ describe("ImplBlock", () => {
       </Output>,
     ).toRenderTo(d`
       trait Display {}
+
       struct Foo;
+
       #[automatically_derived]
       impl Display for Foo {
           fn fmt(&self) {}

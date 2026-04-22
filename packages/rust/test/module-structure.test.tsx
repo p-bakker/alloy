@@ -87,6 +87,7 @@ describe("Module structure integration", () => {
       d`
         pub mod alpha;
         mod zebra;
+
         fn root() {}
       `.trim(),
     );
@@ -114,6 +115,7 @@ describe("Module structure integration", () => {
       d`
         mod internal;
         pub mod v1;
+
         fn api_root() {}
       `.trim(),
     );
@@ -218,6 +220,7 @@ describe("Module structure integration", () => {
     expect(findFile(output, "src/services/mod.rs").contents.trim()).toBe(
       d`
         use crate::models::User;
+
         type UserAlias = User;
       `.trim(),
     );
@@ -271,6 +274,7 @@ describe("Module structure integration", () => {
     expect(findFile(output, "src/services/mod.rs").contents.trim()).toBe(
       d`
         use crate::models::User;
+
         pub fn greet(user: &User) -> String {
             format!("Hello, {}!", user.name)
         }

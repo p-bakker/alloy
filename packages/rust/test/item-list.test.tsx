@@ -4,9 +4,11 @@ import { describe, expect, it } from "vitest";
 import {
   AssociatedType,
   Attribute,
+  ConstDeclaration,
   DocComment,
   FunctionDeclaration,
   ImplBlock,
+  StructDeclaration,
 } from "../src/components/index.js";
 import { ItemList } from "../src/components/primitives/item-list.js";
 import { RustFormatOptions } from "../src/context/format-options.js";
@@ -81,6 +83,121 @@ describe("ItemList — topLevel mode, autoBlankLines on", () => {
   it("emits nothing for empty children", () => {
     const src = toSourceText(<ItemList mode="topLevel">{[]}</ItemList>);
     expect(src).toBe("");
+  });
+
+  it("inserts a blank between two StructDeclarations with no authored marker", () => {
+    // The runs-based policy required an authored `<hbr/>` between
+    // siblings to insert a blank. Under default-on auto-insertion the
+    // blank fires without any authored marker.
+    const src = toSourceText(
+      <ItemList mode="topLevel">
+        <StructDeclaration name="A" />
+        <StructDeclaration name="B" />
+      </ItemList>,
+    );
+    expect(src).toBe(["struct A;", "", "struct B;"].join("\n"));
+  });
+
+  it("keeps exactly one blank between two StructDeclarations with one authored <hbr/>", () => {
+    // Authored markers suppress auto-insertion (don't double it).
+    const src = toSourceText(
+      <ItemList mode="topLevel">
+        <StructDeclaration name="A" />
+        <hbr />
+        <StructDeclaration name="B" />
+      </ItemList>,
+    );
+    expect(src).toBe(["struct A;", "", "struct B;"].join("\n"));
+  });
+
+  it("treats a raw string between two structs as its own glue item", () => {
+    // Glue arriving between real items is an item in its own right —
+    // a blank line fires on both sides rather than the glue attaching
+    // silently as prelude of the next real item. Mirrors the
+    // raw-text-macro-before-const shape in rust-example-timovv.
+    const src = toSourceText(
+      <ItemList mode="topLevel">
+        <StructDeclaration name="A" />
+        {"// a note\n"}
+        <StructDeclaration name="B" />
+      </ItemList>,
+    );
+    expect(src).toBe(
+      ["struct A;", "", "// a note", "", "struct B;"].join("\n"),
+    );
+  });
+
+  it("treats a decoration+glue run before a real item as its own glue item", () => {
+    // `#[macro_export]` looks like a decoration (raw `#[` string) but
+    // is followed by raw-string glue that doesn't terminate in a real
+    // item boundary before the next real sibling. The whole run must
+    // form a single item so the blank fires between it and the
+    // following ConstDeclaration.
+    const src = toSourceText(
+      <ItemList mode="topLevel">
+        {"#[macro_export]"}
+        {"\nmacro_rules! m { () => {}; }"}
+        <ConstDeclaration name="K" type="u32">
+          1
+        </ConstDeclaration>
+      </ItemList>,
+    );
+    expect(src).toBe(
+      [
+        "#[macro_export]",
+        "macro_rules! m { () => {}; }",
+        "",
+        "const K: u32 = 1;",
+      ].join("\n"),
+    );
+  });
+
+  it("still attaches a pure-decoration run as prelude of the next real item", () => {
+    // A run consisting entirely of recognised decorations (doc
+    // comment + outer attribute) attaches as prelude to the following
+    // real item rather than splitting off into its own glue item.
+    const src = toSourceText(
+      <ItemList mode="topLevel">
+        <StructDeclaration name="A" />
+        <DocComment>docs</DocComment>
+        <Attribute name="inline" />
+        <StructDeclaration name="B" />
+      </ItemList>,
+    );
+    expect(src).toBe(
+      ["struct A;", "", "/// docs", "#[inline]", "struct B;"].join("\n"),
+    );
+  });
+
+  it("filters falsy JSX entries and blanks between real items", () => {
+    const src = toSourceText(
+      <ItemList mode="topLevel">
+        {[
+          <StructDeclaration name="A" />,
+          undefined,
+          null,
+          false,
+          <StructDeclaration name="B" />,
+        ]}
+      </ItemList>,
+    );
+    expect(src).toBe(["struct A;", "", "struct B;"].join("\n"));
+  });
+
+  it("does not blank between adjacent same-kind packable ConstDeclarations", () => {
+    // Packable-same-kind: two adjacent `const`s pack with a single
+    // newline, not a blank line, matching stdlib.
+    const src = toSourceText(
+      <ItemList mode="topLevel">
+        <ConstDeclaration name="A" type="u32">
+          1
+        </ConstDeclaration>
+        <ConstDeclaration name="B" type="u32">
+          2
+        </ConstDeclaration>
+      </ItemList>,
+    );
+    expect(src).toBe(["const A: u32 = 1;", "const B: u32 = 2;"].join("\n"));
   });
 });
 

@@ -5,6 +5,7 @@ use std::time::{Duration, Instant};
 use crate::config::Config;
 use crate::error::{Result, StoreError};
 use crate::traits::Cacheable;
+
 /// Core storage engine for the key-value store.
 ///
 /// Provides a generic, thread-safe store with support
@@ -19,6 +20,7 @@ pub enum EntryStatus {
     /// The entry was removed to make room for new entries.
     Evicted,
 }
+
 /// A single entry in the store, holding a value and metadata.
 #[derive(Debug, Clone)]
 pub struct Entry<V: Clone> {
@@ -27,12 +29,14 @@ pub struct Entry<V: Clone> {
     pub ttl: Option<Duration>,
     pub status: EntryStatus,
 }
+
 /// A generic key-value store with capacity limits and TTL support.
 pub struct Store<K: Eq + Hash + Clone, V: Clone + Send + Sync> {
     data: HashMap<K, Entry<V>>,
     max_capacity: usize,
     default_ttl: Option<Duration>,
 }
+
 impl<K: Eq + Hash + Clone, V: Clone + Send + Sync> Store<K, V> {
     /// Creates a new store from the given configuration.
     pub fn new(config: Config) -> Self {
@@ -42,6 +46,7 @@ impl<K: Eq + Hash + Clone, V: Clone + Send + Sync> Store<K, V> {
             default_ttl: config.default_ttl,
         }
     }
+
     /// Inserts a value into the store, returning an error if full.
     pub fn insert(&mut self, key: K, value: V) -> Result<()> {
         if self.data.len() >= self.max_capacity && !self.data.contains_key(&key) {
@@ -56,6 +61,7 @@ impl<K: Eq + Hash + Clone, V: Clone + Send + Sync> Store<K, V> {
         self.data.insert(key, entry);
         Ok(())
     }
+
     /// Retrieves a value by key, checking for expiration.
     pub fn get(&self, key: &K) -> Result<&V> {
         match self.data.get(key) {
@@ -73,6 +79,7 @@ impl<K: Eq + Hash + Clone, V: Clone + Send + Sync> Store<K, V> {
             None => Err(StoreError::NotFound),
         }
     }
+
     /// Removes an entry from the store.
     pub fn remove(&mut self, key: &K) -> Result<V> {
         self.data
@@ -80,16 +87,19 @@ impl<K: Eq + Hash + Clone, V: Clone + Send + Sync> Store<K, V> {
             .map(|entry| entry.value)
             .ok_or(StoreError::NotFound)
     }
+
     /// Returns the number of entries in the store.
     #[inline]
     pub fn len(&self) -> usize {
         self.data.len()
     }
+
     /// Returns true if the store is empty.
     #[inline]
     pub fn is_empty(&self) -> bool {
         self.data.is_empty()
     }
+
     /// Evicts all expired entries from the store.
     pub fn evict_expired(&mut self) -> usize {
         let before = self.data.len();
@@ -103,13 +113,16 @@ impl<K: Eq + Hash + Clone, V: Clone + Send + Sync> Store<K, V> {
         before - self.data.len()
     }
 }
+
 impl<K: Eq + Hash + Clone, V: Clone + Send + Sync> Cacheable<V> for Store<K, V> {
     fn cache_key(&self) -> String {
         format!("store::{}", self.data.len())
     }
+
     fn is_expired(&self) -> bool {
         self.data.is_empty()
     }
+
     fn cached_value(&self) -> Option<&V> {
         None
     }

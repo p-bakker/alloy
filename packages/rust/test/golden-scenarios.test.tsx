@@ -65,6 +65,7 @@ describe("Golden scenarios", () => {
           pub x: f64,
           pub y: f64,
       }
+
       impl Point {
           pub fn new(x: f64, y: f64) -> Self {
               Self { x, y }
@@ -126,6 +127,7 @@ describe("Golden scenarios", () => {
     expect(findFile(output, "src/services/mod.rs").contents.trim()).toBe(
       d`
         use crate::models::User;
+
         pub fn greet(user: &User) -> String {
             format!("Hello, {}!", user.name)
         }
@@ -161,9 +163,11 @@ describe("Golden scenarios", () => {
       trait Greetable {
           fn greet(&self) -> String;
       }
+
       pub struct User {
           pub name: String,
       }
+
       impl Greetable for User {
           fn greet(&self) -> String {
               format!("Hello, {}!", self.name)
@@ -221,6 +225,7 @@ describe("Golden scenarios", () => {
     expect(findFile(output, "src/lib.rs").contents.trim()).toBe(
       d`
         use serde::Serialize;
+
         type Serializable = Serialize;
       `.trim(),
     );

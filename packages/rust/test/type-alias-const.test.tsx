@@ -115,7 +115,9 @@ describe("TypeAlias", () => {
       </Output>,
     ).toRenderTo(d`
       pub(crate) type ResponseValue = String;
+
       type-alias|type-alias|pub(crate)
+
       ResponseValue
     `);
   });
@@ -135,6 +137,7 @@ describe("TypeAlias", () => {
       </Output>,
     ).toRenderTo(d`
       pub type ResponseValue = String;
+
       type-alias|type-alias|pub
     `);
   });
@@ -240,7 +243,9 @@ describe("ConstDeclaration", () => {
       </Output>,
     ).toRenderTo(d`
       pub const MAX_ITEMS: usize = 16;
+
       const|pub
+
       MAX_ITEMS
     `);
   });
@@ -260,6 +265,7 @@ describe("ConstDeclaration", () => {
       </Output>,
     ).toRenderTo(d`
       pub const MAX_ITEMS: usize = 16;
+
       const|pub
     `);
   });

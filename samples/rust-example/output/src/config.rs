@@ -1,7 +1,9 @@
 use std::time::Duration;
+
 /// Configuration for the key-value store.
 pub const MAX_ENTRIES: usize = 10_000;
 pub const DEFAULT_TTL_SECS: u64 = 3600;
+
 /// Configuration options for initializing a Store.
 ///
 /// Use the builder methods to customize behavior.
@@ -12,6 +14,7 @@ pub struct Config {
     pub enable_eviction: bool,
     pub name: String,
 }
+
 impl Config {
     /// Creates a new Config with sensible defaults.
     pub fn new() -> Self {
@@ -22,6 +25,7 @@ impl Config {
             name: String::from("default"),
         }
     }
+
     /// Sets the maximum number of entries.
     #[must_use]
     pub fn with_max_capacity(self, capacity: usize) -> Self {
@@ -30,6 +34,7 @@ impl Config {
             ..self
         }
     }
+
     /// Sets the default TTL for entries.
     #[must_use]
     pub fn with_ttl(self, ttl: Duration) -> Self {
@@ -38,6 +43,7 @@ impl Config {
             ..self
         }
     }
+
     /// Disables automatic eviction of expired entries.
     #[must_use]
     pub fn disable_eviction(self) -> Self {
@@ -46,6 +52,7 @@ impl Config {
             ..self
         }
     }
+
     /// Sets the name of this store instance.
     #[must_use]
     pub fn with_name(self, name: &str) -> Self {

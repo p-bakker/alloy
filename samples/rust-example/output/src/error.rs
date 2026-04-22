@@ -1,4 +1,5 @@
 use std::fmt::{Display, Formatter};
+
 /// Error types for the key-value store.
 #[derive(Debug, Clone)]
 pub enum StoreError {
@@ -11,6 +12,7 @@ pub enum StoreError {
     /// Failed to acquire a lock on the store.
     LockError(String),
 }
+
 impl Display for StoreError {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
@@ -21,5 +23,6 @@ impl Display for StoreError {
         }
     }
 }
+
 /// A specialized Result type for store operations.
 pub type Result<T> = std::result::Result<T, StoreError>;

@@ -323,7 +323,7 @@ describe("std builtins", () => {
     );
 
     expect(findFile(output, "src/lib").contents.trim()).toBe(
-      ["use std::collections::HashMap;", "type Map = HashMap;"].join("\n"),
+      ["use std::collections::HashMap;", "", "type Map = HashMap;"].join("\n"),
     );
 
     // std should NOT appear in Cargo.toml dependencies
@@ -341,7 +341,7 @@ describe("std builtins", () => {
     );
 
     expect(findFile(output, "src/lib").contents.trim()).toBe(
-      ["use std::fmt::Display;", "type Fmt = Display;"].join("\n"),
+      ["use std::fmt::Display;", "", "type Fmt = Display;"].join("\n"),
     );
   });
 
@@ -357,7 +357,7 @@ describe("std builtins", () => {
     );
 
     expect(findFile(output, "src/lib").contents.trim()).toBe(
-      ["use std::collections::HashMap;", "type Map = HashMap;"].join("\n"),
+      ["use std::collections::HashMap;", "", "type Map = HashMap;"].join("\n"),
     );
   });
 
@@ -373,7 +373,7 @@ describe("std builtins", () => {
     );
 
     expect(findFile(output, "src/lib").contents.trim()).toBe(
-      ["use std::collections::HashMap;", "type Map = HashMap;"].join("\n"),
+      ["use std::collections::HashMap;", "", "type Map = HashMap;"].join("\n"),
     );
   });
 
@@ -556,7 +556,7 @@ describe("core builtins", () => {
     );
 
     expect(findFile(output, "src/lib").contents.trim()).toBe(
-      ["use core::fmt::Display;", "type Fmt = Display;"].join("\n"),
+      ["use core::fmt::Display;", "", "type Fmt = Display;"].join("\n"),
     );
   });
 });

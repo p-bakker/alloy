@@ -25,6 +25,7 @@ describe("ModDeclarations", () => {
     ).toRenderTo(d`
       pub mod alpha;
       mod zebra;
+
       fn main() {}
     `);
   });
@@ -45,6 +46,7 @@ describe("ModDeclarations", () => {
     expect(findFile(output, "src/net/mod.rs").contents).toContain(d`
       pub mod alpha;
       mod zebra;
+
       fn net() {}
     `);
   });
@@ -100,6 +102,7 @@ describe("ModDeclarations", () => {
     expect(findFile(output, "src/lib.rs").contents).toContain(d`
       #[cfg(test)]
       mod tests;
+
       fn main() {}
     `);
   });
@@ -116,6 +119,7 @@ describe("ModDeclarations", () => {
     ).toRenderTo(d`
       #[cfg(test)]
       pub mod tests;
+
       fn main() {}
     `);
   });

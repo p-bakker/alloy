@@ -105,6 +105,7 @@ describe("WhileExpression + LoopExpression", () => {
       'retry: while let Some(item) = queue.pop_front() {
           process(item);
       }
+
       'outer: loop {
           break;
       }

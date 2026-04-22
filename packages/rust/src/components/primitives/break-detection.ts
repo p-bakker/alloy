@@ -17,13 +17,11 @@
  * component (no hooks, no context access).
  */
 
-import type { Children } from "@alloy-js/core";
+import type { Children, AlloyNode, ElementNode } from "@alloy-js/core";
 import { ELEMENT_NODE, isComponentCreator } from "@alloy-js/core";
-import type { AlloyNode, ElementNode } from "@alloy-js/core";
 
 import { Attribute, InnerAttribute } from "../attribute.js";
 import { DocComment, InnerDocComment } from "../doc-comment.js";
-
 
 function isElementNode(child: unknown): child is ElementNode {
   return (

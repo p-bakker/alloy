@@ -375,6 +375,7 @@ describe("StructDeclaration", () => {
       </Output>,
     ).toRenderTo(d`
       struct Foo;
+
       struct
     `);
   });

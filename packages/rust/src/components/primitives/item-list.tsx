@@ -1,6 +1,6 @@
-import type { AlloyNode, ElementNode } from "@alloy-js/core";
-import type { Children } from "@alloy-js/core";
-import { ELEMENT_NODE,
+import type { AlloyNode, ElementNode, Children } from "@alloy-js/core";
+import {
+  ELEMENT_NODE,
   isComponentCreator,
   memo,
   useScope,
@@ -10,10 +10,13 @@ import { useRustFormatOptions } from "../../context/format-options.js";
 import { RustModuleScope } from "../../scopes/rust-module-scope.js";
 import { AssociatedType } from "../associated-type.js";
 import { ConstDeclaration } from "../const-declaration.js";
+import { EnumDeclaration } from "../enum-declaration.js";
 import { FunctionDeclaration } from "../function-declaration.js";
 import { ImplBlock } from "../impl-block.js";
 import { MethodChainCall } from "../method-chain-expression.js";
 import { StaticDeclaration } from "../static-declaration.js";
+import { StructDeclaration } from "../struct-declaration.js";
+import { TraitDeclaration } from "../trait-declaration.js";
 import { TypeAlias } from "../type-alias.js";
 import { UseStatement } from "../use-statement.js";
 import {
@@ -27,18 +30,21 @@ export interface ItemListProps {
   /**
    * The gap-policy context:
    *
-   * - `"topLevel"` — between items in a source file. Each *run* of
-   *   sibling children separated by an authored `<hbr/>` / `<br/>` /
-   *   `<sbr/>` is treated as one logical item; a single authored gap
-   *   marker between two runs is promoted to a blank line **unless**
-   *   both items are the same "packable" kind (`const`, `static`,
-   *   `type`), in which case the caller's single marker passes through
-   *   verbatim so stdlib-style packed runs of same-kind items stay
-   *   packed. Runs that are not separated by an authored marker flow
-   *   through adjacent (the caller did not signal a seam). This
-   *   preserves inline text fragments like `type Alias = {refkey};`
-   *   which JSX splits into multiple sibling children without
-   *   intending them as separate items.
+   * - `"topLevel"` — between items in a source file. Real top-level
+   *   items (`ConstDeclaration`, `StaticDeclaration`, `TypeAlias`,
+   *   `FunctionDeclaration`, `ImplBlock`, `TraitDeclaration`,
+   *   `StructDeclaration`, `EnumDeclaration`) each define an item;
+   *   decorations (doc comments, outer attributes) and other glue
+   *   between two real items attach to the next item's prelude. A
+   *   blank line is inserted between every pair of adjacent items by
+   *   default, **except** when both sides are the same "packable"
+   *   kind (`const`, `static`, `type`) — stdlib-style packed runs of
+   *   same-kind items stay packed. Authored gap markers (`<hbr/>` /
+   *   `<br/>` / `<sbr/>`) suppress the auto-blank to avoid doubling:
+   *   the total newline count at a seam is clamped to match the auto
+   *   decision (2 newlines for a blank, 1 for packed). Strings /
+   *   numbers / unknown components between real items are "glue" and
+   *   flow through onto the next item's prelude.
    * - `"associated"` — between items inside an `impl` or `trait` body.
    *   Each real-content sibling is a distinct item; a preceding run of
    *   decorations (doc comments, outer attributes) attaches to the
@@ -62,7 +68,6 @@ export interface ItemListProps {
    */
   leadingBlankIfImports?: boolean;
 }
-
 
 function isElementNode(child: unknown): child is ElementNode {
   return (
@@ -199,6 +204,25 @@ function classifyTopLevelItem(child: Children): TopLevelKind {
 }
 
 /**
+ * Is `child` a recognised top-level real item? Real items carry
+ * semantic identity — they're the things a blank line goes around.
+ * Glue (strings, numbers, unknown components, intrinsics) flows
+ * through attached to the nearest real item.
+ */
+function isTopLevelRealItem(child: Children): boolean {
+  return (
+    isComponentCreator(child, ConstDeclaration) ||
+    isComponentCreator(child, StaticDeclaration) ||
+    isComponentCreator(child, TypeAlias) ||
+    isComponentCreator(child, FunctionDeclaration) ||
+    isComponentCreator(child, ImplBlock) ||
+    isComponentCreator(child, TraitDeclaration) ||
+    isComponentCreator(child, StructDeclaration) ||
+    isComponentCreator(child, EnumDeclaration)
+  );
+}
+
+/**
  * True when `a` and `b` are creators for the SAME packable component
  * kind (both `ConstDeclaration`, both `StaticDeclaration`, both
  * `TypeAlias`). Used by `renderTopLevel` to decide when a pair of
@@ -245,18 +269,19 @@ interface Item {
  *
  * Behaviour depends on `mode`:
  *
- * - `"topLevel"` (source-file children): scans siblings for authored
- *   gap markers (`<hbr/>` / `<br/>` / `<sbr/>`). Each contiguous span
- *   of sibling children between authored markers is one logical item;
- *   a run of decorations followed by real content collapses into a
- *   single item's decoration+content. When `autoBlankLines` is `true`
- *   (the default), a run of exactly one authored marker between two
- *   items is promoted to a blank line (double hbr); runs of
- *   two-or-more authored markers pass through untouched. When
- *   `autoBlankLines` is `false`, all authored markers pass through
- *   untouched. This accommodates JSX children like `type Alias =
- *   {refkey};` which expand to multiple sibling children but are a
- *   single logical item — no authored seam, no auto-blank.
+ * - `"topLevel"` (source-file children): walks siblings, splitting
+ *   on recognised real-item components (`StructDeclaration`,
+ *   `FunctionDeclaration`, etc. per `isTopLevelRealItem`).
+ *   Decorations and other glue between real items attach to the
+ *   NEXT item's prelude. When `autoBlankLines` is `true` (the
+ *   default), a blank line fires between every adjacent pair unless
+ *   both sides are the same packable kind (`ConstDeclaration`,
+ *   `StaticDeclaration`, `TypeAlias`). Authored gap markers
+ *   (`<hbr/>` / `<br/>` / `<sbr/>`) count toward the seam's newline
+ *   budget so the caller's explicit spacing doesn't double up on
+ *   auto-insertion. When `autoBlankLines` is `false`, the seam
+ *   collapses to the authored markers (or a single `<hbr/>` if none)
+ *   so output mirrors the legacy jammed-except-where-authored form.
  *
  * - `"associated"` (impl / trait body): each real-content sibling is a
  *   distinct item; a decoration preceding it attaches to that item
@@ -309,14 +334,26 @@ export function ItemList(props: ItemListProps) {
  * with the count of authored gap markers between each adjacent pair
  * and any leading / trailing orphan markers / invisibles.
  *
- * Item boundaries:
- * - A gap marker always closes the current item.
- * - A decoration that appears after the current item already has real
- *   content also closes the current item (the decoration belongs to a
- *   new item).
- * - Otherwise children accumulate into the current item: decorations
- *   into `decorations`, real content into `content`, invisibles into
- *   `content` as passengers.
+ * Grouping model:
+ * - Every sibling is either a **real item** (recognised top-level
+ *   component per `isTopLevelRealItem`), a **gap marker**, an
+ *   **invisible** (registration-only component), a **decoration**
+ *   (doc comment / attribute), or **other glue** (strings, numbers,
+ *   unknown components).
+ * - Real items define item boundaries. A real item starts a new item,
+ *   absorbing any pending prelude glue / decorations collected since
+ *   the previous real item (or start of list).
+ * - Decorations and other glue that appear BETWEEN real items attach
+ *   as the prelude of the NEXT real item.
+ * - A gap marker closes the current pending-glue accumulation into a
+ *   seam count; decorations/glue on either side of an authored marker
+ *   still attach to the next real item's prelude (the marker itself
+ *   only records authored-break count).
+ * - Invisibles ride along on the nearest item as passengers.
+ * - Trailing glue after the last real item becomes that item's
+ *   trailing content. If no real item exists, all accumulated
+ *   glue/decorations flow out as a synthetic single-item so the
+ *   output matches legacy "concatenate all siblings" behaviour.
  */
 function groupTopLevel(normalized: Children[]): {
   items: Item[];
@@ -329,85 +366,152 @@ function groupTopLevel(normalized: Children[]): {
   const markerCounts: number[] = [];
   const leadingMarkers: Children[] = [];
 
-  let current: Item = { decorations: [], content: [] };
-  let hasContent = false;
-  let pendingMarkers: Children[] = [];
+  // Pending buckets accumulated since the last item boundary (or
+  // start of input). When the next real item arrives, pendingPrelude
+  // becomes its decorations+content prelude; pendingInvisible ride
+  // along in content; pendingMarkers count into the seam.
+  let pendingPrelude: Children[] = [];
   let pendingInvisible: Children[] = [];
+  let pendingMarkers: Children[] = [];
   let seenAnyItem = false;
 
-  function currentHasAnything(): boolean {
-    return hasContent || current.decorations.length > 0;
-  }
+  // Track whether the LAST item pushed was a synthetic glue-only
+  // item — used so that trailing glue after a marker can be promoted
+  // to its own synthetic item.
+  let pendingIsAfterMarker = false;
 
-  function flushCurrent(): void {
-    if (!currentHasAnything()) return;
-    items.push(current);
-    current = { decorations: [], content: [] };
-    hasContent = false;
-    seenAnyItem = true;
-  }
-
-  function applyPendingSeam(): void {
-    // Called immediately before adding the first child of a new item
-    // when a previous item exists. Records the authored-marker count
-    // between the previous item and this one.
-    if (items.length > 0 && markerCounts.length < items.length) {
+  function flushPendingAsGlueItem(): void {
+    // Promote accumulated pending glue (+ invisibles) to a synthetic
+    // glue-only item. Used when an authored marker lands in a pure-
+    // glue stream so each side of the marker becomes an item and the
+    // marker sits on a seam between items (enabling auto-blank).
+    if (pendingPrelude.length === 0 && pendingInvisible.length === 0) {
+      return;
+    }
+    if (seenAnyItem) {
       markerCounts.push(pendingMarkers.length);
       pendingMarkers = [];
+    } else {
+      for (const m of pendingMarkers) leadingMarkers.push(m);
+      pendingMarkers = [];
     }
-    // Invisibles accumulated between items attach to the new item so
-    // they render as part of this item's content.
-    if (pendingInvisible.length > 0) {
-      for (const inv of pendingInvisible) current.content.push(inv);
-      pendingInvisible = [];
-    }
+    items.push({
+      decorations: [],
+      content: [...pendingInvisible, ...pendingPrelude],
+    });
+    pendingPrelude = [];
+    pendingInvisible = [];
+    seenAnyItem = true;
+    pendingIsAfterMarker = false;
   }
 
   for (const child of normalized) {
     if (isGapMarker(child)) {
-      if (currentHasAnything()) {
-        flushCurrent();
+      // Flush any pending glue as a synthetic item so the marker
+      // lands on a seam.
+      if (pendingPrelude.length > 0 || pendingInvisible.length > 0) {
+        flushPendingAsGlueItem();
       }
       if (!seenAnyItem) {
         leadingMarkers.push(child);
       } else {
         pendingMarkers.push(child);
       }
+      pendingIsAfterMarker = true;
       continue;
     }
 
     if (isInvisibleComponent(child)) {
-      if (hasContent || current.decorations.length > 0) {
-        current.content.push(child);
+      pendingInvisible.push(child);
+      continue;
+    }
+
+    if (isTopLevelRealItem(child)) {
+      // If pendingPrelude contains any non-decoration child (raw text,
+      // unknown components, etc. — i.e. "glue"), that run stands as
+      // its own item rather than attaching as prelude to this real
+      // item. Pure-decoration runs (doc comments, outer attributes)
+      // still attach as prelude so e.g. `<DocComment/><Struct/>`
+      // remains one decorated item.
+      const preludeHasGlue = pendingPrelude.some((c) => !isDecoration(c));
+      if (preludeHasGlue) {
+        if (seenAnyItem) {
+          markerCounts.push(pendingMarkers.length);
+        } else {
+          for (const m of pendingMarkers) leadingMarkers.push(m);
+        }
+        pendingMarkers = [];
+        items.push({
+          decorations: [],
+          content: [...pendingInvisible, ...pendingPrelude],
+        });
+        pendingPrelude = [];
+        pendingInvisible = [];
+        seenAnyItem = true;
+      }
+
+      // Commit the pending-marker count as the seam between the
+      // previous item (or just-flushed glue item) and this real item.
+      if (seenAnyItem) {
+        markerCounts.push(pendingMarkers.length);
       } else {
-        pendingInvisible.push(child);
+        // Pending markers before the first item are orphan leading
+        // markers — preserve them.
+        for (const m of pendingMarkers) leadingMarkers.push(m);
       }
+      pendingMarkers = [];
+
+      // Any remaining pendingPrelude here is pure-decoration; attach
+      // as the real item's decoration prelude.
+      const item: Item = {
+        decorations: pendingPrelude,
+        content: [...pendingInvisible, child],
+      };
+      pendingPrelude = [];
+      pendingInvisible = [];
+      items.push(item);
+      seenAnyItem = true;
+      pendingIsAfterMarker = false;
       continue;
     }
 
-    if (isDecoration(child)) {
-      if (hasContent) {
-        // Decoration after real content with no gap marker — starts a
-        // new item.
-        flushCurrent();
-      }
-      if (!currentHasAnything()) {
-        applyPendingSeam();
-      }
-      current.decorations.push(child);
-      continue;
-    }
-
-    // Real content child.
-    if (!currentHasAnything()) {
-      applyPendingSeam();
-    }
-    current.content.push(child);
-    hasContent = true;
+    // Decoration or other-glue — accumulate into the prelude of the
+    // next real item (or become trailing content if none follows).
+    pendingPrelude.push(child);
   }
 
-  if (currentHasAnything()) {
-    items.push(current);
+  // Handle leftovers after the last real item.
+  if (items.length === 0) {
+    // No real items at all, no markers encountered. If any visible
+    // glue remains, promote it to a single synthetic item so legacy
+    // "concatenated siblings" rendering is preserved. An invisible-
+    // only residue (e.g. a `SourceFile` that contains only
+    // `UseStatement`s) is left for `trailingInvisible` so downstream
+    // decisions keyed off `items.length` don't see a phantom item.
+    if (pendingPrelude.length > 0) {
+      items.push({
+        decorations: [],
+        content: [...pendingInvisible, ...pendingPrelude],
+      });
+      pendingInvisible = [];
+      pendingPrelude = [];
+    }
+  } else if (
+    pendingIsAfterMarker &&
+    (pendingPrelude.length > 0 || pendingInvisible.length > 0)
+  ) {
+    // Trailing glue sits AFTER an authored marker — promote it to a
+    // synthetic trailing glue-only item so the marker's seam decision
+    // applies symmetrically on both sides.
+    flushPendingAsGlueItem();
+  } else {
+    // Trailing glue with no marker between it and the last real item
+    // — attach as trailing content of the last item.
+    const last = items[items.length - 1];
+    for (const inv of pendingInvisible) last.content.push(inv);
+    for (const g of pendingPrelude) last.content.push(g);
+    pendingInvisible = [];
+    pendingPrelude = [];
   }
 
   return {
@@ -563,71 +667,94 @@ function renderTopLevel(
   for (const m of leadingMarkers) out.push(m);
 
   for (let i = 0; i < items.length; i++) {
-    if (i > 0) {
-      const count = markerCounts[i - 1] ?? 0;
-      const left = items[i - 1];
-      const right = items[i];
-      const leftTail = itemTail(left);
-      const rightHead = itemHead(right);
-      const edgeAlreadyBreaks =
-        (leftTail !== undefined && hasTrailingBreak(leftTail)) ||
-        (rightHead !== undefined && hasLeadingBreak(rightHead));
-
-      // Classify on the real item head, ignoring any decoration
-      // prelude — the semantic identity of the item is carried by its
-      // real-content head, not the doc comment in front of it.
-      const leftClassifier =
-        left.content.length > 0 ? left.content[0] : itemHead(left);
-      const rightClassifier =
-        right.content.length > 0 ? right.content[0] : itemHead(right);
-      const leftKind =
-        leftClassifier !== undefined
-          ? classifyTopLevelItem(leftClassifier)
-          : "fn-like";
-      const rightKind =
-        rightClassifier !== undefined
-          ? classifyTopLevelItem(rightClassifier)
-          : "fn-like";
-      const samePackable =
-        leftKind === "packable" &&
-        rightKind === "packable" &&
-        // Only treat the pair as "same kind" when the classifier
-        // recognises both sides as literally the same component —
-        // otherwise e.g. a `const` adjacent to a `type` would pack,
-        // which isn't what stdlib does.
-        sameComponentKind(leftClassifier, rightClassifier);
-
-      if (count >= 2) {
-        for (let j = 0; j < count; j++) out.push(<hbr />);
-      } else if (count === 1) {
-        out.push(<hbr />);
-        if (autoBlank && !samePackable && !edgeAlreadyBreaks) {
-          out.push(<hbr />);
-        }
-      } else {
-        // Two items with no authored marker between them — the grouper
-        // only produces this when a decoration follows content without
-        // a gap (e.g. `<Fn/><DocComment/><Fn/>`). Auto-blank fires when
-        // the right item carries a decoration and the edges don't
-        // already deliver the newlines.
-        if (
-          autoBlank &&
-          right.decorations.length > 0 &&
-          !samePackable &&
-          !edgeAlreadyBreaks
-        ) {
-          out.push(<hbr />);
-          out.push(<hbr />);
-        }
-        // else: concat (single-run spread case like `type A = {rk};`).
-      }
+    if (i === 0) {
+      emitItem(items[i], out);
+      continue;
     }
-    emitItem(items[i], out);
+
+    const authoredCount = markerCounts[i - 1] ?? 0;
+    const left = items[i - 1];
+    const right = items[i];
+    const leftTail = itemTail(left);
+    const rightHead = itemHead(right);
+    const edgeAlreadyBreaks =
+      (leftTail !== undefined && hasTrailingBreak(leftTail)) ||
+      (rightHead !== undefined && hasLeadingBreak(rightHead));
+
+    // Classify on the real item's content head (ignoring decoration
+    // prelude) — the semantic identity of the item is carried by its
+    // real content, not the doc comment in front of it.
+    const leftClassifier = realItemHead(left);
+    const rightClassifier = realItemHead(right);
+    const leftKind =
+      leftClassifier !== undefined
+        ? classifyTopLevelItem(leftClassifier)
+        : "fn-like";
+    const rightKind =
+      rightClassifier !== undefined
+        ? classifyTopLevelItem(rightClassifier)
+        : "fn-like";
+    const samePackable =
+      leftKind === "packable" &&
+      rightKind === "packable" &&
+      // Only treat the pair as "same kind" when the classifier
+      // recognises both sides as literally the same component —
+      // otherwise e.g. a `const` adjacent to a `type` would pack,
+      // which isn't what stdlib does.
+      sameComponentKind(leftClassifier, rightClassifier);
+
+    if (!autoBlank) {
+      // Flag-off legacy path: honour authored markers verbatim, emit
+      // a single <hbr/> when none authored (so items still line-split).
+      if (authoredCount > 0) {
+        for (let j = 0; j < authoredCount; j++) out.push(<hbr />);
+      } else if (!edgeAlreadyBreaks) {
+        out.push(<hbr />);
+      }
+      emitItem(right, out);
+      continue;
+    }
+
+    // Auto-blank decision: default-on blank line between items,
+    // suppressed only when both sides are same-kind packable items.
+    const wantBlank = !samePackable;
+
+    if (authoredCount >= 2) {
+      // Author already wrote at least a blank line — honour verbatim.
+      for (let j = 0; j < authoredCount; j++) out.push(<hbr />);
+    } else {
+      // Compute how many newlines the ambient edge + authored markers
+      // already contribute; add hbrs to reach the target (2 for a
+      // blank, 1 otherwise).
+      const existing = (edgeAlreadyBreaks ? 1 : 0) + authoredCount;
+      const target = wantBlank ? 2 : 1;
+      // Emit authored markers first (preserve them in the output).
+      for (let j = 0; j < authoredCount; j++) out.push(<hbr />);
+      // Top up with extra hbrs to hit the target.
+      for (let j = existing; j < target; j++) out.push(<hbr />);
+    }
+
+    emitItem(right, out);
   }
 
   for (const inv of trailingInvisible) out.push(inv);
   for (const m of trailingMarkers) out.push(m);
   return <>{out}</>;
+}
+
+/**
+ * Return the first real-item child of an item — the non-decoration
+ * non-invisible content used for classification. For items whose
+ * `content` contains a recognised real item, return it; otherwise
+ * fall back to the decoration head.
+ */
+function realItemHead(item: Item): Children | undefined {
+  for (const c of item.content) {
+    if (isInvisibleComponent(c)) continue;
+    return c;
+  }
+  if (item.decorations.length > 0) return item.decorations[0];
+  return undefined;
 }
 
 function renderAssociated(

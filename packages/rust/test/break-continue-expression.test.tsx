@@ -54,6 +54,7 @@ describe("BreakExpression + ContinueExpression", () => {
       ),
     ).toRenderTo(d`
       break 'outer value
+
       continue 'outer
     `);
   });

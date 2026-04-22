@@ -56,6 +56,7 @@ describe("namekey support", () => {
       pub struct Person {
           pub name: String,
       }
+
       type Alias = Person;
     `);
   });
@@ -78,6 +79,7 @@ describe("namekey support", () => {
       pub struct Person {
           pub name: String,
       }
+
       type Alias = Person;
     `);
   });
@@ -149,9 +151,11 @@ describe("namekey support", () => {
       </Output>,
     ).toRenderTo(d`
       pub struct Person;
+
       pub trait Greetable {
           fn greet(&self) -> String;
       }
+
       impl Greetable for Person {
           fn greet(&self) -> String {
               String::from("hello")
@@ -250,7 +254,9 @@ describe("namekey support", () => {
       </Output>,
     ).toRenderTo(d`
       pub struct Foo;
+
       type A = Foo;
+
       type B = Foo;
     `);
   });

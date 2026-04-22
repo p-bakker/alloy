@@ -42,8 +42,6 @@ export function TraitsModule(props: TraitsModuleProps) {
           }
         />
 
-        <hbr />
-
         <FunctionDeclaration
           name="from_bytes"
           receiver="none"
@@ -75,15 +73,11 @@ export function TraitsModule(props: TraitsModuleProps) {
           returnType="String"
         />
 
-        <hbr />
-
         <FunctionDeclaration
           name="is_expired"
           receiver="&self"
           returnType="bool"
         />
-
-        <hbr />
 
         <FunctionDeclaration
           name="cached_value"

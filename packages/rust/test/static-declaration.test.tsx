@@ -100,6 +100,7 @@ describe("StaticDeclaration", () => {
       </Output>,
     ).toRenderTo(d`
       static SHARED: usize = 10;
+
       static mut LOCAL: usize = 11;
     `);
   });
@@ -119,6 +120,7 @@ describe("StaticDeclaration", () => {
       </Output>,
     ).toRenderTo(d`
       pub(crate) static WORKER_COUNT: usize = 4;
+
       static|pub(crate)
     `);
   });
@@ -138,6 +140,7 @@ describe("StaticDeclaration", () => {
       </Output>,
     ).toRenderTo(d`
       pub static WORKER_COUNT: usize = 4;
+
       static|pub
     `);
   });
@@ -163,6 +166,7 @@ describe("StaticDeclaration", () => {
       </Output>,
     ).toRenderTo(d`
       static GLOBAL_FLAG: bool = true;
+
       GLOBAL_FLAG
     `);
   });

@@ -71,6 +71,7 @@ describe("AwaitExpression", () => {
       ),
     ).toRenderTo(d`
       client.get(url).await
+
       client.get(url).await?
     `);
   });

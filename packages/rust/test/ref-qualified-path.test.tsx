@@ -37,6 +37,7 @@ describe("ref() qualified path rendering", () => {
           Active,
           Pending,
       }
+
       let s = Status::Pending;
     `);
   });
@@ -66,7 +67,9 @@ describe("ref() qualified path rendering", () => {
       `,
       "src/lib.rs": d`
         mod models;
+
         use crate::models::Status;
+
         let s = Status::Pending;
       `,
     });
@@ -105,11 +108,13 @@ describe("ref() qualified path rendering", () => {
       pub struct Config {
           timeout: u64,
       }
+
       impl Config {
           pub fn new() -> Self {
               Self { timeout: 30 }
           }
       }
+
       let c = Config::new();
     `);
   });

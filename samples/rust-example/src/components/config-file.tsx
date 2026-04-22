@@ -92,8 +92,6 @@ export function ConfigFile(props: ConfigFileProps) {
           </StructExpression>
         </FunctionDeclaration>
 
-        <hbr />
-
         <DocComment>Sets the maximum number of entries.</DocComment>
         <FunctionDeclaration
           name="with_max_capacity"
@@ -107,8 +105,6 @@ export function ConfigFile(props: ConfigFileProps) {
             <FieldInit name="max_capacity">capacity</FieldInit>
           </StructExpression>
         </FunctionDeclaration>
-
-        <hbr />
 
         <DocComment>Sets the default TTL for entries.</DocComment>
         <FunctionDeclaration
@@ -126,8 +122,6 @@ export function ConfigFile(props: ConfigFileProps) {
           </StructExpression>
         </FunctionDeclaration>
 
-        <hbr />
-
         <DocComment>Disables automatic eviction of expired entries.</DocComment>
         <FunctionDeclaration
           name="disable_eviction"
@@ -140,8 +134,6 @@ export function ConfigFile(props: ConfigFileProps) {
             <FieldInit name="enable_eviction">false</FieldInit>
           </StructExpression>
         </FunctionDeclaration>
-
-        <hbr />
 
         <DocComment>Sets the name of this store instance.</DocComment>
         <FunctionDeclaration

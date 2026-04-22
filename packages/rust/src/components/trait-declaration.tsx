@@ -14,6 +14,7 @@ import { RustTraitScope, useRustScope } from "../scopes/index.js";
 import { createTraitSymbol } from "../symbols/factories.js";
 import { AttributeList } from "./attribute.js";
 import { DocComment } from "./doc-comment.js";
+import { ItemList } from "./primitives/item-list.js";
 import type { TypeParameterProp } from "./type-parameters.js";
 import {
   hasWhereClauseBounds,
@@ -113,7 +114,9 @@ export function TraitDeclaration(props: TraitDeclarationProps) {
         {hasBody ? (
           <>
             <Scope value={traitScope}>
-              <Indent>{bodyChildren}</Indent>
+              <Indent>
+                <ItemList mode="associated">{bodyChildren}</ItemList>
+              </Indent>
             </Scope>
             <hbr />
             {code`}`}

@@ -190,6 +190,7 @@ describe("FunctionDeclaration", () => {
 
     expect(source).toEqual(d`
       struct Item;
+
       impl Item {
           fn foo(&self, bar: T) {}
       }
@@ -220,6 +221,7 @@ describe("FunctionDeclaration", () => {
 
     expect(source).toEqual(d`
       struct Item;
+
       impl Item {
           fn configure_item_with_many_options(
               &self,
@@ -267,7 +269,7 @@ describe("FunctionDeclaration", () => {
         name="map"
         parameters={[{ name: "item", type: "T" }]}
         returnType="U"
-        typeParameters={[{ name: "T" }, { name: "U", constraint: "Display" }]}
+        typeParameters={[{ name: "T" }, { name: "U", constraints: "Display" }]}
         whereClause="U: Clone"
       >
         {"item"}
@@ -407,6 +409,7 @@ describe("FunctionDeclaration", () => {
       pub(crate) const async unsafe fn run-work(input-value: i32) {
           input-value
       }
+
       pub(crate)|true|true|true
     `);
   });
@@ -424,6 +427,7 @@ describe("FunctionDeclaration", () => {
       </Output>,
     ).toRenderTo(d`
       pub fn run-work() {}
+
       pub|false|false|false
     `);
   });
@@ -445,6 +449,7 @@ describe("FunctionDeclaration", () => {
       </Output>,
     ).toRenderTo(d`
       struct Item;
+
       impl Item {
           fn run(&self) {}
       }
@@ -468,6 +473,7 @@ describe("FunctionDeclaration", () => {
       </Output>,
     ).toRenderTo(d`
       struct Item;
+
       impl Item {
           fn run(&mut self) {}
       }
@@ -491,6 +497,7 @@ describe("FunctionDeclaration", () => {
       </Output>,
     ).toRenderTo(d`
       struct Item;
+
       impl Item {
           fn consume(self) {}
       }
@@ -514,6 +521,7 @@ describe("FunctionDeclaration", () => {
       </Output>,
     ).toRenderTo(d`
       struct Item;
+
       impl Item {
           fn new() {}
       }
@@ -543,6 +551,7 @@ describe("FunctionDeclaration", () => {
       </Output>,
     ).toRenderTo(d`
       struct Item;
+
       impl Item {
           fn set(&self, x: i32, y: i32) {}
       }
