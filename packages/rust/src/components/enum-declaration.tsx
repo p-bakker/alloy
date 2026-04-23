@@ -16,6 +16,7 @@ import {
   createVariantSymbol,
 } from "../symbols/factories.js";
 import { resolveSymbolName } from "../symbols/resolve-name.js";
+import { AttributeList } from "./attribute.js";
 import { DocComment } from "./doc-comment.js";
 import type { TypeParameterProp } from "./type-parameters.js";
 import { TypeParameters } from "./type-parameters.js";
@@ -89,14 +90,7 @@ export function EnumDeclaration(props: EnumDeclarationProps) {
           <DocComment>{props.doc}</DocComment>
         </>
       ) : null}
-      {props.attributes && props.attributes.length > 0 ? (
-        <>
-          <For each={props.attributes} line>
-            {(attr) => attr}
-          </For>
-          <hbr />
-        </>
-      ) : null}
+      <AttributeList attributes={props.attributes} />
       {derives && derives.length > 0 ? (
         <>
           {"#[derive("}
@@ -166,14 +160,7 @@ export function EnumVariant(props: EnumVariantProps) {
           <DocComment>{props.doc}</DocComment>
         </>
       ) : null}
-      {props.attributes && props.attributes.length > 0 ? (
-        <>
-          <For each={props.attributes} line>
-            {(attr) => attr}
-          </For>
-          <hbr />
-        </>
-      ) : null}
+      <AttributeList attributes={props.attributes} />
       {variantSymbol.name}
       {variantKind === "tuple" && tupleValues.length > 0 ? (
         <>

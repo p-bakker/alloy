@@ -68,7 +68,7 @@ describe("StructDeclaration", () => {
           <SourceFile path="lib.rs">
             <StructDeclaration
               name="Foo"
-              attributes={["#[repr(C)]"]}
+              attributes={["repr(C)"]}
               derives={["Debug", "Clone"]}
             />
           </SourceFile>
@@ -200,7 +200,7 @@ describe("StructDeclaration", () => {
               name="Foo"
               unit={true}
               doc="Represents foo."
-              attributes={["#[repr(C)]"]}
+              attributes={["repr(C)"]}
               derives={["Debug", "Clone"]}
             />
           </SourceFile>

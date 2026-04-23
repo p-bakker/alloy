@@ -12,6 +12,7 @@ import {
 
 import { RustTraitScope, useRustScope } from "../scopes/index.js";
 import { createTraitSymbol } from "../symbols/factories.js";
+import { AttributeList } from "./attribute.js";
 import { DocComment } from "./doc-comment.js";
 import type { TypeParameterProp } from "./type-parameters.js";
 import { TypeParameters, WhereClause } from "./type-parameters.js";
@@ -50,14 +51,7 @@ export function TraitDeclaration(props: TraitDeclarationProps) {
           <DocComment>{props.doc}</DocComment>
         </>
       ) : null}
-      {props.attributes && props.attributes.length > 0 ? (
-        <>
-          <For each={props.attributes} line>
-            {(attr) => attr}
-          </For>
-          <hbr />
-        </>
-      ) : null}
+      <AttributeList attributes={props.attributes} />
       <CoreDeclaration symbol={traitSymbol}>
         <VisibilityPrefix pub={props.pub} />
         {code`trait `}

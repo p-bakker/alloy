@@ -79,7 +79,7 @@ describe("EnumDeclaration", () => {
           <SourceFile path="lib.rs">
             <EnumDeclaration
               name="Foo"
-              attributes={["#[repr(u8)]"]}
+              attributes={["repr(u8)"]}
               derives={["Debug", "Clone"]}
             />
           </SourceFile>

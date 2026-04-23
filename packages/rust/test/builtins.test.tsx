@@ -104,6 +104,28 @@ describe("std builtins", () => {
     expect(content).not.toContain("use std::");
   });
 
+  it("string entries in the attributes prop auto-wrap as #[name]", () => {
+    const output = render(
+      <Output>
+        <CrateDirectory name="my_crate">
+          <SourceFile path="lib">
+            <StructDeclaration
+              name="Foo"
+              pub
+              unit
+              attributes={["must_use", "inline"]}
+            />
+          </SourceFile>
+        </CrateDirectory>
+      </Output>,
+    );
+
+    const content = findFile(output, "src/lib").contents;
+    expect(content).toContain("#[must_use]");
+    expect(content).toContain("#[inline]");
+    expect(content).toContain("pub struct Foo");
+  });
+
   it("createTypeRef exposes variants as callable members on enum refs", () => {
     const MyErr = createTypeRef({
       variants: { NotFound: "unit", Io: "tuple" },

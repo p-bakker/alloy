@@ -2,6 +2,7 @@ import { type Children, code, For, memo } from "@alloy-js/core";
 
 import type { RustCrateScope } from "../scopes/rust-crate-scope.js";
 import type { RustModuleScope } from "../scopes/rust-module-scope.js";
+import { AttributeList } from "./attribute.js";
 import { type RustVisibilityProps, VisibilityPrefix } from "./visibility.js";
 
 interface ModDeclaration extends RustVisibilityProps {
@@ -16,14 +17,7 @@ export interface ModDeclarationsProps {
 function ModDeclarationLine(props: ModDeclaration) {
   return (
     <>
-      {props.attributes && props.attributes.length > 0 ? (
-        <>
-          <For each={props.attributes} line>
-            {(attr) => attr}
-          </For>
-          <hbr />
-        </>
-      ) : null}
+      <AttributeList attributes={props.attributes} />
       <VisibilityPrefix pub={props.pub} />
       {code`mod `}
       {props.name}

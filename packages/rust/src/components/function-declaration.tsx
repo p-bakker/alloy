@@ -18,6 +18,7 @@ import {
   createFunctionSymbol,
   createMethodSymbol,
 } from "../symbols/factories.js";
+import { AttributeList } from "./attribute.js";
 import { DocComment } from "./doc-comment.js";
 import { Parameters } from "./parameters.js";
 import type { TypeParameterProp } from "./type-parameters.js";
@@ -81,14 +82,7 @@ export function FunctionDeclaration(props: FunctionDeclarationProps) {
           <DocComment>{props.doc}</DocComment>
         </>
       ) : null}
-      {props.attributes && props.attributes.length > 0 ? (
-        <>
-          <For each={props.attributes} line>
-            {(attr) => attr}
-          </For>
-          <hbr />
-        </>
-      ) : null}
+      <AttributeList attributes={props.attributes} />
       <CoreDeclaration symbol={functionSymbol}>
         <VisibilityPrefix pub={props.pub} />
         {props.const ? "const " : ""}

@@ -2,6 +2,7 @@ import type { Children, Namekey, Refkey } from "@alloy-js/core";
 import { Declaration as CoreDeclaration, For } from "@alloy-js/core";
 
 import { createStaticSymbol } from "../symbols/factories.js";
+import { AttributeList } from "./attribute.js";
 import {
   type RustVisibilityProps,
   toRustVisibility,
@@ -28,14 +29,7 @@ export function StaticDeclaration(props: StaticDeclarationProps) {
 
   return (
     <>
-      {props.attributes && props.attributes.length > 0 ? (
-        <>
-          <For each={props.attributes} line>
-            {(attr) => attr}
-          </For>
-          <hbr />
-        </>
-      ) : null}
+      <AttributeList attributes={props.attributes} />
       <CoreDeclaration symbol={staticSymbol}>
         <VisibilityPrefix pub={props.pub} />
         {"static "}

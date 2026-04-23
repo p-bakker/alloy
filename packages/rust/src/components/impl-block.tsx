@@ -17,6 +17,7 @@ import {
 } from "../scopes/index.js";
 import { NamedTypeSymbol } from "../symbols/named-type-symbol.js";
 import { RustOutputSymbol } from "../symbols/rust-output-symbol.js";
+import { AttributeList } from "./attribute.js";
 import type { TypeParameterProp } from "./type-parameters.js";
 import { TypeParameters, WhereClause } from "./type-parameters.js";
 
@@ -135,14 +136,7 @@ export function ImplBlock(props: ImplBlockProps) {
 
   return (
     <>
-      {props.attributes && props.attributes.length > 0 ? (
-        <>
-          <For each={props.attributes} line>
-            {(attr) => attr}
-          </For>
-          <hbr />
-        </>
-      ) : null}
+      <AttributeList attributes={props.attributes} />
       {code`impl`}
       <TypeParameters params={implTypeParameters} />{" "}
       {props.trait ? (

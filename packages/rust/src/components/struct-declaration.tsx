@@ -16,6 +16,7 @@ import {
   createTypeParameterSymbol,
 } from "../symbols/factories.js";
 import { resolveSymbolName } from "../symbols/resolve-name.js";
+import { AttributeList } from "./attribute.js";
 import { DocComment } from "./doc-comment.js";
 import type { TypeParameterProp } from "./type-parameters.js";
 import { TypeParameters, WhereClause } from "./type-parameters.js";
@@ -93,14 +94,7 @@ export function StructDeclaration(props: StructDeclarationProps) {
           <DocComment>{props.doc}</DocComment>
         </>
       ) : null}
-      {props.attributes && props.attributes.length > 0 ? (
-        <>
-          <For each={props.attributes} line>
-            {(attr) => attr}
-          </For>
-          <hbr />
-        </>
-      ) : null}
+      <AttributeList attributes={props.attributes} />
       {derives && derives.length > 0 ? (
         <>
           {"#[derive("}
@@ -178,14 +172,7 @@ export function Field(props: FieldProps) {
           <DocComment>{props.doc}</DocComment>
         </>
       ) : null}
-      {props.attributes && props.attributes.length > 0 ? (
-        <>
-          <For each={props.attributes} line>
-            {(attr) => attr}
-          </For>
-          <hbr />
-        </>
-      ) : null}
+      <AttributeList attributes={props.attributes} />
       <VisibilityPrefix pub={props.pub} />
       {fieldSymbol.name}
       {": "}

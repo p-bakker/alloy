@@ -7,6 +7,7 @@ import {
 } from "@alloy-js/core";
 
 import { createTypeAliasSymbol } from "../symbols/factories.js";
+import { AttributeList } from "./attribute.js";
 import type { TypeParameterProp } from "./type-parameters.js";
 import { TypeParameters } from "./type-parameters.js";
 import {
@@ -32,14 +33,7 @@ export function TypeAlias(props: TypeAliasProps) {
 
   return (
     <>
-      {props.attributes && props.attributes.length > 0 ? (
-        <>
-          <For each={props.attributes} line>
-            {(attr) => attr}
-          </For>
-          <hbr />
-        </>
-      ) : null}
+      <AttributeList attributes={props.attributes} />
       <CoreDeclaration symbol={typeAliasSymbol}>
         <VisibilityPrefix pub={props.pub} />
         {"type "}
