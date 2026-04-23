@@ -1,7 +1,7 @@
 import { isRefkeyable, Output, render, type Children } from "@alloy-js/core";
 import { describe, expect, it } from "vitest";
 
-import { core, std } from "../src/builtins/index.js";
+import { core, prelude, std } from "../src/builtins/index.js";
 import {
   PRELUDE_TYPES,
   PRELUDE_TYPES_2021,
@@ -47,6 +47,55 @@ describe("std builtins", () => {
     expect(isRefkeyable(std.default.Default)).toBe(true);
     expect(isRefkeyable(std.convert.From)).toBe(true);
     expect(isRefkeyable(std.convert.Into)).toBe(true);
+  });
+
+  it("prelude export gives ergonomic access to prelude items", () => {
+    const { Box, Vec, Ok, None, Clone } = prelude;
+
+    const output = render(
+      <Output>
+        <CrateDirectory name="my_crate">
+          <SourceFile path="lib">
+            type B = {Box}&lt;u32&gt;;{"\n"}
+            type V = {Vec}&lt;u32&gt;;{"\n"}
+            let r = <Ok>42</Ok>;{"\n"}
+            let o = <None />;{"\n"}
+            type C = {Clone};
+          </SourceFile>
+        </CrateDirectory>
+      </Output>,
+    );
+
+    const content = findFile(output, "src/lib").contents;
+    // Box, Vec, Clone are in 2021 prelude — bare. Ok/None are prelude-bare variants.
+    expect(content).toContain("type B = Box<u32>;");
+    expect(content).toContain("type V = Vec<u32>;");
+    expect(content).toContain("let r = Ok(42);");
+    expect(content).toContain("let o = None;");
+    expect(content).toContain("type C = Clone;");
+    expect(content).not.toContain("use std::");
+  });
+
+  it("prelude export works under noStd (routes via alloc/core)", () => {
+    const { TryFrom, FromIterator } = prelude;
+
+    const output = render(
+      <Output>
+        <CrateDirectory name="my_crate" noStd edition="2018">
+          <SourceFile path="lib">
+            type T = {TryFrom};{"\n"}
+            type F = {FromIterator};
+          </SourceFile>
+        </CrateDirectory>
+      </Output>,
+    );
+
+    const content = findFile(output, "src/lib").contents;
+    // 2018 edition: neither in prelude, so both get use statements.
+    // noStd: they must be sourced from core, not std.
+    expect(content).toContain("use core::convert::TryFrom;");
+    expect(content).toContain("use core::iter::FromIterator;");
+    expect(content).not.toContain("use std::");
   });
 
   it("renders enum variants as JSX components", () => {

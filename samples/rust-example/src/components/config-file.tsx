@@ -7,10 +7,11 @@ import {
   FieldInit,
   FunctionDeclaration,
   ImplBlock,
+  prelude,
   SourceFile,
+  std,
   StructDeclaration,
   StructExpression,
-  std,
 } from "@alloy-js/rust";
 
 export const configKey = refkey();
@@ -55,7 +56,7 @@ export function ConfigFile(props: ConfigFileProps) {
         name="Config"
         refkey={configKey}
         pub
-        derives={[std.fmt.Debug, std.clone.Clone]}
+        derives={[std.fmt.Debug, prelude.Clone]}
       >
         <Field name="max_capacity" pub type="usize" />
         <Field

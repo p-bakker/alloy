@@ -15,11 +15,12 @@ import {
   MatchArm,
   MatchExpression,
   MethodChainExpression,
+  prelude,
   ReturnExpression,
   SourceFile,
+  std,
   StructDeclaration,
   StructExpression,
-  std,
 } from "@alloy-js/rust";
 
 import { configKey } from "./config-file.js";
@@ -45,7 +46,7 @@ export function StoreModule(props: StoreModuleProps) {
         name="EntryStatus"
         refkey={entryStatusKey}
         pub
-        derives={[std.fmt.Debug, std.clone.Clone, std.cmp.PartialEq]}
+        derives={[std.fmt.Debug, prelude.Clone, prelude.PartialEq]}
         doc="Represents the current status of a cached entry."
       >
         <EnumVariant name="Active" doc="The entry is valid and accessible." />
@@ -65,8 +66,8 @@ export function StoreModule(props: StoreModuleProps) {
         name="Entry"
         refkey={entryKey}
         pub
-        derives={[std.fmt.Debug, std.clone.Clone]}
-        typeParameters={[{ name: "V", constraint: std.clone.Clone }]}
+        derives={[std.fmt.Debug, prelude.Clone]}
+        typeParameters={[{ name: "V", constraint: prelude.Clone }]}
         doc="A single entry in the store, holding a value and metadata."
       >
         <Field name="value" pub type="V" />
@@ -96,7 +97,7 @@ export function StoreModule(props: StoreModuleProps) {
             name: "K",
             constraint: (
               <>
-                {std.cmp.Eq} + {std.hash.Hash} + {std.clone.Clone}
+                {prelude.Eq} + {std.hash.Hash} + {prelude.Clone}
               </>
             ),
           },
@@ -104,7 +105,7 @@ export function StoreModule(props: StoreModuleProps) {
             name: "V",
             constraint: (
               <>
-                {std.clone.Clone} + {std.marker.Send} + {std.marker.Sync}
+                {prelude.Clone} + {prelude.Send} + {prelude.Sync}
               </>
             ),
           },
@@ -142,7 +143,7 @@ export function StoreModule(props: StoreModuleProps) {
             name: "K",
             constraint: (
               <>
-                {std.cmp.Eq} + {std.hash.Hash} + {std.clone.Clone}
+                {prelude.Eq} + {std.hash.Hash} + {prelude.Clone}
               </>
             ),
           },
@@ -150,7 +151,7 @@ export function StoreModule(props: StoreModuleProps) {
             name: "V",
             constraint: (
               <>
-                {std.clone.Clone} + {std.marker.Send} + {std.marker.Sync}
+                {prelude.Clone} + {prelude.Send} + {prelude.Sync}
               </>
             ),
           },
@@ -344,7 +345,7 @@ export function StoreModule(props: StoreModuleProps) {
             name: "K",
             constraint: (
               <>
-                {std.cmp.Eq} + {std.hash.Hash} + {std.clone.Clone}
+                {prelude.Eq} + {std.hash.Hash} + {prelude.Clone}
               </>
             ),
           },
@@ -352,7 +353,7 @@ export function StoreModule(props: StoreModuleProps) {
             name: "V",
             constraint: (
               <>
-                {std.clone.Clone} + {std.marker.Send} + {std.marker.Sync}
+                {prelude.Clone} + {prelude.Send} + {prelude.Sync}
               </>
             ),
           },

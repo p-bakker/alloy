@@ -8,9 +8,10 @@ import {
   MacroCall,
   MatchArm,
   MatchExpression,
+  prelude,
   SourceFile,
-  TypeAlias,
   std,
+  TypeAlias,
 } from "@alloy-js/rust";
 
 export const storeErrorKey = refkey();
@@ -28,7 +29,7 @@ export function ErrorModule(props: ErrorModuleProps) {
         name="StoreError"
         refkey={storeErrorKey}
         pub
-        derives={[std.fmt.Debug, std.clone.Clone]}
+        derives={[std.fmt.Debug, prelude.Clone]}
       >
         <EnumVariant name="NotFound" doc="The requested key was not found." />
         <EnumVariant
@@ -98,7 +99,7 @@ export function ErrorModule(props: ErrorModuleProps) {
         pub
         typeParameters={[{ name: "T" }]}
       >
-        {std.result.Result}
+        {prelude.Result}
         {"<T, StoreError>"}
       </TypeAlias>
     </SourceFile>

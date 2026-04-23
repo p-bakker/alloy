@@ -2,9 +2,9 @@ import { Children, refkey } from "@alloy-js/core";
 import {
   DocComment,
   FunctionDeclaration,
+  prelude,
   SourceFile,
   TraitDeclaration,
-  std,
 } from "@alloy-js/rust";
 
 import { resultAliasKey } from "./error-module.js";
@@ -70,7 +70,7 @@ export function TraitsModule(props: TraitsModuleProps) {
             name: "V",
             constraint: (
               <>
-                {std.clone.Clone} + {std.marker.Send} + {std.marker.Sync}
+                {prelude.Clone} + {prelude.Send} + {prelude.Sync}
               </>
             ),
           },
