@@ -1,5 +1,12 @@
 import type { Refkey } from "@alloy-js/core";
-import { isRefkey, memo, resolve, type Children } from "@alloy-js/core";
+import {
+  isRefkey,
+  memo,
+  resolve,
+  type Children,
+  REFKEYABLE,
+  type RefkeyableObject,
+} from "@alloy-js/core";
 
 /**
  * Resolve a refkey to its declaration's bare symbol name as reactive
@@ -16,8 +23,11 @@ import { isRefkey, memo, resolve, type Children } from "@alloy-js/core";
  * For non-rendering symbol-table lookups (synchronous, returns `string`),
  * see `resolveSymbolNameFromRefkey` in `impl-block.tsx`.
  */
-export function resolveSymbolName(ref: string | Refkey): Children {
-  if (!isRefkey(ref)) return ref;
-  const result = resolve(ref);
-  return memo(() => result.value?.lexicalDeclaration.name ?? ref);
+export function resolveSymbolName(
+  ref: string | Refkey | RefkeyableObject,
+): Children {
+  if (typeof ref === "string") return ref;
+  const key = isRefkey(ref) ? ref : (ref as RefkeyableObject)[REFKEYABLE]();
+  const result = resolve(key);
+  return memo(() => result.value?.lexicalDeclaration.name ?? key);
 }

@@ -1,4 +1,4 @@
-import { Children, code, refkey } from "@alloy-js/core";
+import { Children, refkey } from "@alloy-js/core";
 import {
   Attribute,
   ConstDeclaration,
@@ -63,7 +63,7 @@ export function ConfigFile(props: ConfigFileProps) {
         derives={[std.fmt.Debug, prelude.Clone]}
       >
         <Field name="max_capacity" pub type="usize" />
-        <Field name="default_ttl" pub type={code`${Option}<${Duration}>`} />
+        <Field name="default_ttl" pub type={<Option>{Duration}</Option>} />
         <Field name="enable_eviction" pub type="bool" />
         <Field name="name" pub type="String" />
       </StructDeclaration>

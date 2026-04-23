@@ -25,10 +25,14 @@ import {
 } from "@alloy-js/rust";
 
 import { configKey } from "./config-file.js";
-import { resultAliasKey, storeErrorKey } from "./error-module.js";
+import {
+  resultAliasKey,
+  storeErrorNotFoundKey,
+  storeErrorStorageFullKey,
+} from "./error-module.js";
 import { cacheableKey } from "./traits-module.js";
 
-const { Clone, Eq, Option, PartialEq, Send, Sync } = prelude;
+const { Clone, Eq, Err, Ok, Option, PartialEq, Send, Sync } = prelude;
 const { Duration, Instant } = std.time;
 const { HashMap } = std.collections;
 const { Debug } = std.fmt;
@@ -79,7 +83,7 @@ export function StoreModule(props: StoreModuleProps) {
       >
         <Field name="value" pub type="V" />
         <Field name="created_at" pub type={Instant} />
-        <Field name="ttl" pub type={code`${Option}<${Duration}>`} />
+        <Field name="ttl" pub type={<Option>{Duration}</Option>} />
         <Field name="status" pub type="EntryStatus" />
       </StructDeclaration>
 
@@ -101,9 +105,9 @@ export function StoreModule(props: StoreModuleProps) {
         ]}
         doc="A generic key-value store with capacity limits and TTL support."
       >
-        <Field name="data" type={code`${HashMap}<K, Entry<V>>`} />
+        <Field name="data" type={<HashMap>K, {entryKey}&lt;V&gt;</HashMap>} />
         <Field name="max_capacity" type="usize" />
-        <Field name="default_ttl" type={code`${Option}<${Duration}>`} />
+        <Field name="default_ttl" type={<Option>{Duration}</Option>} />
       </StructDeclaration>
 
       <hbr />
@@ -140,8 +144,6 @@ export function StoreModule(props: StoreModuleProps) {
           </StructExpression>
         </FunctionDeclaration>
 
-        <hbr />
-
         <DocComment>
           Inserts a value into the store, returning an error if full.
         </DocComment>
@@ -156,10 +158,11 @@ export function StoreModule(props: StoreModuleProps) {
           returnType={code`${resultAliasKey}<()>`}
         >
           <IfExpression condition="self.data.len() >= self.max_capacity && !self.data.contains_key(&key)">
-            <>
-              <ReturnExpression>Err(StoreError::StorageFull)</ReturnExpression>;
-            </>
+            <ReturnExpression>
+              <Err>{storeErrorStorageFullKey}</Err>
+            </ReturnExpression>
           </IfExpression>
+          <hbr />
           <LetBinding name="entry">
             <StructExpression type="Entry">
               <FieldInit name="value" />
@@ -170,10 +173,11 @@ export function StoreModule(props: StoreModuleProps) {
               <FieldInit name="status">EntryStatus::Active</FieldInit>
             </StructExpression>
           </LetBinding>
-          self.data.insert(key, entry); Ok(())
+          <hbr />
+          {code`self.data.insert(key, entry);`}
+          <hbr />
+          <Ok>{"()"}</Ok>
         </FunctionDeclaration>
-
-        <hbr />
 
         <DocComment>
           Retrieves a value by key, checking for expiration.
@@ -188,28 +192,24 @@ export function StoreModule(props: StoreModuleProps) {
           <MatchExpression expression="self.data.get(key)">
             <MatchArm pattern="Some(entry)">
               <IfExpression condition="entry.status == EntryStatus::Expired">
-                <>
-                  <ReturnExpression>Err(StoreError::NotFound)</ReturnExpression>
-                  ;
-                </>
+                <ReturnExpression>
+                  <Err>{storeErrorNotFoundKey}</Err>
+                </ReturnExpression>
               </IfExpression>
               <IfExpression condition="let Some(ttl) = entry.ttl">
                 <IfExpression condition="entry.created_at.elapsed() &gt; ttl">
-                  <>
-                    <ReturnExpression>
-                      Err(StoreError::NotFound)
-                    </ReturnExpression>
-                    ;
-                  </>
+                  <ReturnExpression>
+                    <Err>{storeErrorNotFoundKey}</Err>
+                  </ReturnExpression>
                 </IfExpression>
               </IfExpression>
-              Ok(&entry.value)
+              <Ok>&amp;entry.value</Ok>
             </MatchArm>
-            <MatchArm pattern="None">Err(StoreError::NotFound)</MatchArm>
+            <MatchArm pattern="None">
+              <Err>{storeErrorNotFoundKey}</Err>
+            </MatchArm>
           </MatchExpression>
         </FunctionDeclaration>
-
-        <hbr />
 
         <DocComment>Removes an entry from the store.</DocComment>
         <FunctionDeclaration
@@ -231,12 +231,10 @@ export function StoreModule(props: StoreModuleProps) {
             />
             <MethodChainExpression.Call
               name="ok_or"
-              args={[<>{storeErrorKey}::NotFound</>]}
+              args={[storeErrorNotFoundKey]}
             />
           </MethodChainExpression>
         </FunctionDeclaration>
-
-        <hbr />
 
         <DocComment>Returns the number of entries in the store.</DocComment>
         <FunctionDeclaration
@@ -249,8 +247,6 @@ export function StoreModule(props: StoreModuleProps) {
           self.data.len()
         </FunctionDeclaration>
 
-        <hbr />
-
         <DocComment>Returns true if the store is empty.</DocComment>
         <FunctionDeclaration
           name="is_empty"
@@ -262,8 +258,6 @@ export function StoreModule(props: StoreModuleProps) {
           self.data.is_empty()
         </FunctionDeclaration>
 
-        <hbr />
-
         <DocComment>Evicts all expired entries from the store.</DocComment>
         <FunctionDeclaration
           name="evict_expired"
@@ -272,14 +266,18 @@ export function StoreModule(props: StoreModuleProps) {
           returnType="usize"
         >
           <LetBinding name="before">self.data.len()</LetBinding>
-          {code`self.data.retain(|_, entry| {
+          <hbr />
+          {code`
+            self.data.retain(|_, entry| {
                 if let Some(ttl) = entry.ttl {
                     entry.created_at.elapsed() <= ttl
                 } else {
                     true
                 }
-            });`}
-          before - self.data.len()
+            });
+          `}
+          <hbr />
+          {code`before - self.data.len()`}
         </FunctionDeclaration>
       </ImplBlock>
 
@@ -287,12 +285,7 @@ export function StoreModule(props: StoreModuleProps) {
 
       <ImplBlock
         type={storeKey}
-        trait={
-          <>
-            {cacheableKey}
-            {"<V>"}
-          </>
-        }
+        trait={<>{cacheableKey}&lt;V&gt;</>}
         typeParameters={[
           {
             name: "K",
@@ -312,8 +305,6 @@ export function StoreModule(props: StoreModuleProps) {
           <MacroCall name="format" args={['"store::{}"', "self.data.len()"]} />
         </FunctionDeclaration>
 
-        <hbr />
-
         <FunctionDeclaration
           name="is_expired"
           receiver="&self"
@@ -321,8 +312,6 @@ export function StoreModule(props: StoreModuleProps) {
         >
           self.data.is_empty()
         </FunctionDeclaration>
-
-        <hbr />
 
         <FunctionDeclaration
           name="cached_value"

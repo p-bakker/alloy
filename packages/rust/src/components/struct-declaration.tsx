@@ -4,6 +4,7 @@ import {
   createScope,
   For,
   Indent,
+  type Refkeyable,
   Scope,
 } from "@alloy-js/core";
 
@@ -26,7 +27,7 @@ import {
 export interface StructDeclarationProps extends RustVisibilityProps {
   name: string | Namekey;
   refkey?: Refkey;
-  derives?: (string | Refkey)[] | Refkey;
+  derives?: (string | Refkeyable)[] | Refkeyable;
   attributes?: Children[];
   doc?: string;
   typeParameters?: TypeParameterProp[];

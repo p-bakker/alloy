@@ -65,7 +65,7 @@ function createSymbolRefkey(key: string): SymbolRefkey {
 
 export function isRefkeyable(value: unknown): value is RefkeyableObject {
   return (
-    typeof value === "object" &&
+    (typeof value === "object" || typeof value === "function") &&
     value !== null &&
     Object.hasOwn(value, REFKEYABLE)
   );

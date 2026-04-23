@@ -34,7 +34,11 @@ export function TraitsModule(props: TraitsModuleProps) {
         <FunctionDeclaration
           name="to_bytes"
           receiver="&self"
-          returnType={code`${resultAliasKey}<${Vec}<u8>>`}
+          returnType={
+            <>
+              {resultAliasKey}&lt;<Vec>u8</Vec>&gt;
+            </>
+          }
         />
 
         <hbr />
@@ -83,7 +87,7 @@ export function TraitsModule(props: TraitsModuleProps) {
         <FunctionDeclaration
           name="cached_value"
           receiver="&self"
-          returnType={code`${Option}<&V>`}
+          returnType={<Option>&amp;V</Option>}
         />
       </TraitDeclaration>
     </SourceFile>

@@ -98,6 +98,33 @@ describe("std builtins", () => {
     expect(content).not.toContain("use std::");
   });
 
+  it("renders generic types as JSX components with type args", () => {
+    const { Option, Vec, Result } = prelude;
+    const { HashMap } = std.collections;
+
+    const output = render(
+      <Output>
+        <CrateDirectory name="my_crate">
+          <SourceFile path="lib">
+            type A = <Option>u32</Option>;{"\n"}
+            type B = <Vec>u8</Vec>;{"\n"}
+            type C = <Result>T, E</Result>;{"\n"}
+            type D = <HashMap>K, V</HashMap>;{"\n"}
+            type E = {Option};
+          </SourceFile>
+        </CrateDirectory>
+      </Output>,
+    );
+
+    const content = findFile(output, "src/lib").contents;
+    expect(content).toContain("type A = Option<u32>;");
+    expect(content).toContain("type B = Vec<u8>;");
+    expect(content).toContain("type C = Result<T, E>;");
+    expect(content).toContain("type D = HashMap<K, V>;");
+    // Bare interpolation still works (no children = no angle brackets)
+    expect(content).toContain("type E = Option;");
+  });
+
   it("renders enum variants as JSX components", () => {
     const { Ok, Err } = std.result.Result;
     const { Some, None } = std.option.Option;

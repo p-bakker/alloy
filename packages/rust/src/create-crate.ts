@@ -11,6 +11,10 @@ import {
 } from "@alloy-js/core";
 
 import {
+  createTypeComponent,
+  type TypeComponent,
+} from "./components/type-ref.js";
+import {
   createVariantComponent,
   type VariantComponent,
   type VariantShape,
@@ -69,10 +73,22 @@ export type MemberRef<M extends MemberDescriptor> = M extends {
   ? VariantComponent
   : Refkey;
 
+export type NamedTypeKind = "struct" | "enum" | "trait" | "type-alias";
+
 export type SymbolRef<TSymbol extends SymbolDescriptor> = TSymbol extends {
-  members: infer M extends Record<string, MemberDescriptor>;
+  kind: infer K;
 }
-  ? RefkeyableObject & { [K in keyof M]: MemberRef<M[K]> }
+  ? K extends NamedTypeKind
+    ? TSymbol extends {
+        members: infer M extends Record<string, MemberDescriptor>;
+      }
+      ? TypeComponent & RefkeyableObject & { [N in keyof M]: MemberRef<M[N]> }
+      : TypeComponent & RefkeyableObject
+    : TSymbol extends {
+          members: infer M extends Record<string, MemberDescriptor>;
+        }
+      ? RefkeyableObject & { [N in keyof M]: MemberRef<M[N]> }
+      : Refkey
   : Refkey;
 
 export type ItemRef<T extends CrateItem> = T extends SymbolDescriptor
@@ -182,8 +198,81 @@ export function createCrate<const TItems extends Record<string, CrateItem>>(
     symbolDescriptor: SymbolDescriptor,
   ) {
     const symbolRefkey = refkey(descriptor.items, modulePath, exportName);
+    const isNamedType =
+      symbolDescriptor.kind === "struct" ||
+      symbolDescriptor.kind === "enum" ||
+      symbolDescriptor.kind === "trait" ||
+      symbolDescriptor.kind === "type-alias";
 
-    if (symbolDescriptor.members) {
+    if (isNamedType) {
+      // Callable component that renders Name<children> when children are
+      // supplied, or just Name otherwise. The callable is wrapped in a
+      // Proxy so members can be exposed under names that collide with
+      // Function.prototype properties (e.g. `name`, `bind`, `caller`) —
+      // those are non-writable on strict-mode function objects and would
+      // throw if assigned directly.
+      const base = createTypeComponent(symbolRefkey);
+      const memberRefs: Record<string, unknown> = {};
+      if (symbolDescriptor.members) {
+        for (const [memberName, memberDesc] of Object.entries(
+          symbolDescriptor.members,
+        )) {
+          const memberRefkey = refkey(
+            descriptor.items,
+            modulePath,
+            exportName,
+            memberName,
+          );
+          memberRefs[memberName] =
+            memberDesc.kind === "variant"
+              ? createVariantComponent(
+                  memberRefkey,
+                  memberDesc.shape ?? "tuple",
+                )
+              : memberRefkey;
+        }
+      }
+      target[exportName] = new Proxy(base, {
+        get(fn, key) {
+          if (key === REFKEYABLE) return () => symbolRefkey;
+          if (typeof key === "string" && key in memberRefs) {
+            return memberRefs[key];
+          }
+          return Reflect.get(fn, key);
+        },
+        has(fn, key) {
+          if (key === REFKEYABLE) return true;
+          if (typeof key === "string" && key in memberRefs) return true;
+          return Reflect.has(fn, key);
+        },
+        ownKeys(fn) {
+          return [
+            ...Reflect.ownKeys(fn),
+            ...Object.keys(memberRefs),
+            REFKEYABLE,
+          ];
+        },
+        getOwnPropertyDescriptor(fn, key) {
+          if (key === REFKEYABLE) {
+            return {
+              value: () => symbolRefkey,
+              writable: false,
+              enumerable: false,
+              configurable: true,
+            };
+          }
+          if (typeof key === "string" && key in memberRefs) {
+            return {
+              value: memberRefs[key],
+              writable: false,
+              enumerable: true,
+              configurable: true,
+            };
+          }
+          return Reflect.getOwnPropertyDescriptor(fn, key);
+        },
+      });
+    } else if (symbolDescriptor.members) {
       const symbolWithMembers: Record<string | symbol, unknown> = {
         [REFKEYABLE]() {
           return symbolRefkey;

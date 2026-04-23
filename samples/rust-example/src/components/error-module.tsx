@@ -18,6 +18,10 @@ const { Result } = prelude;
 const { Display, Formatter, Result: FmtResult } = std.fmt;
 
 export const storeErrorKey = refkey();
+export const storeErrorNotFoundKey = refkey();
+export const storeErrorStorageFullKey = refkey();
+export const storeErrorSerializationKey = refkey();
+export const storeErrorLockKey = refkey();
 export const resultAliasKey = refkey();
 
 export interface ErrorModuleProps {
@@ -34,19 +38,26 @@ export function ErrorModule(props: ErrorModuleProps) {
         pub
         derives={[std.fmt.Debug, prelude.Clone]}
       >
-        <EnumVariant name="NotFound" doc="The requested key was not found." />
+        <EnumVariant
+          name="NotFound"
+          refkey={storeErrorNotFoundKey}
+          doc="The requested key was not found."
+        />
         <EnumVariant
           name="StorageFull"
+          refkey={storeErrorStorageFullKey}
           doc="The store has reached its maximum capacity."
         />
         <EnumVariant
           name="SerializationError"
+          refkey={storeErrorSerializationKey}
           doc="Failed to serialize or deserialize a value."
           kind="tuple"
           fields={["String"]}
         />
         <EnumVariant
           name="LockError"
+          refkey={storeErrorLockKey}
           doc="Failed to acquire a lock on the store."
           kind="tuple"
           fields={["String"]}
@@ -91,7 +102,7 @@ export function ErrorModule(props: ErrorModuleProps) {
         pub
         typeParameters={[{ name: "T" }]}
       >
-        {code`${Result}<T, StoreError>`}
+        <Result>T, StoreError</Result>
       </TypeAlias>
     </SourceFile>
   );

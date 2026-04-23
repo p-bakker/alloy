@@ -11,5 +11,4 @@ export {
 } from "./prelude.js";
 export { std, stdDescriptor } from "./std/index.js";
 export { prelude } from "./prelude-refs.js";
-export { std, stdDescriptor } from "./std/index.js";
 export type { StdCrate } from "./std/index.js";

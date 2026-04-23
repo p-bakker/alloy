@@ -5,6 +5,7 @@ import {
   isRefkeyable,
   Output,
   render,
+  toRefkey,
   type Children,
 } from "@alloy-js/core";
 import { describe, expect, it } from "vitest";
@@ -60,8 +61,10 @@ describe("createCrate", () => {
       },
     });
 
-    expect(isRefkey(serde.Serialize)).toBe(true);
-    expect(isRefkey(serde.Deserialize)).toBe(true);
+    // Traits are callable type components (RefkeyableObject), not raw Refkeys.
+    expect(isRefkeyable(serde.Serialize)).toBe(true);
+    expect(isRefkeyable(serde.Deserialize)).toBe(true);
+    // Functions remain raw Refkeys.
     expect(isRefkey(serde.json.to_string)).toBe(true);
     expect(getCrateInfo(serde)).toEqual({ name: "serde", version: "1.0.219" });
   });
@@ -87,7 +90,7 @@ describe("createCrate", () => {
 
     const rootResolution = binder.resolveDeclarationByKey(
       undefined,
-      serde.Serialize,
+      toRefkey(serde.Serialize),
     ).value;
     expect(rootResolution?.symbol.name).toBe("Serialize");
 
