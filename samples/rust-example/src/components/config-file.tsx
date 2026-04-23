@@ -1,10 +1,11 @@
-import { Children, refkey } from "@alloy-js/core";
+import { Children, code, refkey } from "@alloy-js/core";
 import {
   Attribute,
   ConstDeclaration,
   DocComment,
   Field,
   FieldInit,
+  FunctionCallExpression,
   FunctionDeclaration,
   ImplBlock,
   prelude,
@@ -13,6 +14,9 @@ import {
   StructDeclaration,
   StructExpression,
 } from "@alloy-js/rust";
+
+const { Option, Some } = prelude;
+const { Duration } = std.time;
 
 export const configKey = refkey();
 export const maxEntriesKey = refkey();
@@ -59,17 +63,7 @@ export function ConfigFile(props: ConfigFileProps) {
         derives={[std.fmt.Debug, prelude.Clone]}
       >
         <Field name="max_capacity" pub type="usize" />
-        <Field
-          name="default_ttl"
-          pub
-          type={
-            <>
-              {"Option<"}
-              {std.time.Duration}
-              {">"}
-            </>
-          }
-        />
+        <Field name="default_ttl" pub type={code`${Option}<${Duration}>`} />
         <Field name="enable_eviction" pub type="bool" />
         <Field name="name" pub type="String" />
       </StructDeclaration>
@@ -82,8 +76,12 @@ export function ConfigFile(props: ConfigFileProps) {
           <StructExpression type="Self">
             <FieldInit name="max_capacity">MAX_ENTRIES</FieldInit>
             <FieldInit name="default_ttl">
-              {"Some("}
-              {std.time.Duration}::from_secs(DEFAULT_TTL_SECS){")"}
+              <Some>
+                <FunctionCallExpression
+                  target={Duration.from_secs}
+                  args={[defaultTtlSecsKey]}
+                />
+              </Some>
             </FieldInit>
             <FieldInit name="enable_eviction">true</FieldInit>
             <FieldInit name="name">String::from("default")</FieldInit>
@@ -113,12 +111,14 @@ export function ConfigFile(props: ConfigFileProps) {
           name="with_ttl"
           pub
           receiver="self"
-          parameters={[{ name: "ttl", type: std.time.Duration }]}
+          parameters={[{ name: "ttl", type: Duration }]}
           returnType="Self"
           attributes={[<Attribute name="must_use" />]}
         >
           <StructExpression type="Self" spread="self">
-            <FieldInit name="default_ttl">Some(ttl)</FieldInit>
+            <FieldInit name="default_ttl">
+              <Some>ttl</Some>
+            </FieldInit>
           </StructExpression>
         </FunctionDeclaration>
 

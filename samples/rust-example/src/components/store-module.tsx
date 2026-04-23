@@ -7,6 +7,7 @@ import {
   EnumVariant,
   Field,
   FieldInit,
+  FunctionCallExpression,
   FunctionDeclaration,
   IfExpression,
   ImplBlock,
@@ -27,6 +28,12 @@ import { configKey } from "./config-file.js";
 import { resultAliasKey, storeErrorKey } from "./error-module.js";
 import { cacheableKey } from "./traits-module.js";
 
+const { Clone, Eq, Option, PartialEq, Send, Sync } = prelude;
+const { Duration, Instant } = std.time;
+const { HashMap } = std.collections;
+const { Debug } = std.fmt;
+const { Hash } = std.hash;
+
 export const storeKey = refkey();
 export const entryKey = refkey();
 export const entryStatusKey = refkey();
@@ -46,7 +53,7 @@ export function StoreModule(props: StoreModuleProps) {
         name="EntryStatus"
         refkey={entryStatusKey}
         pub
-        derives={[std.fmt.Debug, prelude.Clone, prelude.PartialEq]}
+        derives={[Debug, Clone, PartialEq]}
         doc="Represents the current status of a cached entry."
       >
         <EnumVariant name="Active" doc="The entry is valid and accessible." />
@@ -66,23 +73,13 @@ export function StoreModule(props: StoreModuleProps) {
         name="Entry"
         refkey={entryKey}
         pub
-        derives={[std.fmt.Debug, prelude.Clone]}
-        typeParameters={[{ name: "V", constraint: prelude.Clone }]}
+        derives={[Debug, Clone]}
+        typeParameters={[{ name: "V", constraint: Clone }]}
         doc="A single entry in the store, holding a value and metadata."
       >
         <Field name="value" pub type="V" />
-        <Field name="created_at" pub type={std.time.Instant} />
-        <Field
-          name="ttl"
-          pub
-          type={
-            <>
-              {"Option<"}
-              {std.time.Duration}
-              {">"}
-            </>
-          }
-        />
+        <Field name="created_at" pub type={Instant} />
+        <Field name="ttl" pub type={code`${Option}<${Duration}>`} />
         <Field name="status" pub type="EntryStatus" />
       </StructDeclaration>
 
@@ -95,43 +92,18 @@ export function StoreModule(props: StoreModuleProps) {
         typeParameters={[
           {
             name: "K",
-            constraint: (
-              <>
-                {prelude.Eq} + {std.hash.Hash} + {prelude.Clone}
-              </>
-            ),
+            constraint: code`${Eq} + ${Hash} + ${Clone}`,
           },
           {
             name: "V",
-            constraint: (
-              <>
-                {prelude.Clone} + {prelude.Send} + {prelude.Sync}
-              </>
-            ),
+            constraint: code`${Clone} + ${Send} + ${Sync}`,
           },
         ]}
         doc="A generic key-value store with capacity limits and TTL support."
       >
-        <Field
-          name="data"
-          type={
-            <>
-              {std.collections.HashMap}
-              {"<K, Entry<V>>"}
-            </>
-          }
-        />
+        <Field name="data" type={code`${HashMap}<K, Entry<V>>`} />
         <Field name="max_capacity" type="usize" />
-        <Field
-          name="default_ttl"
-          type={
-            <>
-              {"Option<"}
-              {std.time.Duration}
-              {">"}
-            </>
-          }
-        />
+        <Field name="default_ttl" type={code`${Option}<${Duration}>`} />
       </StructDeclaration>
 
       <hbr />
@@ -141,19 +113,11 @@ export function StoreModule(props: StoreModuleProps) {
         typeParameters={[
           {
             name: "K",
-            constraint: (
-              <>
-                {prelude.Eq} + {std.hash.Hash} + {prelude.Clone}
-              </>
-            ),
+            constraint: code`${Eq} + ${Hash} + ${Clone}`,
           },
           {
             name: "V",
-            constraint: (
-              <>
-                {prelude.Clone} + {prelude.Send} + {prelude.Sync}
-              </>
-            ),
+            constraint: code`${Clone} + ${Send} + ${Sync}`,
           },
         ]}
       >
@@ -168,7 +132,9 @@ export function StoreModule(props: StoreModuleProps) {
           returnType="Self"
         >
           <StructExpression type="Self">
-            <FieldInit name="data">{std.collections.HashMap}::new()</FieldInit>
+            <FieldInit name="data">
+              <FunctionCallExpression target={HashMap.new} />
+            </FieldInit>
             <FieldInit name="max_capacity">config.max_capacity</FieldInit>
             <FieldInit name="default_ttl">config.default_ttl</FieldInit>
           </StructExpression>
@@ -187,12 +153,7 @@ export function StoreModule(props: StoreModuleProps) {
             { name: "key", type: "K" },
             { name: "value", type: "V" },
           ]}
-          returnType={
-            <>
-              {resultAliasKey}
-              {"<()>"}
-            </>
-          }
+          returnType={code`${resultAliasKey}<()>`}
         >
           <IfExpression condition="self.data.len() >= self.max_capacity && !self.data.contains_key(&key)">
             <>
@@ -202,7 +163,9 @@ export function StoreModule(props: StoreModuleProps) {
           <LetBinding name="entry">
             <StructExpression type="Entry">
               <FieldInit name="value" />
-              <FieldInit name="created_at">{std.time.Instant}::now()</FieldInit>
+              <FieldInit name="created_at">
+                <FunctionCallExpression target={Instant.now} />
+              </FieldInit>
               <FieldInit name="ttl">self.default_ttl</FieldInit>
               <FieldInit name="status">EntryStatus::Active</FieldInit>
             </StructExpression>
@@ -220,12 +183,7 @@ export function StoreModule(props: StoreModuleProps) {
           pub
           receiver="&self"
           parameters={[{ name: "key", type: "&K" }]}
-          returnType={
-            <>
-              {resultAliasKey}
-              {"<&V>"}
-            </>
-          }
+          returnType={code`${resultAliasKey}<&V>`}
         >
           <MatchExpression expression="self.data.get(key)">
             <MatchArm pattern="Some(entry)">
@@ -259,12 +217,7 @@ export function StoreModule(props: StoreModuleProps) {
           pub
           receiver="&mut self"
           parameters={[{ name: "key", type: "&K" }]}
-          returnType={
-            <>
-              {resultAliasKey}
-              {"<V>"}
-            </>
-          }
+          returnType={code`${resultAliasKey}<V>`}
         >
           <MethodChainExpression receiver="self.data">
             <MethodChainExpression.Call name="remove" args={["key"]} />
@@ -343,19 +296,11 @@ export function StoreModule(props: StoreModuleProps) {
         typeParameters={[
           {
             name: "K",
-            constraint: (
-              <>
-                {prelude.Eq} + {std.hash.Hash} + {prelude.Clone}
-              </>
-            ),
+            constraint: code`${Eq} + ${Hash} + ${Clone}`,
           },
           {
             name: "V",
-            constraint: (
-              <>
-                {prelude.Clone} + {prelude.Send} + {prelude.Sync}
-              </>
-            ),
+            constraint: code`${Clone} + ${Send} + ${Sync}`,
           },
         ]}
       >

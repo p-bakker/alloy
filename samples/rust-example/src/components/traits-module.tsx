@@ -1,4 +1,4 @@
-import { Children, refkey } from "@alloy-js/core";
+import { Children, code, refkey } from "@alloy-js/core";
 import {
   DocComment,
   FunctionDeclaration,
@@ -8,6 +8,8 @@ import {
 } from "@alloy-js/rust";
 
 import { resultAliasKey } from "./error-module.js";
+
+const { Clone, Option, Send, Sync, Vec } = prelude;
 
 export const serializableKey = refkey();
 export const cacheableKey = refkey();
@@ -32,12 +34,7 @@ export function TraitsModule(props: TraitsModuleProps) {
         <FunctionDeclaration
           name="to_bytes"
           receiver="&self"
-          returnType={
-            <>
-              {resultAliasKey}
-              {"<Vec<u8>>"}
-            </>
-          }
+          returnType={code`${resultAliasKey}<${Vec}<u8>>`}
         />
 
         <hbr />
@@ -46,12 +43,7 @@ export function TraitsModule(props: TraitsModuleProps) {
           name="from_bytes"
           receiver="none"
           parameters={[{ name: "bytes", type: "&[u8]" }]}
-          returnType={
-            <>
-              {resultAliasKey}
-              {"<Self>"}
-            </>
-          }
+          returnType={code`${resultAliasKey}<Self>`}
           whereClause="Self: Sized"
         />
       </TraitDeclaration>
@@ -68,11 +60,7 @@ export function TraitsModule(props: TraitsModuleProps) {
         typeParameters={[
           {
             name: "V",
-            constraint: (
-              <>
-                {prelude.Clone} + {prelude.Send} + {prelude.Sync}
-              </>
-            ),
+            constraint: code`${Clone} + ${Send} + ${Sync}`,
           },
         ]}
       >
@@ -95,7 +83,7 @@ export function TraitsModule(props: TraitsModuleProps) {
         <FunctionDeclaration
           name="cached_value"
           receiver="&self"
-          returnType="Option<&V>"
+          returnType={code`${Option}<&V>`}
         />
       </TraitDeclaration>
     </SourceFile>

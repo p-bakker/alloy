@@ -1,4 +1,4 @@
-import { Children, refkey } from "@alloy-js/core";
+import { Children, code, refkey } from "@alloy-js/core";
 import {
   DocComment,
   EnumDeclaration,
@@ -13,6 +13,9 @@ import {
   std,
   TypeAlias,
 } from "@alloy-js/rust";
+
+const { Result } = prelude;
+const { Display, Formatter, Result: FmtResult } = std.fmt;
 
 export const storeErrorKey = refkey();
 export const resultAliasKey = refkey();
@@ -52,23 +55,12 @@ export function ErrorModule(props: ErrorModuleProps) {
 
       <hbr />
 
-      <ImplBlock type={storeErrorKey} trait={std.fmt.Display}>
+      <ImplBlock type={storeErrorKey} trait={Display}>
         <FunctionDeclaration
           name="fmt"
           receiver="&self"
-          parameters={[
-            {
-              name: "f",
-              type: (
-                <>
-                  {"&mut "}
-                  {std.fmt.Formatter}
-                  {"<'_>"}
-                </>
-              ),
-            },
-          ]}
-          returnType={std.fmt.Result}
+          parameters={[{ name: "f", type: code`&mut ${Formatter}<'_>` }]}
+          returnType={FmtResult}
         >
           <MatchExpression expression="self">
             <MatchArm pattern="Self::NotFound">
@@ -99,8 +91,7 @@ export function ErrorModule(props: ErrorModuleProps) {
         pub
         typeParameters={[{ name: "T" }]}
       >
-        {prelude.Result}
-        {"<T, StoreError>"}
+        {code`${Result}<T, StoreError>`}
       </TypeAlias>
     </SourceFile>
   );
