@@ -6,6 +6,7 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_range = {
   Range: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       contains: {
         kind: "function",
@@ -26,6 +27,7 @@ export const mod_range = {
   },
   RangeFrom: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       contains: {
         kind: "function",
@@ -40,6 +42,7 @@ export const mod_range = {
   },
   RangeFromIter: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       remainder: {
         kind: "function",
@@ -51,6 +54,7 @@ export const mod_range = {
   },
   RangeInclusive: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       contains: {
         kind: "function",
@@ -74,6 +78,7 @@ export const mod_range = {
   },
   RangeInclusiveIter: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.95.0",
     },
@@ -88,6 +93,7 @@ export const mod_range = {
   },
   RangeIter: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       remainder: {
         kind: "function",
@@ -99,6 +105,7 @@ export const mod_range = {
   },
   RangeToInclusive: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       contains: {
         kind: "function",
@@ -113,6 +120,7 @@ export const mod_range = {
 export const mod_range_legacy = {
   Range: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
@@ -133,6 +141,7 @@ export const mod_range_legacy = {
   },
   RangeFrom: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
@@ -147,6 +156,7 @@ export const mod_range_legacy = {
   },
   RangeInclusive: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.26.0",
     },
@@ -192,6 +202,7 @@ export const mod_range_legacy = {
   },
   RangeToInclusive: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.26.0",
     },

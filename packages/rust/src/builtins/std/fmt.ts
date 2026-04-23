@@ -6,6 +6,7 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_fmt = {
   Alignment: {
     kind: "enum",
+    canonicalCrate: "core",
     members: {
       Center: {
         kind: "variant",
@@ -32,6 +33,7 @@ export const mod_fmt = {
   },
   Arguments: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       as_str: {
         kind: "function",
@@ -50,12 +52,15 @@ export const mod_fmt = {
   },
   Binary: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   Debug: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   DebugAsHex: {
     kind: "enum",
+    canonicalCrate: "core",
     members: {
       Lower: {
         kind: "variant",
@@ -69,6 +74,7 @@ export const mod_fmt = {
   },
   DebugList: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.2.0",
     },
@@ -107,6 +113,7 @@ export const mod_fmt = {
   },
   DebugMap: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.2.0",
     },
@@ -163,6 +170,7 @@ export const mod_fmt = {
   },
   DebugSet: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.2.0",
     },
@@ -201,6 +209,7 @@ export const mod_fmt = {
   },
   DebugStruct: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.2.0",
     },
@@ -233,6 +242,7 @@ export const mod_fmt = {
   },
   DebugTuple: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.2.0",
     },
@@ -265,18 +275,22 @@ export const mod_fmt = {
   },
   Display: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   Error: {
     kind: "struct",
+    canonicalCrate: "core",
   },
   format: {
     kind: "function",
+    canonicalCrate: "alloc",
     metadata: {
       since: "1.0.0",
     },
   },
   Formatter: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       align: {
         kind: "function",
@@ -415,6 +429,7 @@ export const mod_fmt = {
   },
   FormattingOptions: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       align: {
         kind: "function",
@@ -529,24 +544,29 @@ export const mod_fmt = {
   },
   from_fn: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.93.0",
     },
   },
   FromFn: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.93.0",
     },
   },
   LowerExp: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   LowerHex: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   NumBuffer: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
@@ -568,21 +588,26 @@ export const mod_fmt = {
   },
   NumBufferTrait: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   Octal: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   Pointer: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   Result: {
     kind: "type-alias",
+    canonicalCrate: "core",
   },
   Sign: {
     kind: "enum",
+    canonicalCrate: "core",
     members: {
       Minus: {
         kind: "variant",
@@ -596,17 +621,21 @@ export const mod_fmt = {
   },
   UpperExp: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   UpperHex: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   write: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   Write: {
     kind: "trait",
+    canonicalCrate: "core",
   },
 } as const satisfies Record<string, SymbolDescriptor>;

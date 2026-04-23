@@ -9,6 +9,7 @@ export const mod_char_ = {
   },
   CharCase: {
     kind: "enum",
+    canonicalCrate: "core",
     members: {
       Lower: {
         kind: "variant",
@@ -26,24 +27,28 @@ export const mod_char_ = {
   },
   CharTryFromError: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.34.0",
     },
   },
   decode_utf16: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.9.0",
     },
   },
   DecodeUtf16: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.9.0",
     },
   },
   DecodeUtf16Error: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.9.0",
     },
@@ -58,72 +63,88 @@ export const mod_char_ = {
   },
   EscapeDebug: {
     kind: "struct",
+    canonicalCrate: "core",
   },
   EscapeDefault: {
     kind: "struct",
+    canonicalCrate: "core",
   },
   EscapeUnicode: {
     kind: "struct",
+    canonicalCrate: "core",
   },
   from_digit: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   from_u32: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   from_u32_unchecked: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.5.0",
     },
   },
   MAX: {
     kind: "const",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   MAX_LEN_UTF16: {
     kind: "const",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   MAX_LEN_UTF8: {
     kind: "const",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   ParseCharError: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.20.0",
     },
   },
   REPLACEMENT_CHARACTER: {
     kind: "const",
+    canonicalCrate: "core",
   },
   ToLowercase: {
     kind: "struct",
+    canonicalCrate: "core",
   },
   ToTitlecase: {
     kind: "struct",
+    canonicalCrate: "core",
   },
   ToUppercase: {
     kind: "struct",
+    canonicalCrate: "core",
   },
   TryFromCharError: {
     kind: "struct",
+    canonicalCrate: "core",
   },
   UNICODE_VERSION: {
     kind: "const",
+    canonicalCrate: "core",
     metadata: {
       since: "1.45.0",
     },

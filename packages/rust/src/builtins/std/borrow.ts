@@ -6,12 +6,15 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_borrow = {
   Borrow: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   BorrowMut: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   Cow: {
     kind: "enum",
+    canonicalCrate: "alloc",
     members: {
       Borrowed: {
         kind: "variant",
@@ -57,5 +60,6 @@ export const mod_borrow = {
   },
   ToOwned: {
     kind: "trait",
+    canonicalCrate: "alloc",
   },
 } as const satisfies Record<string, SymbolDescriptor>;

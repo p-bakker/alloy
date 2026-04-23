@@ -6,5 +6,6 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_default_ = {
   Default: {
     kind: "trait",
+    canonicalCrate: "core",
   },
 } as const satisfies Record<string, SymbolDescriptor>;

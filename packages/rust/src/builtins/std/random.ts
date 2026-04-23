@@ -12,6 +12,7 @@ export const mod_random = {
   },
   Distribution: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
@@ -24,6 +25,7 @@ export const mod_random = {
   },
   RandomSource: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },

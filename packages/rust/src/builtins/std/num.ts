@@ -6,6 +6,7 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_num = {
   FpCategory: {
     kind: "enum",
+    canonicalCrate: "core",
     members: {
       Infinite: {
         kind: "variant",
@@ -46,6 +47,7 @@ export const mod_num = {
   },
   IntErrorKind: {
     kind: "enum",
+    canonicalCrate: "core",
     members: {
       Empty: {
         kind: "variant",
@@ -86,6 +88,7 @@ export const mod_num = {
   },
   NonZero: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       abs: {
         kind: "function",
@@ -418,45 +421,59 @@ export const mod_num = {
   },
   NonZeroI128: {
     kind: "type-alias",
+    canonicalCrate: "core",
   },
   NonZeroI16: {
     kind: "type-alias",
+    canonicalCrate: "core",
   },
   NonZeroI32: {
     kind: "type-alias",
+    canonicalCrate: "core",
   },
   NonZeroI64: {
     kind: "type-alias",
+    canonicalCrate: "core",
   },
   NonZeroI8: {
     kind: "type-alias",
+    canonicalCrate: "core",
   },
   NonZeroIsize: {
     kind: "type-alias",
+    canonicalCrate: "core",
   },
   NonZeroU128: {
     kind: "type-alias",
+    canonicalCrate: "core",
   },
   NonZeroU16: {
     kind: "type-alias",
+    canonicalCrate: "core",
   },
   NonZeroU32: {
     kind: "type-alias",
+    canonicalCrate: "core",
   },
   NonZeroU64: {
     kind: "type-alias",
+    canonicalCrate: "core",
   },
   NonZeroU8: {
     kind: "type-alias",
+    canonicalCrate: "core",
   },
   NonZeroUsize: {
     kind: "type-alias",
+    canonicalCrate: "core",
   },
   ParseFloatError: {
     kind: "struct",
+    canonicalCrate: "core",
   },
   ParseIntError: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       kind: {
         kind: "function",
@@ -468,6 +485,7 @@ export const mod_num = {
   },
   Saturating: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       abs: {
         kind: "function",
@@ -583,9 +601,11 @@ export const mod_num = {
   },
   TryFromIntError: {
     kind: "struct",
+    canonicalCrate: "core",
   },
   Wrapping: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       abs: {
         kind: "function",
@@ -707,5 +727,6 @@ export const mod_num = {
   },
   ZeroablePrimitive: {
     kind: "trait",
+    canonicalCrate: "core",
   },
 } as const satisfies Record<string, SymbolDescriptor>;

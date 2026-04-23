@@ -167,6 +167,25 @@ describe("std builtins", () => {
     );
   });
 
+  it("rewrites std re-export imports to alloc/core under noStd", () => {
+    const output = render(
+      <Output>
+        <CrateDirectory name="my_crate" noStd>
+          <SourceFile path="lib">
+            type R = {std.rc.Rc};{"\n"}
+            type D = {std.fmt.Debug};
+          </SourceFile>
+        </CrateDirectory>
+      </Output>,
+    );
+
+    const content = findFile(output, "src/lib").contents.trim();
+    // Rc is re-exported from alloc; Debug is re-exported from core.
+    expect(content).toContain("use alloc::rc::Rc;");
+    expect(content).toContain("use core::fmt::Debug;");
+    expect(content).not.toContain("use std::");
+  });
+
   it("noStd skips std registration but core types still resolve", () => {
     const output = render(
       <Output>

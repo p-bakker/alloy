@@ -6,48 +6,58 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_ptr = {
   addr_eq: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.76.0",
     },
   },
   addr_of: {
     kind: "symbol",
+    canonicalCrate: "core",
     metadata: {
       since: "1.51.0",
     },
   },
   addr_of_mut: {
     kind: "symbol",
+    canonicalCrate: "core",
   },
   Alignment: {
     kind: "type-alias",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   copy: {
     kind: "function",
+    canonicalCrate: "core",
   },
   copy_nonoverlapping: {
     kind: "function",
+    canonicalCrate: "core",
   },
   dangling: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.84.0",
     },
   },
   dangling_mut: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.84.0",
     },
   },
   drop_in_place: {
     kind: "function",
+    canonicalCrate: "core",
   },
   DynMetadata: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       align_of: {
         kind: "function",
@@ -62,48 +72,57 @@ export const mod_ptr = {
   },
   eq: {
     kind: "function",
+    canonicalCrate: "core",
   },
   fn_addr_eq: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.85.0",
     },
   },
   from_mut: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.76.0",
     },
   },
   from_raw_parts: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   from_raw_parts_mut: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   from_ref: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.76.0",
     },
   },
   hash: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.35.0",
     },
   },
   metadata: {
     kind: "function",
+    canonicalCrate: "core",
   },
   NonNull: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.25.0",
     },
@@ -475,68 +494,87 @@ export const mod_ptr = {
   },
   null: {
     kind: "function",
+    canonicalCrate: "core",
   },
   null_mut: {
     kind: "function",
+    canonicalCrate: "core",
   },
   Pointee: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   read: {
     kind: "function",
+    canonicalCrate: "core",
   },
   read_unaligned: {
     kind: "function",
+    canonicalCrate: "core",
   },
   read_volatile: {
     kind: "function",
+    canonicalCrate: "core",
   },
   replace: {
     kind: "function",
+    canonicalCrate: "core",
   },
   slice_from_raw_parts: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.42.0",
     },
   },
   slice_from_raw_parts_mut: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.42.0",
     },
   },
   swap: {
     kind: "function",
+    canonicalCrate: "core",
   },
   swap_nonoverlapping: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.27.0",
     },
   },
   with_exposed_provenance: {
     kind: "function",
+    canonicalCrate: "core",
   },
   with_exposed_provenance_mut: {
     kind: "function",
+    canonicalCrate: "core",
   },
   without_provenance: {
     kind: "function",
+    canonicalCrate: "core",
   },
   without_provenance_mut: {
     kind: "function",
+    canonicalCrate: "core",
   },
   write: {
     kind: "function",
+    canonicalCrate: "core",
   },
   write_bytes: {
     kind: "function",
+    canonicalCrate: "core",
   },
   write_unaligned: {
     kind: "function",
+    canonicalCrate: "core",
   },
   write_volatile: {
     kind: "function",
+    canonicalCrate: "core",
   },
 } as const satisfies Record<string, SymbolDescriptor>;

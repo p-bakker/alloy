@@ -6,6 +6,7 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_error = {
   Error: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   Report: {
     kind: "struct",
@@ -36,6 +37,7 @@ export const mod_error = {
   },
   Request: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       provide_ref: {
         kind: "function",
@@ -77,12 +79,15 @@ export const mod_error = {
   },
   request_ref: {
     kind: "function",
+    canonicalCrate: "core",
   },
   request_value: {
     kind: "function",
+    canonicalCrate: "core",
   },
   Source: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },

@@ -6,15 +6,19 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_result = {
   IntoIter: {
     kind: "struct",
+    canonicalCrate: "core",
   },
   Iter: {
     kind: "struct",
+    canonicalCrate: "core",
   },
   IterMut: {
     kind: "struct",
+    canonicalCrate: "core",
   },
   Result: {
     kind: "enum",
+    canonicalCrate: "core",
     members: {
       and: {
         kind: "function",

@@ -6,6 +6,7 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_contracts = {
   build_check_ensures: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },

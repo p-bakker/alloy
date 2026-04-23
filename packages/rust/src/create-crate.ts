@@ -40,6 +40,13 @@ export interface SymbolDescriptor {
   name?: string;
   /** Cargo features required for this symbol to be available. */
   features?: readonly string[];
+  /**
+   * For symbols re-exported from another crate (e.g. std re-exporting
+   * alloc/core items): the origin crate name. Under `#![no_std]`, the
+   * reference resolver swaps the emitted path from this crate to the
+   * canonical one so the generated `use` compiles.
+   */
+  canonicalCrate?: string;
   metadata?: Record<string, unknown>;
   members?: Record<string, MemberDescriptor>;
 }
@@ -56,7 +63,9 @@ export interface CrateDescriptor<
   items: TItems;
 }
 
-export type MemberRef<M extends MemberDescriptor> = M extends { kind: "variant" }
+export type MemberRef<M extends MemberDescriptor> = M extends {
+  kind: "variant";
+}
   ? VariantComponent
   : Refkey;
 
@@ -303,9 +312,12 @@ function createSymbolFromDescriptor(
 ) {
   const { descriptor, symbolRefkey, exportName } = entry;
   const symbolName = descriptor.name ?? exportName;
-  const metadata = descriptor.features
+  const baseMetadata = descriptor.features
     ? { ...descriptor.metadata, features: descriptor.features }
     : descriptor.metadata;
+  const metadata = descriptor.canonicalCrate
+    ? { ...baseMetadata, canonicalCrate: descriptor.canonicalCrate }
+    : baseMetadata;
   const options = {
     binder,
     refkeys: symbolRefkey,

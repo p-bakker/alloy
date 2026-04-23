@@ -9,6 +9,7 @@ export const mod_pat = {
   },
   RangePattern: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },

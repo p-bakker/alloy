@@ -6,30 +6,35 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_slice = {
   ArrayWindows: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.94.0",
     },
   },
   ChunkBy: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.77.0",
     },
   },
   ChunkByMut: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.77.0",
     },
   },
   Chunks: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   ChunksExact: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.31.0",
     },
@@ -44,6 +49,7 @@ export const mod_slice = {
   },
   ChunksExactMut: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.31.0",
     },
@@ -58,57 +64,67 @@ export const mod_slice = {
   },
   ChunksMut: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   Concat: {
     kind: "trait",
+    canonicalCrate: "alloc",
   },
   EscapeAscii: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.60.0",
     },
   },
   from_mut: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.28.0",
     },
   },
   from_mut_ptr_range: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   from_ptr_range: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   from_raw_parts: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   from_raw_parts_mut: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   from_ref: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.28.0",
     },
   },
   GetDisjointMutError: {
     kind: "enum",
+    canonicalCrate: "core",
     members: {
       IndexOutOfBounds: {
         kind: "variant",
@@ -122,9 +138,11 @@ export const mod_slice = {
   },
   GetDisjointMutIndex: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   Iter: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
@@ -139,6 +157,7 @@ export const mod_slice = {
   },
   IterMut: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
@@ -165,21 +184,25 @@ export const mod_slice = {
   },
   Join: {
     kind: "trait",
+    canonicalCrate: "alloc",
   },
   range: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   RChunks: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.31.0",
     },
   },
   RChunksExact: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.31.0",
     },
@@ -194,6 +217,7 @@ export const mod_slice = {
   },
   RChunksExactMut: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.31.0",
     },
@@ -208,45 +232,53 @@ export const mod_slice = {
   },
   RChunksMut: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.31.0",
     },
   },
   RSplit: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.27.0",
     },
   },
   RSplitMut: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.27.0",
     },
   },
   RSplitN: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   RSplitNMut: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   SliceIndex: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.28.0",
     },
   },
   SlicePattern: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   Split: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
@@ -261,42 +293,49 @@ export const mod_slice = {
   },
   SplitInclusive: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.51.0",
     },
   },
   SplitInclusiveMut: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.51.0",
     },
   },
   SplitMut: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   SplitN: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   SplitNMut: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   try_range: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   Windows: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },

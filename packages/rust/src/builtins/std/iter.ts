@@ -6,6 +6,7 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_iter = {
   ArrayChunks: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
@@ -20,60 +21,70 @@ export const mod_iter = {
   },
   ByRefSized: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   chain: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.91.0",
     },
   },
   Chain: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   Cloned: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.1.0",
     },
   },
   Copied: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.36.0",
     },
   },
   Cycle: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   DoubleEndedIterator: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   empty: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.2.0",
     },
   },
   Empty: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.2.0",
     },
   },
   Enumerate: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
@@ -88,162 +99,189 @@ export const mod_iter = {
   },
   ExactSizeIterator: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   Extend: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   Filter: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   FilterMap: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   FlatMap: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   Flatten: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.29.0",
     },
   },
   from_coroutine: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   from_fn: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.34.0",
     },
   },
   FromCoroutine: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   FromFn: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.34.0",
     },
   },
   FromIterator: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   Fuse: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   FusedIterator: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.26.0",
     },
   },
   Inspect: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   Intersperse: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   IntersperseWith: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   IntoIterator: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   iter: {
     kind: "symbol",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   Iterator: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   Map: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   MapWhile: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.57.0",
     },
   },
   MapWindows: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   once: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.2.0",
     },
   },
   Once: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.2.0",
     },
   },
   once_with: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.43.0",
     },
   },
   OnceWith: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.43.0",
     },
   },
   Peekable: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
@@ -288,48 +326,56 @@ export const mod_iter = {
   },
   Product: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.12.0",
     },
   },
   repeat: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   Repeat: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   repeat_n: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.82.0",
     },
   },
   repeat_with: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.28.0",
     },
   },
   RepeatN: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.82.0",
     },
   },
   RepeatWith: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.28.0",
     },
   },
   Rev: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
@@ -344,84 +390,98 @@ export const mod_iter = {
   },
   Scan: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   Skip: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   SkipWhile: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   Step: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   StepBy: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.28.0",
     },
   },
   successors: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.34.0",
     },
   },
   Successors: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.34.0",
     },
   },
   Sum: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.12.0",
     },
   },
   Take: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   TakeWhile: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   TrustedLen: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   TrustedStep: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   zip: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.59.0",
     },
   },
   Zip: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },

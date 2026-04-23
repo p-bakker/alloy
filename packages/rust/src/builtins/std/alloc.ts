@@ -6,54 +6,63 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_alloc = {
   alloc: {
     kind: "function",
+    canonicalCrate: "alloc",
     metadata: {
       since: "1.28.0",
     },
   },
   alloc_zeroed: {
     kind: "function",
+    canonicalCrate: "alloc",
     metadata: {
       since: "1.28.0",
     },
   },
   Allocator: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   AllocError: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   dealloc: {
     kind: "function",
+    canonicalCrate: "alloc",
     metadata: {
       since: "1.28.0",
     },
   },
   Global: {
     kind: "struct",
+    canonicalCrate: "alloc",
     metadata: {
       since: "unstable",
     },
   },
   GlobalAlloc: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.28.0",
     },
   },
   handle_alloc_error: {
     kind: "function",
+    canonicalCrate: "alloc",
     metadata: {
       since: "1.28.0",
     },
   },
   Layout: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.28.0",
     },
@@ -190,18 +199,21 @@ export const mod_alloc = {
   },
   LayoutErr: {
     kind: "type-alias",
+    canonicalCrate: "core",
     metadata: {
       since: "1.28.0",
     },
   },
   LayoutError: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.50.0",
     },
   },
   realloc: {
     kind: "function",
+    canonicalCrate: "alloc",
     metadata: {
       since: "1.28.0",
     },

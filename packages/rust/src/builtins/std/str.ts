@@ -6,6 +6,7 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_str = {
   Bytes: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
@@ -24,6 +25,7 @@ export const mod_str = {
   },
   CharIndices: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
@@ -44,6 +46,7 @@ export const mod_str = {
   },
   Chars: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
@@ -58,72 +61,84 @@ export const mod_str = {
   },
   EncodeUtf16: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.8.0",
     },
   },
   EscapeDebug: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.34.0",
     },
   },
   EscapeDefault: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.34.0",
     },
   },
   EscapeUnicode: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.34.0",
     },
   },
   from_boxed_utf8_unchecked: {
     kind: "function",
+    canonicalCrate: "alloc",
     metadata: {
       since: "1.20.0",
     },
   },
   from_raw_parts: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   from_raw_parts_mut: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   from_utf8: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   from_utf8_mut: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.20.0",
     },
   },
   from_utf8_unchecked: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   from_utf8_unchecked_mut: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.20.0",
     },
   },
   FromStr: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
@@ -139,6 +154,7 @@ export const mod_str = {
   },
   Lines: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
@@ -153,6 +169,7 @@ export const mod_str = {
   },
   LinesAny: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
@@ -162,42 +179,49 @@ export const mod_str = {
   },
   Matches: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.2.0",
     },
   },
   MatchIndices: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.5.0",
     },
   },
   next_code_point: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   ParseBoolError: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   RMatches: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.2.0",
     },
   },
   RMatchIndices: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.5.0",
     },
   },
   RSplit: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
@@ -212,6 +236,7 @@ export const mod_str = {
   },
   RSplitN: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
@@ -226,6 +251,7 @@ export const mod_str = {
   },
   RSplitTerminator: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
@@ -240,6 +266,7 @@ export const mod_str = {
   },
   Split: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
@@ -254,6 +281,7 @@ export const mod_str = {
   },
   SplitAsciiWhitespace: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.34.0",
     },
@@ -268,6 +296,7 @@ export const mod_str = {
   },
   SplitInclusive: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.51.0",
     },
@@ -282,6 +311,7 @@ export const mod_str = {
   },
   SplitN: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
@@ -296,6 +326,7 @@ export const mod_str = {
   },
   SplitTerminator: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
@@ -310,6 +341,7 @@ export const mod_str = {
   },
   SplitWhitespace: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.1.0",
     },
@@ -327,12 +359,14 @@ export const mod_str = {
   },
   utf8_char_width: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   Utf8Chunk: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.79.0",
     },
@@ -353,12 +387,14 @@ export const mod_str = {
   },
   Utf8Chunks: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.79.0",
     },
   },
   Utf8Error: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
@@ -382,42 +418,55 @@ export const mod_str = {
 export const mod_str_pattern = {
   CharArrayRefSearcher: {
     kind: "struct",
+    canonicalCrate: "core",
   },
   CharArraySearcher: {
     kind: "struct",
+    canonicalCrate: "core",
   },
   CharPredicateSearcher: {
     kind: "struct",
+    canonicalCrate: "core",
   },
   CharSearcher: {
     kind: "struct",
+    canonicalCrate: "core",
   },
   CharSliceSearcher: {
     kind: "struct",
+    canonicalCrate: "core",
   },
   DoubleEndedSearcher: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   EmptyNeedle: {
     kind: "struct",
+    canonicalCrate: "alloc",
   },
   MultiCharEqPattern: {
     kind: "struct",
+    canonicalCrate: "alloc",
   },
   MultiCharEqSearcher: {
     kind: "struct",
+    canonicalCrate: "alloc",
   },
   Pattern: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   ReverseSearcher: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   Searcher: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   SearchStep: {
     kind: "enum",
+    canonicalCrate: "core",
     members: {
       Done: {
         kind: "variant",
@@ -435,15 +484,19 @@ export const mod_str_pattern = {
   },
   StrSearcher: {
     kind: "struct",
+    canonicalCrate: "core",
   },
   StrSearcherImpl: {
     kind: "enum",
+    canonicalCrate: "alloc",
   },
   TwoWaySearcher: {
     kind: "struct",
+    canonicalCrate: "alloc",
   },
   Utf8Pattern: {
     kind: "enum",
+    canonicalCrate: "core",
     members: {
       CharPattern: {
         kind: "variant",

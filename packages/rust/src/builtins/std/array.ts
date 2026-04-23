@@ -6,18 +6,21 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_array = {
   from_fn: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.63.0",
     },
   },
   from_mut: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.53.0",
     },
   },
   from_ref: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.53.0",
     },
@@ -27,6 +30,7 @@ export const mod_array = {
   },
   IntoIter: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.51.0",
     },
@@ -68,17 +72,20 @@ export const mod_array = {
   },
   repeat: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.91.0",
     },
   },
   try_from_fn: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   TryFromSliceError: {
     kind: "struct",
+    canonicalCrate: "core",
   },
 } as const satisfies Record<string, SymbolDescriptor>;

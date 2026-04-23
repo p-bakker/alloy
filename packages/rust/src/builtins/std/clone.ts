@@ -6,14 +6,18 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_clone = {
   Clone: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   CloneToUninit: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   TrivialClone: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   UseCloned: {
     kind: "trait",
+    canonicalCrate: "core",
   },
 } as const satisfies Record<string, SymbolDescriptor>;

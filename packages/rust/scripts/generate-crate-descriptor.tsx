@@ -293,6 +293,12 @@ interface SymbolEntry {
   members?: MemberEntry[];
   /** Rustdoc item ID, used for extracting members after walk */
   itemId?: string;
+  /**
+   * For symbols merged in from another crate (e.g. std merging from
+   * core/alloc), the name of the origin crate — the canonical home
+   * for referencing this symbol under `#![no_std]`.
+   */
+  canonicalCrate?: string;
 }
 
 interface GeneratorState {
@@ -318,6 +324,7 @@ function addSymbol(
   since?: string,
   itemId?: string,
   features?: string[],
+  canonicalCrate?: string,
 ) {
   let syms = state.modules.get(modulePath);
   if (!syms) {
@@ -325,7 +332,7 @@ function addSymbol(
     state.modules.set(modulePath, syms);
   }
   if (!syms.some((s) => s.name === name)) {
-    syms.push({ name, kind, since, itemId, features });
+    syms.push({ name, kind, since, itemId, features, canonicalCrate });
   }
 }
 
@@ -757,6 +764,7 @@ function moduleVarName(modulePath: string): string {
 
 function symbolToJsValue(sym: SymbolEntry): Record<string, unknown> {
   const value: Record<string, unknown> = { kind: sym.kind };
+  if (sym.canonicalCrate) value.canonicalCrate = sym.canonicalCrate;
   if (sym.features && sym.features.length > 0) value.features = sym.features;
   if (sym.since) value.metadata = { since: sym.since };
   if (sym.members && sym.members.length > 0) {
@@ -1252,14 +1260,20 @@ for (const mergePath of cli.mergeFrom) {
         sym.since,
         sym.itemId,
         sym.features,
+        mergeName,
       );
-      // If the merged symbol has members and the main state's copy doesn't, transfer them
-      if (sym.members) {
-        const mainSyms = state.modules.get(modulePath);
-        if (mainSyms) {
-          const mainSym = mainSyms.find((s) => s.name === sym.name);
-          if (mainSym && !mainSym.members) {
+      // Back-fill members + canonicalCrate onto an existing main-state entry:
+      // std's own walk typically encounters the re-exported symbol first without
+      // knowing its origin crate; the merge walk discovers both.
+      const mainSyms = state.modules.get(modulePath);
+      if (mainSyms) {
+        const mainSym = mainSyms.find((s) => s.name === sym.name);
+        if (mainSym) {
+          if (sym.members && !mainSym.members) {
             mainSym.members = sym.members;
+          }
+          if (!mainSym.canonicalCrate) {
+            mainSym.canonicalCrate = mergeName;
           }
         }
       }

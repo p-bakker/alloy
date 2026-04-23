@@ -6,72 +6,84 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_ops = {
   Add: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   AddAssign: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.8.0",
     },
   },
   AsyncFn: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.85.0",
     },
   },
   AsyncFnMut: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.85.0",
     },
   },
   AsyncFnOnce: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.85.0",
     },
   },
   BitAnd: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   BitAndAssign: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.8.0",
     },
   },
   BitOr: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   BitOrAssign: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.8.0",
     },
   },
   BitXor: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   BitXorAssign: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.8.0",
     },
   },
   Bound: {
     kind: "enum",
+    canonicalCrate: "core",
     metadata: {
       since: "1.17.0",
     },
@@ -131,18 +143,21 @@ export const mod_ops = {
   },
   CoerceShared: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   CoerceUnsized: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   ControlFlow: {
     kind: "enum",
+    canonicalCrate: "core",
     metadata: {
       since: "1.55.0",
     },
@@ -219,12 +234,14 @@ export const mod_ops = {
   },
   Coroutine: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   CoroutineState: {
     kind: "enum",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
@@ -241,120 +258,140 @@ export const mod_ops = {
   },
   Deref: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   DerefMut: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   DerefPure: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   DispatchFromDyn: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   Div: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   DivAssign: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.8.0",
     },
   },
   Drop: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   Fn: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   FnMut: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   FnOnce: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   FromResidual: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   Index: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   IndexMut: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   IntoBounds: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   Mul: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   MulAssign: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.8.0",
     },
   },
   Neg: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   Not: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   OneSidedRange: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   OneSidedRangeBound: {
     kind: "enum",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
@@ -375,6 +412,7 @@ export const mod_ops = {
   },
   Range: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
@@ -395,12 +433,14 @@ export const mod_ops = {
   },
   RangeBounds: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.28.0",
     },
   },
   RangeFrom: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
@@ -415,12 +455,14 @@ export const mod_ops = {
   },
   RangeFull: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   RangeInclusive: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.26.0",
     },
@@ -466,6 +508,7 @@ export const mod_ops = {
   },
   RangeTo: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
@@ -480,6 +523,7 @@ export const mod_ops = {
   },
   RangeToInclusive: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.26.0",
     },
@@ -494,78 +538,91 @@ export const mod_ops = {
   },
   Reborrow: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   Receiver: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   Rem: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   RemAssign: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.8.0",
     },
   },
   Residual: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   Shl: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   ShlAssign: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.8.0",
     },
   },
   Shr: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   ShrAssign: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.8.0",
     },
   },
   Sub: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   SubAssign: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.8.0",
     },
   },
   Try: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   Yeet: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },

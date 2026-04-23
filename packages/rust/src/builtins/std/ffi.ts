@@ -6,57 +6,75 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_ffi = {
   c_char: {
     kind: "type-alias",
+    canonicalCrate: "core",
   },
   c_double: {
     kind: "type-alias",
+    canonicalCrate: "core",
   },
   c_float: {
     kind: "type-alias",
+    canonicalCrate: "core",
   },
   c_int: {
     kind: "type-alias",
+    canonicalCrate: "core",
   },
   c_long: {
     kind: "type-alias",
+    canonicalCrate: "core",
   },
   c_longlong: {
     kind: "type-alias",
+    canonicalCrate: "core",
   },
   c_ptrdiff_t: {
     kind: "type-alias",
+    canonicalCrate: "core",
   },
   c_schar: {
     kind: "type-alias",
+    canonicalCrate: "core",
   },
   c_short: {
     kind: "type-alias",
+    canonicalCrate: "core",
   },
   c_size_t: {
     kind: "type-alias",
+    canonicalCrate: "core",
   },
   c_ssize_t: {
     kind: "type-alias",
+    canonicalCrate: "core",
   },
   c_uchar: {
     kind: "type-alias",
+    canonicalCrate: "core",
   },
   c_uint: {
     kind: "type-alias",
+    canonicalCrate: "core",
   },
   c_ulong: {
     kind: "type-alias",
+    canonicalCrate: "core",
   },
   c_ulonglong: {
     kind: "type-alias",
+    canonicalCrate: "core",
   },
   c_ushort: {
     kind: "type-alias",
+    canonicalCrate: "core",
   },
   c_void: {
     kind: "enum",
+    canonicalCrate: "core",
   },
   CStr: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       as_c_str: {
         kind: "function",
@@ -144,6 +162,7 @@ export const mod_ffi = {
   },
   CString: {
     kind: "struct",
+    canonicalCrate: "alloc",
     members: {
       as_bytes: {
         kind: "function",
@@ -232,9 +251,11 @@ export const mod_ffi = {
   },
   FromBytesUntilNulError: {
     kind: "struct",
+    canonicalCrate: "core",
   },
   FromBytesWithNulError: {
     kind: "enum",
+    canonicalCrate: "core",
     members: {
       InteriorNul: {
         kind: "variant",
@@ -248,6 +269,7 @@ export const mod_ffi = {
   },
   FromVecWithNulError: {
     kind: "struct",
+    canonicalCrate: "alloc",
     members: {
       as_bytes: {
         kind: "function",
@@ -265,6 +287,7 @@ export const mod_ffi = {
   },
   IntoStringError: {
     kind: "struct",
+    canonicalCrate: "alloc",
     members: {
       into_cstring: {
         kind: "function",
@@ -282,6 +305,7 @@ export const mod_ffi = {
   },
   NulError: {
     kind: "struct",
+    canonicalCrate: "alloc",
     members: {
       into_vec: {
         kind: "function",
@@ -536,9 +560,11 @@ export const mod_ffi = {
   },
   VaArgSafe: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   VaList: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       arg: {
         kind: "function",
@@ -553,12 +579,14 @@ export const mod_ffi = {
 export const mod_ffi_c_str = {
   Bytes: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   CStr: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       as_c_str: {
         kind: "function",
@@ -646,6 +674,7 @@ export const mod_ffi_c_str = {
   },
   CString: {
     kind: "struct",
+    canonicalCrate: "alloc",
     members: {
       as_bytes: {
         kind: "function",
@@ -734,9 +763,11 @@ export const mod_ffi_c_str = {
   },
   FromBytesUntilNulError: {
     kind: "struct",
+    canonicalCrate: "core",
   },
   FromBytesWithNulError: {
     kind: "enum",
+    canonicalCrate: "core",
     members: {
       InteriorNul: {
         kind: "variant",
@@ -750,6 +781,7 @@ export const mod_ffi_c_str = {
   },
   FromVecWithNulError: {
     kind: "struct",
+    canonicalCrate: "alloc",
     members: {
       as_bytes: {
         kind: "function",
@@ -767,6 +799,7 @@ export const mod_ffi_c_str = {
   },
   IntoStringError: {
     kind: "struct",
+    canonicalCrate: "alloc",
     members: {
       into_cstring: {
         kind: "function",
@@ -784,6 +817,7 @@ export const mod_ffi_c_str = {
   },
   NulError: {
     kind: "struct",
+    canonicalCrate: "alloc",
     members: {
       into_vec: {
         kind: "function",
@@ -1050,9 +1084,11 @@ export const mod_ffi_os_str = {
 export const mod_ffi_va_list = {
   VaArgSafe: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   VaList: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       arg: {
         kind: "function",

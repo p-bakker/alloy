@@ -6,6 +6,7 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_string = {
   Drain: {
     kind: "struct",
+    canonicalCrate: "alloc",
     members: {
       as_str: {
         kind: "function",
@@ -17,9 +18,11 @@ export const mod_string = {
   },
   FromUtf16Error: {
     kind: "struct",
+    canonicalCrate: "alloc",
   },
   FromUtf8Error: {
     kind: "struct",
+    canonicalCrate: "alloc",
     members: {
       as_bytes: {
         kind: "function",
@@ -49,6 +52,7 @@ export const mod_string = {
   },
   IntoChars: {
     kind: "struct",
+    canonicalCrate: "alloc",
     members: {
       as_str: {
         kind: "function",
@@ -66,12 +70,14 @@ export const mod_string = {
   },
   ParseError: {
     kind: "type-alias",
+    canonicalCrate: "alloc",
     metadata: {
       since: "1.5.0",
     },
   },
   String: {
     kind: "struct",
+    canonicalCrate: "alloc",
     members: {
       as_bytes: {
         kind: "function",
@@ -379,5 +385,6 @@ export const mod_string = {
   },
   ToString: {
     kind: "trait",
+    canonicalCrate: "alloc",
   },
 } as const satisfies Record<string, SymbolDescriptor>;

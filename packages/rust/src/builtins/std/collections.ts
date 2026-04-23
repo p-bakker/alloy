@@ -6,6 +6,7 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_collections = {
   BinaryHeap: {
     kind: "struct",
+    canonicalCrate: "alloc",
     members: {
       allocator: {
         kind: "function",
@@ -202,6 +203,7 @@ export const mod_collections = {
   },
   BTreeMap: {
     kind: "struct",
+    canonicalCrate: "alloc",
     members: {
       append: {
         kind: "function",
@@ -437,6 +439,7 @@ export const mod_collections = {
   },
   BTreeSet: {
     kind: "struct",
+    canonicalCrate: "alloc",
     members: {
       append: {
         kind: "function",
@@ -1136,6 +1139,7 @@ export const mod_collections = {
   },
   LinkedList: {
     kind: "struct",
+    canonicalCrate: "alloc",
     members: {
       append: {
         kind: "function",
@@ -1305,6 +1309,7 @@ export const mod_collections = {
   },
   TryReserveError: {
     kind: "struct",
+    canonicalCrate: "alloc",
     members: {
       kind: {
         kind: "function",
@@ -1316,6 +1321,7 @@ export const mod_collections = {
   },
   TryReserveErrorKind: {
     kind: "enum",
+    canonicalCrate: "alloc",
     members: {
       AllocError: {
         kind: "variant",
@@ -1329,6 +1335,7 @@ export const mod_collections = {
   },
   VecDeque: {
     kind: "struct",
+    canonicalCrate: "alloc",
     members: {
       allocator: {
         kind: "function",
@@ -1732,6 +1739,7 @@ export const mod_collections = {
 export const mod_collections_binary_heap = {
   BinaryHeap: {
     kind: "struct",
+    canonicalCrate: "alloc",
     members: {
       allocator: {
         kind: "function",
@@ -1928,6 +1936,7 @@ export const mod_collections_binary_heap = {
   },
   Drain: {
     kind: "struct",
+    canonicalCrate: "alloc",
     members: {
       allocator: {
         kind: "function",
@@ -1939,6 +1948,7 @@ export const mod_collections_binary_heap = {
   },
   DrainSorted: {
     kind: "struct",
+    canonicalCrate: "alloc",
     members: {
       allocator: {
         kind: "function",
@@ -1953,6 +1963,7 @@ export const mod_collections_binary_heap = {
   },
   IntoIter: {
     kind: "struct",
+    canonicalCrate: "alloc",
     members: {
       allocator: {
         kind: "function",
@@ -1964,6 +1975,7 @@ export const mod_collections_binary_heap = {
   },
   IntoIterSorted: {
     kind: "struct",
+    canonicalCrate: "alloc",
     members: {
       allocator: {
         kind: "function",
@@ -1975,9 +1987,11 @@ export const mod_collections_binary_heap = {
   },
   Iter: {
     kind: "struct",
+    canonicalCrate: "alloc",
   },
   PeekMut: {
     kind: "struct",
+    canonicalCrate: "alloc",
     members: {
       pop: {
         kind: "function",
@@ -2035,6 +2049,7 @@ export const mod_collections_hash_map = {
 export const mod_collections_linked_list = {
   Cursor: {
     kind: "struct",
+    canonicalCrate: "alloc",
     members: {
       as_list: {
         kind: "function",
@@ -2094,6 +2109,7 @@ export const mod_collections_linked_list = {
   },
   CursorMut: {
     kind: "struct",
+    canonicalCrate: "alloc",
     members: {
       as_cursor: {
         kind: "function",
@@ -2243,18 +2259,23 @@ export const mod_collections_linked_list = {
   },
   ExtractIf: {
     kind: "struct",
+    canonicalCrate: "alloc",
   },
   IntoIter: {
     kind: "struct",
+    canonicalCrate: "alloc",
   },
   Iter: {
     kind: "struct",
+    canonicalCrate: "alloc",
   },
   IterMut: {
     kind: "struct",
+    canonicalCrate: "alloc",
   },
   LinkedList: {
     kind: "struct",
+    canonicalCrate: "alloc",
     members: {
       append: {
         kind: "function",
@@ -2427,12 +2448,14 @@ export const mod_collections_linked_list = {
 export const mod_collections_vec_deque = {
   Drain: {
     kind: "struct",
+    canonicalCrate: "alloc",
     metadata: {
       since: "1.6.0",
     },
   },
   ExtractIf: {
     kind: "struct",
+    canonicalCrate: "alloc",
     metadata: {
       since: "unstable",
     },
@@ -2447,12 +2470,14 @@ export const mod_collections_vec_deque = {
   },
   IntoIter: {
     kind: "struct",
+    canonicalCrate: "alloc",
     metadata: {
       since: "1.0.0",
     },
   },
   Iter: {
     kind: "struct",
+    canonicalCrate: "alloc",
     metadata: {
       since: "1.0.0",
     },
@@ -2467,6 +2492,7 @@ export const mod_collections_vec_deque = {
   },
   IterMut: {
     kind: "struct",
+    canonicalCrate: "alloc",
     metadata: {
       since: "1.0.0",
     },
@@ -2499,12 +2525,14 @@ export const mod_collections_vec_deque = {
   },
   Splice: {
     kind: "struct",
+    canonicalCrate: "alloc",
     metadata: {
       since: "unstable",
     },
   },
   VecDeque: {
     kind: "struct",
+    canonicalCrate: "alloc",
     members: {
       allocator: {
         kind: "function",

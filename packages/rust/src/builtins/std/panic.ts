@@ -6,6 +6,7 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_panic = {
   abort_unwind: {
     kind: "function",
+    canonicalCrate: "core",
   },
   always_abort: {
     kind: "function",
@@ -15,6 +16,7 @@ export const mod_panic = {
   },
   AssertUnwindSafe: {
     kind: "struct",
+    canonicalCrate: "core",
   },
   BacktraceStyle: {
     kind: "enum",
@@ -50,6 +52,7 @@ export const mod_panic = {
   },
   Location: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       caller: {
         kind: "function",
@@ -124,6 +127,7 @@ export const mod_panic = {
   },
   PanicInfo: {
     kind: "type-alias",
+    canonicalCrate: "core",
     metadata: {
       since: "1.10.0",
     },
@@ -156,6 +160,7 @@ export const mod_panic = {
   },
   PanicMessage: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.81.0",
     },
@@ -170,6 +175,7 @@ export const mod_panic = {
   },
   RefUnwindSafe: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   resume_unwind: {
     kind: "function",
@@ -197,6 +203,7 @@ export const mod_panic = {
   },
   UnwindSafe: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   update_hook: {
     kind: "function",

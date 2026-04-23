@@ -6,6 +6,7 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_task = {
   Context: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.36.0",
     },
@@ -39,6 +40,7 @@ export const mod_task = {
   },
   ContextBuilder: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
@@ -85,18 +87,21 @@ export const mod_task = {
   },
   local_waker_fn: {
     kind: "function",
+    canonicalCrate: "alloc",
     metadata: {
       since: "unstable",
     },
   },
   LocalWake: {
     kind: "trait",
+    canonicalCrate: "alloc",
     metadata: {
       since: "unstable",
     },
   },
   LocalWaker: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
@@ -163,6 +168,7 @@ export const mod_task = {
   },
   Poll: {
     kind: "enum",
+    canonicalCrate: "core",
     metadata: {
       since: "1.36.0",
     },
@@ -215,6 +221,7 @@ export const mod_task = {
   },
   RawWaker: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.36.0",
     },
@@ -230,6 +237,7 @@ export const mod_task = {
   },
   RawWakerVTable: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.36.0",
     },
@@ -245,18 +253,21 @@ export const mod_task = {
   },
   ready: {
     kind: "symbol",
+    canonicalCrate: "core",
     metadata: {
       since: "1.64.0",
     },
   },
   Wake: {
     kind: "trait",
+    canonicalCrate: "alloc",
     metadata: {
       since: "1.51.0",
     },
   },
   Waker: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.36.0",
     },
@@ -323,6 +334,7 @@ export const mod_task = {
   },
   waker_fn: {
     kind: "function",
+    canonicalCrate: "alloc",
     metadata: {
       since: "unstable",
     },

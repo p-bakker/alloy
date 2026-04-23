@@ -6,6 +6,7 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_time = {
   Duration: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       abs_diff: {
         kind: "function",
@@ -399,6 +400,7 @@ export const mod_time = {
   },
   TryFromFloatSecsError: {
     kind: "struct",
+    canonicalCrate: "core",
   },
   UNIX_EPOCH: {
     kind: "const",

@@ -6,6 +6,7 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_io = {
   BorrowedBuf: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       capacity: {
         kind: "function",
@@ -41,6 +42,7 @@ export const mod_io = {
   },
   BorrowedCursor: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       advance: {
         kind: "function",

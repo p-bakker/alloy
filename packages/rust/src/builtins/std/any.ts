@@ -6,33 +6,39 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_any = {
   Any: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   try_as_dyn: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   try_as_dyn_mut: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   type_name: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.38.0",
     },
   },
   type_name_of_val: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.76.0",
     },
   },
   TypeId: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       info: {
         kind: "function",

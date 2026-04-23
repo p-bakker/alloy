@@ -6,18 +6,22 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_mem = {
   align_of: {
     kind: "function",
+    canonicalCrate: "core",
   },
   align_of_val: {
     kind: "function",
+    canonicalCrate: "core",
   },
   align_of_val_raw: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   Alignment: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
@@ -91,6 +95,7 @@ export const mod_mem = {
   },
   Assume: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
@@ -111,30 +116,36 @@ export const mod_mem = {
   },
   conjure_zst: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   copy: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   discriminant: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.21.0",
     },
   },
   Discriminant: {
     kind: "struct",
+    canonicalCrate: "core",
   },
   drop: {
     kind: "function",
+    canonicalCrate: "core",
   },
   DropGuard: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
@@ -157,15 +168,18 @@ export const mod_mem = {
   },
   forget: {
     kind: "function",
+    canonicalCrate: "core",
   },
   forget_unsized: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   ManuallyDrop: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.20.0",
     },
@@ -202,6 +216,7 @@ export const mod_mem = {
   },
   MaybeDangling: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       as_mut: {
         kind: "function",
@@ -220,84 +235,101 @@ export const mod_mem = {
   },
   min_align_of: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   min_align_of_val: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   needs_drop: {
     kind: "function",
+    canonicalCrate: "core",
   },
   offset_of: {
     kind: "symbol",
+    canonicalCrate: "core",
     metadata: {
       since: "1.77.0",
     },
   },
   replace: {
     kind: "function",
+    canonicalCrate: "core",
   },
   size_of: {
     kind: "function",
+    canonicalCrate: "core",
   },
   size_of_val: {
     kind: "function",
+    canonicalCrate: "core",
   },
   size_of_val_raw: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   swap: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   take: {
     kind: "function",
+    canonicalCrate: "core",
   },
   transmute: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   transmute_copy: {
     kind: "function",
+    canonicalCrate: "core",
   },
   TransmuteFrom: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   uninitialized: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   variant_count: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   zeroed: {
     kind: "function",
+    canonicalCrate: "core",
   },
 } as const satisfies Record<string, SymbolDescriptor>;
 
 export const mod_mem_type_info = {
   Abi: {
     kind: "enum",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
@@ -318,66 +350,77 @@ export const mod_mem_type_info = {
   },
   Array: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   Bool: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   Char: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   Const: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   DynTrait: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   DynTraitPredicate: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   Enum: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   Field: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   Float: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   FnPtr: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   Generic: {
     kind: "enum",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
@@ -398,60 +441,70 @@ export const mod_mem_type_info = {
   },
   GenericType: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   Int: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   Lifetime: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   Pointer: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   Reference: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   Slice: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   Str: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   Struct: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   Trait: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   TraitImpl: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
@@ -463,12 +516,14 @@ export const mod_mem_type_info = {
   },
   Tuple: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   Type: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
@@ -484,6 +539,7 @@ export const mod_mem_type_info = {
   },
   TypeKind: {
     kind: "enum",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
@@ -556,12 +612,14 @@ export const mod_mem_type_info = {
   },
   Union: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   Variant: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },

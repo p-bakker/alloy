@@ -6,207 +6,248 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_f64 = {
   DIGITS: {
     kind: "const",
+    canonicalCrate: "core",
   },
   EPSILON: {
     kind: "const",
+    canonicalCrate: "core",
   },
   INFINITY: {
     kind: "const",
+    canonicalCrate: "core",
   },
   MANTISSA_DIGITS: {
     kind: "const",
+    canonicalCrate: "core",
   },
   MAX: {
     kind: "const",
+    canonicalCrate: "core",
   },
   MAX_10_EXP: {
     kind: "const",
+    canonicalCrate: "core",
   },
   MAX_EXP: {
     kind: "const",
+    canonicalCrate: "core",
   },
   MIN: {
     kind: "const",
+    canonicalCrate: "core",
   },
   MIN_10_EXP: {
     kind: "const",
+    canonicalCrate: "core",
   },
   MIN_EXP: {
     kind: "const",
+    canonicalCrate: "core",
   },
   MIN_POSITIVE: {
     kind: "const",
+    canonicalCrate: "core",
   },
   NAN: {
     kind: "const",
+    canonicalCrate: "core",
   },
   NEG_INFINITY: {
     kind: "const",
+    canonicalCrate: "core",
   },
   RADIX: {
     kind: "const",
+    canonicalCrate: "core",
   },
 } as const satisfies Record<string, SymbolDescriptor>;
 
 export const mod_f64_consts = {
   E: {
     kind: "const",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   EULER_GAMMA: {
     kind: "const",
+    canonicalCrate: "core",
     metadata: {
       since: "1.94.0",
     },
   },
   FRAC_1_PI: {
     kind: "const",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   FRAC_1_SQRT_2: {
     kind: "const",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   FRAC_1_SQRT_2PI: {
     kind: "const",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   FRAC_1_SQRT_3: {
     kind: "const",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   FRAC_1_SQRT_5: {
     kind: "const",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   FRAC_1_SQRT_PI: {
     kind: "const",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   FRAC_2_PI: {
     kind: "const",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   FRAC_2_SQRT_PI: {
     kind: "const",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   FRAC_PI_2: {
     kind: "const",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   FRAC_PI_3: {
     kind: "const",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   FRAC_PI_4: {
     kind: "const",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   FRAC_PI_6: {
     kind: "const",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   FRAC_PI_8: {
     kind: "const",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   GOLDEN_RATIO: {
     kind: "const",
+    canonicalCrate: "core",
     metadata: {
       since: "1.94.0",
     },
   },
   LN_10: {
     kind: "const",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   LN_2: {
     kind: "const",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   LOG10_2: {
     kind: "const",
+    canonicalCrate: "core",
     metadata: {
       since: "1.43.0",
     },
   },
   LOG10_E: {
     kind: "const",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   LOG2_10: {
     kind: "const",
+    canonicalCrate: "core",
     metadata: {
       since: "1.43.0",
     },
   },
   LOG2_E: {
     kind: "const",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   PI: {
     kind: "const",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   SQRT_2: {
     kind: "const",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   SQRT_3: {
     kind: "const",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   SQRT_5: {
     kind: "const",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   TAU: {
     kind: "const",
+    canonicalCrate: "core",
     metadata: {
       since: "1.47.0",
     },
@@ -216,78 +257,91 @@ export const mod_f64_consts = {
 export const mod_f64_math = {
   abs_sub: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   cbrt: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   ceil: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   div_euclid: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   floor: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   fract: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   mul_add: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   powi: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   rem_euclid: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   round: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   round_ties_even: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   sqrt: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   trunc: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },

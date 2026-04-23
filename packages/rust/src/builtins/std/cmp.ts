@@ -6,63 +6,75 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_cmp = {
   Eq: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   max: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   max_by: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.53.0",
     },
   },
   max_by_key: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.53.0",
     },
   },
   min: {
     kind: "function",
+    canonicalCrate: "core",
   },
   min_by: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.53.0",
     },
   },
   min_by_key: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.53.0",
     },
   },
   minmax: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   minmax_by: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   minmax_by_key: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   Ord: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   Ordering: {
     kind: "enum",
+    canonicalCrate: "core",
     members: {
       Equal: {
         kind: "variant",
@@ -143,11 +155,14 @@ export const mod_cmp = {
   },
   PartialEq: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   PartialOrd: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   Reverse: {
     kind: "struct",
+    canonicalCrate: "core",
   },
 } as const satisfies Record<string, SymbolDescriptor>;

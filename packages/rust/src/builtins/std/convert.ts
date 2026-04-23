@@ -6,35 +6,44 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_convert = {
   AsMut: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   AsRef: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   FloatToInt: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   From: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   identity: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.33.0",
     },
   },
   Infallible: {
     kind: "enum",
+    canonicalCrate: "core",
   },
   Into: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   TryFrom: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   TryInto: {
     kind: "trait",
+    canonicalCrate: "core",
   },
 } as const satisfies Record<string, SymbolDescriptor>;

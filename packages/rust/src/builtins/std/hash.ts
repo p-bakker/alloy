@@ -6,12 +6,14 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_hash = {
   BuildHasher: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.7.0",
     },
   },
   BuildHasherDefault: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.7.0",
     },
@@ -42,12 +44,14 @@ export const mod_hash = {
   },
   Hash: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   Hasher: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
@@ -69,6 +73,7 @@ export const mod_hash = {
   },
   SipHasher: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },

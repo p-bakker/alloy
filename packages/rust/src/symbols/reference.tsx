@@ -127,6 +127,20 @@ export function ref(
 
     let useFullyQualified = false;
 
+    // Under #![no_std], swap a std re-export for its canonical crate (the
+    // alloc/core origin recorded by the generator). std itself is still
+    // registered so the refkey resolves, but imports must target the
+    // canonical crate so the emitted `use` compiles.
+    const canonicalCrate = lexicalDeclaration.metadata?.canonicalCrate as
+      | string
+      | undefined;
+    const effectiveCrateName =
+      crateContext?.noStd && canonicalCrate
+        ? canonicalCrate
+        : targetCrate instanceof RustCrateScope
+          ? targetCrate.name
+          : "";
+
     if (
       isPreludeSymbol &&
       currentModuleScope.hasLocalDeclaration(declarationName)
@@ -145,7 +159,7 @@ export function ref(
       }
 
       const usePath = buildUsePath(
-        isSameCrate ? "crate" : targetCrate.name,
+        isSameCrate ? "crate" : effectiveCrateName,
         result.pathDown,
       );
 
@@ -204,7 +218,7 @@ export function ref(
     }
 
     if (useFullyQualified && targetCrate instanceof RustCrateScope) {
-      const qualifiedPath = buildUsePath(targetCrate.name, result.pathDown);
+      const qualifiedPath = buildUsePath(effectiveCrateName, result.pathDown);
       return [
         <>
           {qualifiedPath}::{declarationName}

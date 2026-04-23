@@ -12,6 +12,7 @@ export const mod_ascii = {
   },
   Char: {
     kind: "enum",
+    canonicalCrate: "core",
     members: {
       Acknowledge: {
         kind: "variant",
@@ -1061,8 +1062,10 @@ export const mod_ascii = {
   },
   escape_default: {
     kind: "function",
+    canonicalCrate: "core",
   },
   EscapeDefault: {
     kind: "struct",
+    canonicalCrate: "core",
   },
 } as const satisfies Record<string, SymbolDescriptor>;

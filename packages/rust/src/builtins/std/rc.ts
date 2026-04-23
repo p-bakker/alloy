@@ -6,6 +6,7 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_rc = {
   Rc: {
     kind: "struct",
+    canonicalCrate: "alloc",
     members: {
       allocator: {
         kind: "function",
@@ -357,6 +358,7 @@ export const mod_rc = {
   },
   UniqueRc: {
     kind: "struct",
+    canonicalCrate: "alloc",
     members: {
       downgrade: {
         kind: "function",
@@ -407,6 +409,7 @@ export const mod_rc = {
   },
   Weak: {
     kind: "struct",
+    canonicalCrate: "alloc",
     members: {
       allocator: {
         kind: "function",

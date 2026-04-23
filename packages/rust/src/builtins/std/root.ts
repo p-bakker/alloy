@@ -6,18 +6,23 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_root = {
   assert: {
     kind: "symbol",
+    canonicalCrate: "core",
   },
   assert_eq: {
     kind: "symbol",
+    canonicalCrate: "core",
   },
   assert_matches: {
     kind: "symbol",
+    canonicalCrate: "core",
   },
   assert_ne: {
     kind: "symbol",
+    canonicalCrate: "core",
   },
   assert_unsafe_precondition: {
     kind: "symbol",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
@@ -33,24 +38,31 @@ export const mod_root = {
   },
   cfg: {
     kind: "symbol",
+    canonicalCrate: "core",
   },
   cfg_select: {
     kind: "symbol",
+    canonicalCrate: "core",
   },
   column: {
     kind: "symbol",
+    canonicalCrate: "core",
   },
   compile_error: {
     kind: "symbol",
+    canonicalCrate: "core",
   },
   concat: {
     kind: "symbol",
+    canonicalCrate: "core",
   },
   concat_bytes: {
     kind: "symbol",
+    canonicalCrate: "core",
   },
   const_format_args: {
     kind: "symbol",
+    canonicalCrate: "core",
   },
   dbg: {
     kind: "symbol",
@@ -60,15 +72,19 @@ export const mod_root = {
   },
   debug_assert: {
     kind: "symbol",
+    canonicalCrate: "core",
   },
   debug_assert_eq: {
     kind: "symbol",
+    canonicalCrate: "core",
   },
   debug_assert_matches: {
     kind: "symbol",
+    canonicalCrate: "core",
   },
   debug_assert_ne: {
     kind: "symbol",
+    canonicalCrate: "core",
   },
   deref: {
     kind: "symbol",
@@ -81,6 +97,7 @@ export const mod_root = {
   },
   env: {
     kind: "symbol",
+    canonicalCrate: "core",
   },
   eprint: {
     kind: "symbol",
@@ -102,6 +119,7 @@ export const mod_root = {
   },
   file: {
     kind: "symbol",
+    canonicalCrate: "core",
   },
   Fn: {
     kind: "trait",
@@ -114,9 +132,11 @@ export const mod_root = {
   },
   format: {
     kind: "symbol",
+    canonicalCrate: "alloc",
   },
   format_args: {
     kind: "symbol",
+    canonicalCrate: "core",
   },
   hash_map: {
     kind: "symbol",
@@ -126,12 +146,15 @@ export const mod_root = {
   },
   include: {
     kind: "symbol",
+    canonicalCrate: "core",
   },
   include_bytes: {
     kind: "symbol",
+    canonicalCrate: "core",
   },
   include_str: {
     kind: "symbol",
+    canonicalCrate: "core",
   },
   IntoIterator: {
     kind: "trait",
@@ -144,27 +167,34 @@ export const mod_root = {
   },
   line: {
     kind: "symbol",
+    canonicalCrate: "core",
   },
   log_syntax: {
     kind: "symbol",
+    canonicalCrate: "core",
   },
   matches: {
     kind: "symbol",
+    canonicalCrate: "core",
   },
   module_path: {
     kind: "symbol",
+    canonicalCrate: "core",
   },
   option_env: {
     kind: "symbol",
+    canonicalCrate: "core",
   },
   panic: {
     kind: "symbol",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   pattern_type: {
     kind: "symbol",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
@@ -183,6 +213,7 @@ export const mod_root = {
   },
   stringify: {
     kind: "symbol",
+    canonicalCrate: "core",
   },
   thread_local: {
     kind: "symbol",
@@ -192,29 +223,37 @@ export const mod_root = {
   },
   todo: {
     kind: "symbol",
+    canonicalCrate: "core",
   },
   trace_macros: {
     kind: "symbol",
+    canonicalCrate: "core",
   },
   try: {
     kind: "symbol",
+    canonicalCrate: "core",
   },
   type_ascribe: {
     kind: "symbol",
   },
   unimplemented: {
     kind: "symbol",
+    canonicalCrate: "core",
   },
   unreachable: {
     kind: "symbol",
+    canonicalCrate: "core",
   },
   vec: {
     kind: "symbol",
+    canonicalCrate: "alloc",
   },
   write: {
     kind: "symbol",
+    canonicalCrate: "core",
   },
   writeln: {
     kind: "symbol",
+    canonicalCrate: "core",
   },
 } as const satisfies Record<string, SymbolDescriptor>;

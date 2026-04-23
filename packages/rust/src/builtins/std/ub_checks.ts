@@ -6,11 +6,13 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_ub_checks = {
   assert_unsafe_precondition: {
     kind: "symbol",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   check_library_ub: {
     kind: "function",
+    canonicalCrate: "core",
   },
 } as const satisfies Record<string, SymbolDescriptor>;

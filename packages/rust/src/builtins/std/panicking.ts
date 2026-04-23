@@ -6,101 +6,132 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_panicking = {
   const_panic_fmt: {
     kind: "function",
+    canonicalCrate: "core",
   },
   panic: {
     kind: "function",
+    canonicalCrate: "core",
   },
   panic_display: {
     kind: "function",
+    canonicalCrate: "core",
   },
   panic_fmt: {
     kind: "function",
+    canonicalCrate: "core",
   },
   panic_nounwind: {
     kind: "function",
+    canonicalCrate: "core",
   },
   panic_nounwind_fmt: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   panic_nounwind_nobacktrace: {
     kind: "function",
+    canonicalCrate: "core",
   },
   panic_str_2015: {
     kind: "function",
+    canonicalCrate: "core",
   },
   unreachable_display: {
     kind: "function",
+    canonicalCrate: "core",
   },
 } as const satisfies Record<string, SymbolDescriptor>;
 
 export const mod_panicking_panic_const = {
   panic_const_add_overflow: {
     kind: "function",
+    canonicalCrate: "core",
   },
   panic_const_async_fn_resumed: {
     kind: "function",
+    canonicalCrate: "core",
   },
   panic_const_async_fn_resumed_drop: {
     kind: "function",
+    canonicalCrate: "core",
   },
   panic_const_async_fn_resumed_panic: {
     kind: "function",
+    canonicalCrate: "core",
   },
   panic_const_async_gen_fn_resumed: {
     kind: "function",
+    canonicalCrate: "core",
   },
   panic_const_async_gen_fn_resumed_drop: {
     kind: "function",
+    canonicalCrate: "core",
   },
   panic_const_async_gen_fn_resumed_panic: {
     kind: "function",
+    canonicalCrate: "core",
   },
   panic_const_coroutine_resumed: {
     kind: "function",
+    canonicalCrate: "core",
   },
   panic_const_coroutine_resumed_drop: {
     kind: "function",
+    canonicalCrate: "core",
   },
   panic_const_coroutine_resumed_panic: {
     kind: "function",
+    canonicalCrate: "core",
   },
   panic_const_div_by_zero: {
     kind: "function",
+    canonicalCrate: "core",
   },
   panic_const_div_overflow: {
     kind: "function",
+    canonicalCrate: "core",
   },
   panic_const_gen_fn_none: {
     kind: "function",
+    canonicalCrate: "core",
   },
   panic_const_gen_fn_none_drop: {
     kind: "function",
+    canonicalCrate: "core",
   },
   panic_const_gen_fn_none_panic: {
     kind: "function",
+    canonicalCrate: "core",
   },
   panic_const_mul_overflow: {
     kind: "function",
+    canonicalCrate: "core",
   },
   panic_const_neg_overflow: {
     kind: "function",
+    canonicalCrate: "core",
   },
   panic_const_rem_by_zero: {
     kind: "function",
+    canonicalCrate: "core",
   },
   panic_const_rem_overflow: {
     kind: "function",
+    canonicalCrate: "core",
   },
   panic_const_shl_overflow: {
     kind: "function",
+    canonicalCrate: "core",
   },
   panic_const_shr_overflow: {
     kind: "function",
+    canonicalCrate: "core",
   },
   panic_const_sub_overflow: {
     kind: "function",
+    canonicalCrate: "core",
   },
 } as const satisfies Record<string, SymbolDescriptor>;

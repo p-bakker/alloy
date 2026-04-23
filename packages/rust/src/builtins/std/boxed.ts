@@ -6,6 +6,7 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_boxed = {
   Box: {
     kind: "struct",
+    canonicalCrate: "alloc",
     members: {
       allocator: {
         kind: "function",
@@ -350,6 +351,7 @@ export const mod_boxed = {
   },
   ThinBox: {
     kind: "struct",
+    canonicalCrate: "alloc",
     metadata: {
       since: "unstable",
     },

@@ -6,6 +6,7 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_net = {
   AddrParseError: {
     kind: "struct",
+    canonicalCrate: "core",
   },
   hostname: {
     kind: "function",
@@ -27,6 +28,7 @@ export const mod_net = {
   },
   IpAddr: {
     kind: "enum",
+    canonicalCrate: "core",
     members: {
       as_octets: {
         kind: "function",
@@ -113,6 +115,7 @@ export const mod_net = {
   },
   Ipv4Addr: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       as_octets: {
         kind: "function",
@@ -242,6 +245,7 @@ export const mod_net = {
   },
   Ipv6Addr: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       as_octets: {
         kind: "function",
@@ -396,6 +400,7 @@ export const mod_net = {
   },
   Ipv6MulticastScope: {
     kind: "enum",
+    canonicalCrate: "core",
     members: {
       AdminLocal: {
         kind: "variant",
@@ -486,6 +491,7 @@ export const mod_net = {
   },
   SocketAddr: {
     kind: "enum",
+    canonicalCrate: "core",
     members: {
       ip: {
         kind: "function",
@@ -555,6 +561,7 @@ export const mod_net = {
   },
   SocketAddrV4: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       ip: {
         kind: "function",
@@ -598,6 +605,7 @@ export const mod_net = {
   },
   SocketAddrV6: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       flowinfo: {
         kind: "function",

@@ -6,9 +6,11 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_cell = {
   BorrowError: {
     kind: "struct",
+    canonicalCrate: "core",
   },
   BorrowMutError: {
     kind: "struct",
+    canonicalCrate: "core",
   },
   BorrowRef: {
     kind: "struct",
@@ -18,6 +20,7 @@ export const mod_cell = {
   },
   Cell: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       as_array_of_cells: {
         kind: "function",
@@ -106,9 +109,11 @@ export const mod_cell = {
   },
   CloneFromCell: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   LazyCell: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.80.0",
     },
@@ -159,6 +164,7 @@ export const mod_cell = {
   },
   OnceCell: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.70.0",
     },
@@ -234,6 +240,7 @@ export const mod_cell = {
   },
   Ref: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       clone: {
         kind: "function",
@@ -281,6 +288,7 @@ export const mod_cell = {
   },
   RefCell: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       as_ptr: {
         kind: "function",
@@ -371,6 +379,7 @@ export const mod_cell = {
   },
   RefMut: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       filter_map: {
         kind: "function",
@@ -411,6 +420,7 @@ export const mod_cell = {
   },
   SyncUnsafeCell: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       get: {
         kind: "function",
@@ -436,6 +446,7 @@ export const mod_cell = {
   },
   UnsafeCell: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       as_mut_unchecked: {
         kind: "function",

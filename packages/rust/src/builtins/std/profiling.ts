@@ -6,12 +6,14 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_profiling = {
   compiler_copy: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   compiler_move: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },

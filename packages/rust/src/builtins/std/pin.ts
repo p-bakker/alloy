@@ -6,12 +6,14 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_pin = {
   pin: {
     kind: "symbol",
+    canonicalCrate: "core",
     metadata: {
       since: "1.68.0",
     },
   },
   Pin: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       as_deref_mut: {
         kind: "function",
@@ -119,9 +121,11 @@ export const mod_pin = {
   },
   PinCoerceUnsized: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   UnsafePinned: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },

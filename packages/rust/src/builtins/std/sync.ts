@@ -6,6 +6,7 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_sync = {
   Arc: {
     kind: "struct",
+    canonicalCrate: "alloc",
     members: {
       allocator: {
         kind: "function",
@@ -470,6 +471,7 @@ export const mod_sync = {
   },
   Exclusive: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       from_mut: {
         kind: "function",
@@ -1111,6 +1113,7 @@ export const mod_sync = {
   },
   UniqueArc: {
     kind: "struct",
+    canonicalCrate: "alloc",
     members: {
       downgrade: {
         kind: "function",
@@ -1172,6 +1175,7 @@ export const mod_sync = {
   },
   Weak: {
     kind: "struct",
+    canonicalCrate: "alloc",
     members: {
       allocator: {
         kind: "function",
@@ -1256,6 +1260,7 @@ export const mod_sync = {
 export const mod_sync_atomic = {
   Atomic: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       as_ptr: {
         kind: "function",
@@ -1453,99 +1458,120 @@ export const mod_sync_atomic = {
   },
   ATOMIC_BOOL_INIT: {
     kind: "const",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   ATOMIC_ISIZE_INIT: {
     kind: "const",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   ATOMIC_USIZE_INIT: {
     kind: "const",
+    canonicalCrate: "core",
     metadata: {
       since: "1.0.0",
     },
   },
   AtomicBool: {
     kind: "type-alias",
+    canonicalCrate: "core",
   },
   AtomicI128: {
     kind: "type-alias",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   AtomicI16: {
     kind: "type-alias",
+    canonicalCrate: "core",
     metadata: {
       since: "1.34.0",
     },
   },
   AtomicI32: {
     kind: "type-alias",
+    canonicalCrate: "core",
     metadata: {
       since: "1.34.0",
     },
   },
   AtomicI64: {
     kind: "type-alias",
+    canonicalCrate: "core",
     metadata: {
       since: "1.34.0",
     },
   },
   AtomicI8: {
     kind: "type-alias",
+    canonicalCrate: "core",
     metadata: {
       since: "1.34.0",
     },
   },
   AtomicIsize: {
     kind: "type-alias",
+    canonicalCrate: "core",
   },
   AtomicPrimitive: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   AtomicPtr: {
     kind: "type-alias",
+    canonicalCrate: "core",
   },
   AtomicU128: {
     kind: "type-alias",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   AtomicU16: {
     kind: "type-alias",
+    canonicalCrate: "core",
     metadata: {
       since: "1.34.0",
     },
   },
   AtomicU32: {
     kind: "type-alias",
+    canonicalCrate: "core",
     metadata: {
       since: "1.34.0",
     },
   },
   AtomicU64: {
     kind: "type-alias",
+    canonicalCrate: "core",
   },
   AtomicU8: {
     kind: "type-alias",
+    canonicalCrate: "core",
   },
   AtomicUsize: {
     kind: "type-alias",
+    canonicalCrate: "core",
   },
   compiler_fence: {
     kind: "function",
+    canonicalCrate: "core",
   },
   fence: {
     kind: "function",
+    canonicalCrate: "core",
   },
   Ordering: {
     kind: "enum",
+    canonicalCrate: "core",
     members: {
       AcqRel: {
         kind: "variant",
@@ -1586,6 +1612,7 @@ export const mod_sync_atomic = {
   },
   spin_loop_hint: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.24.0",
     },

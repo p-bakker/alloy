@@ -6,33 +6,41 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_marker = {
   ConstParamTy_: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   Copy: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   Destruct: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   DiscriminantKind: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   FnPtr: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   Freeze: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   MetaSized: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   PhantomContravariant: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       new: {
         kind: "function",
@@ -42,6 +50,7 @@ export const mod_marker = {
   },
   PhantomContravariantLifetime: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       new: {
         kind: "function",
@@ -51,6 +60,7 @@ export const mod_marker = {
   },
   PhantomCovariant: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       new: {
         kind: "function",
@@ -60,6 +70,7 @@ export const mod_marker = {
   },
   PhantomCovariantLifetime: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       new: {
         kind: "function",
@@ -69,9 +80,11 @@ export const mod_marker = {
   },
   PhantomData: {
     kind: "struct",
+    canonicalCrate: "core",
   },
   PhantomInvariant: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       new: {
         kind: "function",
@@ -81,6 +94,7 @@ export const mod_marker = {
   },
   PhantomInvariantLifetime: {
     kind: "struct",
+    canonicalCrate: "core",
     members: {
       new: {
         kind: "function",
@@ -90,41 +104,53 @@ export const mod_marker = {
   },
   PhantomPinned: {
     kind: "struct",
+    canonicalCrate: "core",
   },
   PointeeSized: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   Send: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   Sized: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   StructuralPartialEq: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   Sync: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   Tuple: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   Unpin: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   UnsafeUnpin: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   Unsize: {
     kind: "trait",
+    canonicalCrate: "core",
   },
   variance: {
     kind: "function",
+    canonicalCrate: "core",
   },
   Variance: {
     kind: "trait",
+    canonicalCrate: "core",
   },
 } as const satisfies Record<string, SymbolDescriptor>;

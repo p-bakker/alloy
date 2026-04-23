@@ -6,66 +6,77 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_future = {
   async_drop_in_place: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   AsyncDrop: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   Future: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.36.0",
     },
   },
   IntoFuture: {
     kind: "trait",
+    canonicalCrate: "core",
     metadata: {
       since: "1.64.0",
     },
   },
   join: {
     kind: "symbol",
+    canonicalCrate: "core",
     metadata: {
       since: "unstable",
     },
   },
   pending: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.48.0",
     },
   },
   Pending: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.48.0",
     },
   },
   poll_fn: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.64.0",
     },
   },
   PollFn: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.64.0",
     },
   },
   ready: {
     kind: "function",
+    canonicalCrate: "core",
     metadata: {
       since: "1.48.0",
     },
   },
   Ready: {
     kind: "struct",
+    canonicalCrate: "core",
     metadata: {
       since: "1.48.0",
     },

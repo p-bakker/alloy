@@ -33,9 +33,10 @@ export interface CrateDirectoryProps {
 
 export function CrateDirectory(props: CrateDirectoryProps) {
   const binder = useBinder()!;
-  if (!props.noStd) {
-    getSymbolCreator(std)(binder);
-  }
+  // std is always registered so that std refkeys resolve even under #![no_std];
+  // under noStd, the reference resolver swaps imports to alloc/core for any
+  // symbol that carries a canonicalCrate.
+  getSymbolCreator(std)(binder);
   getSymbolCreator(alloc)(binder);
   getSymbolCreator(core)(binder);
 
@@ -48,6 +49,7 @@ export function CrateDirectory(props: CrateDirectoryProps) {
     edition: props.edition ?? "2021",
     crateType: props.crateType ?? "lib",
     sourcePath,
+    noStd: props.noStd ?? false,
   };
 
   const { rootChildren, sourceChildren } = partitionChildren(props.children);

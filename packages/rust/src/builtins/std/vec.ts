@@ -6,6 +6,7 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_vec = {
   Drain: {
     kind: "struct",
+    canonicalCrate: "alloc",
     metadata: {
       since: "1.6.0",
     },
@@ -32,6 +33,7 @@ export const mod_vec = {
   },
   ExtractIf: {
     kind: "struct",
+    canonicalCrate: "alloc",
     metadata: {
       since: "1.87.0",
     },
@@ -46,6 +48,7 @@ export const mod_vec = {
   },
   IntoIter: {
     kind: "struct",
+    canonicalCrate: "alloc",
     metadata: {
       since: "1.0.0",
     },
@@ -72,6 +75,7 @@ export const mod_vec = {
   },
   PeekMut: {
     kind: "struct",
+    canonicalCrate: "alloc",
     metadata: {
       since: "unstable",
     },
@@ -90,12 +94,14 @@ export const mod_vec = {
   },
   Splice: {
     kind: "struct",
+    canonicalCrate: "alloc",
     metadata: {
       since: "1.21.0",
     },
   },
   Vec: {
     kind: "struct",
+    canonicalCrate: "alloc",
     members: {
       allocator: {
         kind: "function",
