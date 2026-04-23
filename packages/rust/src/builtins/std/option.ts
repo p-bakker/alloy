@@ -223,6 +223,13 @@ export const mod_option = {
           since: "1.0.0",
         },
       },
+      None: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
       ok_or: {
         kind: "function",
         metadata: {
@@ -257,6 +264,13 @@ export const mod_option = {
         kind: "function",
         metadata: {
           since: "1.31.0",
+        },
+      },
+      Some: {
+        kind: "variant",
+        shape: "tuple",
+        metadata: {
+          since: "1.0.0",
         },
       },
       take: {

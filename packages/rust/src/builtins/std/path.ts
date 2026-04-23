@@ -28,6 +28,41 @@ export const mod_path = {
           since: "1.0.0",
         },
       },
+      CurDir: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      Normal: {
+        kind: "variant",
+        shape: "tuple",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      ParentDir: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      Prefix: {
+        kind: "variant",
+        shape: "tuple",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      RootDir: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
     },
   },
   Components: {
@@ -515,8 +550,50 @@ export const mod_path = {
       since: "1.0.0",
     },
     members: {
+      DeviceNS: {
+        kind: "variant",
+        shape: "tuple",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      Disk: {
+        kind: "variant",
+        shape: "tuple",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
       is_verbatim: {
         kind: "function",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      UNC: {
+        kind: "variant",
+        shape: "tuple",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      Verbatim: {
+        kind: "variant",
+        shape: "tuple",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      VerbatimDisk: {
+        kind: "variant",
+        shape: "tuple",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      VerbatimUNC: {
+        kind: "variant",
+        shape: "tuple",
         metadata: {
           since: "1.0.0",
         },

@@ -418,6 +418,20 @@ export const mod_str_pattern = {
   },
   SearchStep: {
     kind: "enum",
+    members: {
+      Done: {
+        kind: "variant",
+        shape: "unit",
+      },
+      Match: {
+        kind: "variant",
+        shape: "tuple",
+      },
+      Reject: {
+        kind: "variant",
+        shape: "tuple",
+      },
+    },
   },
   StrSearcher: {
     kind: "struct",
@@ -430,5 +444,15 @@ export const mod_str_pattern = {
   },
   Utf8Pattern: {
     kind: "enum",
+    members: {
+      CharPattern: {
+        kind: "variant",
+        shape: "tuple",
+      },
+      StringPattern: {
+        kind: "variant",
+        shape: "tuple",
+      },
+    },
   },
 } as const satisfies Record<string, SymbolDescriptor>;

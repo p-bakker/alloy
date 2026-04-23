@@ -6,6 +6,29 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_fmt = {
   Alignment: {
     kind: "enum",
+    members: {
+      Center: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.28.0",
+        },
+      },
+      Left: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.28.0",
+        },
+      },
+      Right: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.28.0",
+        },
+      },
+    },
   },
   Arguments: {
     kind: "struct",
@@ -33,6 +56,16 @@ export const mod_fmt = {
   },
   DebugAsHex: {
     kind: "enum",
+    members: {
+      Lower: {
+        kind: "variant",
+        shape: "unit",
+      },
+      Upper: {
+        kind: "variant",
+        shape: "unit",
+      },
+    },
   },
   DebugList: {
     kind: "struct",
@@ -550,6 +583,16 @@ export const mod_fmt = {
   },
   Sign: {
     kind: "enum",
+    members: {
+      Minus: {
+        kind: "variant",
+        shape: "unit",
+      },
+      Plus: {
+        kind: "variant",
+        shape: "unit",
+      },
+    },
   },
   UpperExp: {
     kind: "trait",

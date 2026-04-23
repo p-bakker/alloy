@@ -207,6 +207,16 @@ export const mod_ffi = {
     metadata: {
       since: "1.64.0",
     },
+    members: {
+      InteriorNul: {
+        kind: "variant",
+        shape: "struct",
+      },
+      NotNulTerminated: {
+        kind: "variant",
+        shape: "unit",
+      },
+    },
   },
   VaArgSafe: {
     kind: "trait",
@@ -331,6 +341,16 @@ export const mod_ffi_c_str = {
     kind: "enum",
     metadata: {
       since: "1.64.0",
+    },
+    members: {
+      InteriorNul: {
+        kind: "variant",
+        shape: "struct",
+      },
+      NotNulTerminated: {
+        kind: "variant",
+        shape: "unit",
+      },
     },
   },
 } as const satisfies Record<string, SymbolDescriptor>;

@@ -197,6 +197,20 @@ export const mod_task = {
           since: "1.36.0",
         },
       },
+      Pending: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.36.0",
+        },
+      },
+      Ready: {
+        kind: "variant",
+        shape: "tuple",
+        metadata: {
+          since: "1.36.0",
+        },
+      },
     },
   },
   RawWaker: {

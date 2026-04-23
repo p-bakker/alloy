@@ -100,10 +100,31 @@ export const mod_ops = {
           since: "unstable",
         },
       },
+      Excluded: {
+        kind: "variant",
+        shape: "tuple",
+        metadata: {
+          since: "1.17.0",
+        },
+      },
+      Included: {
+        kind: "variant",
+        shape: "tuple",
+        metadata: {
+          since: "1.17.0",
+        },
+      },
       map: {
         kind: "function",
         metadata: {
           since: "1.77.0",
+        },
+      },
+      Unbounded: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.17.0",
         },
       },
     },
@@ -126,6 +147,13 @@ export const mod_ops = {
       since: "1.55.0",
     },
     members: {
+      Break: {
+        kind: "variant",
+        shape: "tuple",
+        metadata: {
+          since: "1.55.0",
+        },
+      },
       break_ok: {
         kind: "function",
         metadata: {
@@ -136,6 +164,13 @@ export const mod_ops = {
         kind: "function",
         metadata: {
           since: "1.83.0",
+        },
+      },
+      Continue: {
+        kind: "variant",
+        shape: "tuple",
+        metadata: {
+          since: "1.55.0",
         },
       },
       continue_ok: {
@@ -192,6 +227,16 @@ export const mod_ops = {
     kind: "enum",
     metadata: {
       since: "unstable",
+    },
+    members: {
+      Complete: {
+        kind: "variant",
+        shape: "tuple",
+      },
+      Yielded: {
+        kind: "variant",
+        shape: "tuple",
+      },
     },
   },
   Deref: {
@@ -312,6 +357,20 @@ export const mod_ops = {
     kind: "enum",
     metadata: {
       since: "unstable",
+    },
+    members: {
+      End: {
+        kind: "variant",
+        shape: "unit",
+      },
+      EndInclusive: {
+        kind: "variant",
+        shape: "unit",
+      },
+      StartInclusive: {
+        kind: "variant",
+        shape: "unit",
+      },
     },
   },
   Range: {

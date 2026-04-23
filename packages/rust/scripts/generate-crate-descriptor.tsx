@@ -279,6 +279,8 @@ interface MemberEntry {
   name: string;
   kind: string;
   associated?: boolean;
+  /** For kind: "variant" — the shape of the enum variant. */
+  shape?: "unit" | "tuple" | "struct";
   since?: string;
   features?: string[];
 }
@@ -768,6 +770,7 @@ function symbolToJsValue(sym: SymbolEntry): Record<string, unknown> {
 function memberToJsValue(m: MemberEntry): Record<string, unknown> {
   const value: Record<string, unknown> = { kind: m.kind };
   if (m.associated) value.associated = true;
+  if (m.shape) value.shape = m.shape;
   if (m.features && m.features.length > 0) value.features = m.features;
   if (m.since) value.metadata = { since: m.since };
   return value;
@@ -1107,10 +1110,57 @@ function extractMembers(genState: GeneratorState) {
 
       const inner = item.inner?.[
         sym.kind === "type-alias" ? "type_alias" : sym.kind
-      ] as { impls?: string[] } | undefined;
-      if (!inner?.impls) continue;
+      ] as { impls?: string[]; variants?: string[] } | undefined;
+      if (!inner) continue;
 
       const members: MemberEntry[] = [];
+
+      if (sym.kind === "enum" && inner.variants) {
+        for (const variantId of inner.variants) {
+          const variant = genState.data.index[variantId];
+          if (!variant?.name) continue;
+          const variantInner = variant.inner?.variant as
+            | { kind?: unknown }
+            | undefined;
+          const rawKind = variantInner?.kind;
+          let shape: "unit" | "tuple" | "struct";
+          if (rawKind === "plain") {
+            shape = "unit";
+          } else if (
+            typeof rawKind === "object" &&
+            rawKind !== null &&
+            "tuple" in rawKind
+          ) {
+            shape = "tuple";
+          } else if (
+            typeof rawKind === "object" &&
+            rawKind !== null &&
+            "struct" in rawKind
+          ) {
+            shape = "struct";
+          } else {
+            continue;
+          }
+          members.push({
+            name: variant.name,
+            kind: "variant",
+            shape,
+            since: extractStability(variant),
+            features: genState.extractFeaturesFlag
+              ? extractFeatures(variant)
+              : undefined,
+          });
+        }
+      }
+
+      if (!inner.impls) {
+        if (members.length > 0) {
+          members.sort((a, b) => a.name.localeCompare(b.name));
+          sym.members = members;
+          totalMembers += members.length;
+        }
+        continue;
+      }
 
       for (const implId of inner.impls) {
         const impl = genState.data.index[implId];

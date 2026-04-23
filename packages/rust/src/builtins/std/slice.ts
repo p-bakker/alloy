@@ -109,6 +109,16 @@ export const mod_slice = {
   },
   GetDisjointMutError: {
     kind: "enum",
+    members: {
+      IndexOutOfBounds: {
+        kind: "variant",
+        shape: "unit",
+      },
+      OverlappingIndices: {
+        kind: "variant",
+        shape: "unit",
+      },
+    },
   },
   GetDisjointMutIndex: {
     kind: "trait",

@@ -379,6 +379,43 @@ export const mod_sync_atomic = {
     metadata: {
       since: "1.0.0",
     },
+    members: {
+      AcqRel: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      Acquire: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      Relaxed: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      Release: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      SeqCst: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+    },
   },
   spin_loop_hint: {
     kind: "function",

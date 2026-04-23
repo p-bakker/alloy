@@ -9,6 +9,20 @@ export const mod_char_ = {
   },
   CharCase: {
     kind: "enum",
+    members: {
+      Lower: {
+        kind: "variant",
+        shape: "unit",
+      },
+      Title: {
+        kind: "variant",
+        shape: "unit",
+      },
+      Upper: {
+        kind: "variant",
+        shape: "unit",
+      },
+    },
   },
   CharTryFromError: {
     kind: "struct",

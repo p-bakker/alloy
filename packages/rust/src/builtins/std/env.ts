@@ -111,6 +111,22 @@ export const mod_env = {
     metadata: {
       since: "1.0.0",
     },
+    members: {
+      NotPresent: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      NotUnicode: {
+        kind: "variant",
+        shape: "tuple",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+    },
   },
   vars: {
     kind: "function",

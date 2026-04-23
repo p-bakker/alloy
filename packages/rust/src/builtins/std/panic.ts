@@ -21,6 +21,20 @@ export const mod_panic = {
     metadata: {
       since: "unstable",
     },
+    members: {
+      Full: {
+        kind: "variant",
+        shape: "unit",
+      },
+      Off: {
+        kind: "variant",
+        shape: "unit",
+      },
+      Short: {
+        kind: "variant",
+        shape: "unit",
+      },
+    },
   },
   catch_unwind: {
     kind: "function",

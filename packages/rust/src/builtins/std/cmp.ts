@@ -64,6 +64,20 @@ export const mod_cmp = {
   Ordering: {
     kind: "enum",
     members: {
+      Equal: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      Greater: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
       is_eq: {
         kind: "function",
         metadata: {
@@ -98,6 +112,13 @@ export const mod_cmp = {
         kind: "function",
         metadata: {
           since: "1.53.0",
+        },
+      },
+      Less: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
         },
       },
       reverse: {

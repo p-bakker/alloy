@@ -852,6 +852,16 @@ export const mod_collections = {
     metadata: {
       since: "unstable",
     },
+    members: {
+      AllocError: {
+        kind: "variant",
+        shape: "struct",
+      },
+      CapacityOverflow: {
+        kind: "variant",
+        shape: "unit",
+      },
+    },
   },
   VecDeque: {
     kind: "struct",

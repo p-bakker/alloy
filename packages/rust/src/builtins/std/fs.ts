@@ -541,6 +541,16 @@ export const mod_fs = {
     metadata: {
       since: "1.89.0",
     },
+    members: {
+      Error: {
+        kind: "variant",
+        shape: "tuple",
+      },
+      WouldBlock: {
+        kind: "variant",
+        shape: "unit",
+      },
+    },
   },
   write: {
     kind: "function",

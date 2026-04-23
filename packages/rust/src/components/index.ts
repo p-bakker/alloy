@@ -40,3 +40,4 @@ export * from "./use-statement.js";
 export * from "./value.js";
 export * from "./while-expression.js";
 export * from "./visibility.js";
+export * from "./variant.js";

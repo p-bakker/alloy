@@ -70,6 +70,13 @@ export const mod_result = {
           since: "1.0.0",
         },
       },
+      Err: {
+        kind: "variant",
+        shape: "tuple",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
       expect: {
         kind: "function",
         metadata: {
@@ -180,6 +187,13 @@ export const mod_result = {
       },
       ok: {
         kind: "function",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      Ok: {
+        kind: "variant",
+        shape: "tuple",
         metadata: {
           since: "1.0.0",
         },

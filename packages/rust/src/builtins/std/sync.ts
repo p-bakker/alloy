@@ -1086,6 +1086,22 @@ export const mod_sync = {
     metadata: {
       since: "1.0.0",
     },
+    members: {
+      Poisoned: {
+        kind: "variant",
+        shape: "tuple",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      WouldBlock: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+    },
   },
   TryLockResult: {
     kind: "type-alias",
@@ -1530,6 +1546,43 @@ export const mod_sync_atomic = {
   },
   Ordering: {
     kind: "enum",
+    members: {
+      AcqRel: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      Acquire: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      Relaxed: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      Release: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      SeqCst: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+    },
   },
   spin_loop_hint: {
     kind: "function",
@@ -1800,6 +1853,22 @@ export const mod_sync_mpsc = {
     metadata: {
       since: "1.12.0",
     },
+    members: {
+      Disconnected: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.12.0",
+        },
+      },
+      Timeout: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.12.0",
+        },
+      },
+    },
   },
   Sender: {
     kind: "struct",
@@ -1864,11 +1933,43 @@ export const mod_sync_mpsc = {
     metadata: {
       since: "1.0.0",
     },
+    members: {
+      Disconnected: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      Empty: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+    },
   },
   TrySendError: {
     kind: "enum",
     metadata: {
       since: "1.0.0",
+    },
+    members: {
+      Disconnected: {
+        kind: "variant",
+        shape: "tuple",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      Full: {
+        kind: "variant",
+        shape: "tuple",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
     },
   },
 } as const satisfies Record<string, SymbolDescriptor>;
@@ -2278,6 +2379,16 @@ export const mod_sync_oneshot = {
     metadata: {
       since: "unstable",
     },
+    members: {
+      Disconnected: {
+        kind: "variant",
+        shape: "unit",
+      },
+      Timeout: {
+        kind: "variant",
+        shape: "tuple",
+      },
+    },
   },
   Sender: {
     kind: "struct",
@@ -2297,6 +2408,16 @@ export const mod_sync_oneshot = {
     kind: "enum",
     metadata: {
       since: "unstable",
+    },
+    members: {
+      Disconnected: {
+        kind: "variant",
+        shape: "unit",
+      },
+      Empty: {
+        kind: "variant",
+        shape: "tuple",
+      },
     },
   },
 } as const satisfies Record<string, SymbolDescriptor>;
@@ -2703,6 +2824,22 @@ export const mod_sync_poison = {
     kind: "enum",
     metadata: {
       since: "1.0.0",
+    },
+    members: {
+      Poisoned: {
+        kind: "variant",
+        shape: "tuple",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      WouldBlock: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
     },
   },
   TryLockResult: {

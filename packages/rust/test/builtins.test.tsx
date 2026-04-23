@@ -49,6 +49,50 @@ describe("std builtins", () => {
     expect(isRefkeyable(std.convert.Into)).toBe(true);
   });
 
+  it("renders enum variants as JSX components", () => {
+    const { Ok, Err } = std.result.Result;
+    const { Some, None } = std.option.Option;
+
+    const output = render(
+      <Output>
+        <CrateDirectory name="my_crate">
+          <SourceFile path="lib">
+            let a = <Ok>42</Ok>;{"\n"}
+            let b = <Err>"boom"</Err>;{"\n"}
+            let c = <Some>"v"</Some>;{"\n"}
+            let d = <None />;
+          </SourceFile>
+        </CrateDirectory>
+      </Output>,
+    );
+
+    const contents = findFile(output, "src/lib").contents.trim();
+    expect(contents).toContain("let a = Ok(42);");
+    expect(contents).toContain('let b = Err("boom");');
+    expect(contents).toContain('let c = Some("v");');
+    expect(contents).toContain("let d = None;");
+  });
+
+  it("fully qualifies a prelude variant when its bare name is locally shadowed", () => {
+    const { Ok } = std.result.Result;
+
+    const output = render(
+      <Output>
+        <CrateDirectory name="my_crate">
+          <SourceFile path="lib">
+            <TypeAlias name="Ok" pub>
+              u32
+            </TypeAlias>
+            {"\n"}let v = <Ok>1</Ok>;
+          </SourceFile>
+        </CrateDirectory>
+      </Output>,
+    );
+
+    const contents = findFile(output, "src/lib").contents.trim();
+    expect(contents).toContain("let v = Result::Ok(1);");
+  });
+
   it("references non-prelude std types with use statements and no Cargo.toml dependency", () => {
     let consumerCrateScope: RustCrateScope | undefined;
 

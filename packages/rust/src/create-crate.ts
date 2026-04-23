@@ -1,15 +1,20 @@
 import type { SymbolCreator } from "@alloy-js/core";
 import {
-  type Binder,
   createScope,
   createSymbol,
   getSymbolCreatorSymbol,
+  refkey,
   REFKEYABLE,
+  type Binder,
   type Refkey,
   type RefkeyableObject,
-  refkey,
 } from "@alloy-js/core";
 
+import {
+  createVariantComponent,
+  type VariantComponent,
+  type VariantShape,
+} from "./components/variant.js";
 import { RustCrateScope, RustModuleScope } from "./scopes/index.js";
 import {
   FunctionSymbol,
@@ -23,6 +28,8 @@ export interface MemberDescriptor {
   name?: string;
   /** True for associated functions (no self receiver, called with `::`). */
   associated?: boolean;
+  /** For `kind: "variant"`: unit / tuple / struct shape of the enum variant. */
+  shape?: VariantShape;
   /** Cargo features required for this member to be available. */
   features?: readonly string[];
   metadata?: Record<string, unknown>;
@@ -49,10 +56,14 @@ export interface CrateDescriptor<
   items: TItems;
 }
 
+export type MemberRef<M extends MemberDescriptor> = M extends { kind: "variant" }
+  ? VariantComponent
+  : Refkey;
+
 export type SymbolRef<TSymbol extends SymbolDescriptor> = TSymbol extends {
   members: infer M extends Record<string, MemberDescriptor>;
 }
-  ? RefkeyableObject & { [K in keyof M]: Refkey }
+  ? RefkeyableObject & { [K in keyof M]: MemberRef<M[K]> }
   : Refkey;
 
 export type ItemRef<T extends CrateItem> = T extends SymbolDescriptor
@@ -169,14 +180,23 @@ export function createCrate<const TItems extends Record<string, CrateItem>>(
           return symbolRefkey;
         },
       };
-      for (const memberName of Object.keys(symbolDescriptor.members)) {
+      for (const [memberName, memberDesc] of Object.entries(
+        symbolDescriptor.members,
+      )) {
         const memberRefkey = refkey(
           descriptor.items,
           modulePath,
           exportName,
           memberName,
         );
-        symbolWithMembers[memberName] = memberRefkey;
+        if (memberDesc.kind === "variant") {
+          symbolWithMembers[memberName] = createVariantComponent(
+            memberRefkey,
+            memberDesc.shape ?? "tuple",
+          );
+        } else {
+          symbolWithMembers[memberName] = memberRefkey;
+        }
       }
       target[exportName] = symbolWithMembers;
     } else {

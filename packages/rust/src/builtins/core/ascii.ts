@@ -10,8 +10,323 @@ export const mod_ascii = {
       since: "unstable",
     },
     members: {
+      Acknowledge: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      Ampersand: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      Apostrophe: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
       as_str: {
         kind: "function",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      Asterisk: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      Backspace: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      Bell: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      Cancel: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      CapitalA: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      CapitalB: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      CapitalC: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      CapitalD: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      CapitalE: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      CapitalF: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      CapitalG: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      CapitalH: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      CapitalI: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      CapitalJ: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      CapitalK: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      CapitalL: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      CapitalM: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      CapitalN: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      CapitalO: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      CapitalP: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      CapitalQ: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      CapitalR: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      CapitalS: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      CapitalT: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      CapitalU: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      CapitalV: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      CapitalW: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      CapitalX: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      CapitalY: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      CapitalZ: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      CarriageReturn: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      CharacterTabulation: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      CircumflexAccent: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      Colon: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      Comma: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      CommercialAt: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      DataLinkEscape: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      Delete: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      DeviceControlFour: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      DeviceControlOne: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      DeviceControlThree: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      DeviceControlTwo: {
+        kind: "variant",
+        shape: "unit",
         metadata: {
           since: "unstable",
         },
@@ -30,14 +345,154 @@ export const mod_ascii = {
           since: "unstable",
         },
       },
+      Digit0: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      Digit1: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      Digit2: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      Digit3: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      Digit4: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      Digit5: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      Digit6: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      Digit7: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      Digit8: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      Digit9: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      DollarSign: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      EndOfMedium: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      EndOfText: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      EndOfTransmission: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      EndOfTransmissionBlock: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      Enquiry: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
       eq_ignore_case: {
         kind: "function",
         metadata: {
           since: "unstable",
         },
       },
+      EqualsSign: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      Escape: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
       escape_ascii: {
         kind: "function",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      ExclamationMark: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      FormFeed: {
+        kind: "variant",
+        shape: "unit",
         metadata: {
           since: "unstable",
         },
@@ -52,6 +507,62 @@ export const mod_ascii = {
       from_u8_unchecked: {
         kind: "function",
         associated: true,
+        metadata: {
+          since: "unstable",
+        },
+      },
+      FullStop: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      GraveAccent: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      GreaterThanSign: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      HyphenMinus: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      InformationSeparatorFour: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      InformationSeparatorOne: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      InformationSeparatorThree: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      InformationSeparatorTwo: {
+        kind: "variant",
+        shape: "unit",
         metadata: {
           since: "unstable",
         },
@@ -122,6 +633,55 @@ export const mod_ascii = {
           since: "unstable",
         },
       },
+      LeftCurlyBracket: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      LeftParenthesis: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      LeftSquareBracket: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      LessThanSign: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      LineFeed: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      LineTabulation: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      LowLine: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
       make_lowercase: {
         kind: "function",
         metadata: {
@@ -130,6 +690,335 @@ export const mod_ascii = {
       },
       make_uppercase: {
         kind: "function",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      NegativeAcknowledge: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      Null: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      NumberSign: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      PercentSign: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      PlusSign: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      QuestionMark: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      QuotationMark: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      ReverseSolidus: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      RightCurlyBracket: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      RightParenthesis: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      RightSquareBracket: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      Semicolon: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      ShiftIn: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      ShiftOut: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      SmallA: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      SmallB: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      SmallC: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      SmallD: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      SmallE: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      SmallF: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      SmallG: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      SmallH: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      SmallI: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      SmallJ: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      SmallK: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      SmallL: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      SmallM: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      SmallN: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      SmallO: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      SmallP: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      SmallQ: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      SmallR: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      SmallS: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      SmallT: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      SmallU: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      SmallV: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      SmallW: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      SmallX: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      SmallY: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      SmallZ: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      Solidus: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      Space: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      StartOfHeading: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      StartOfText: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      Substitute: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      SynchronousIdle: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      Tilde: {
+        kind: "variant",
+        shape: "unit",
         metadata: {
           since: "unstable",
         },
@@ -154,6 +1043,13 @@ export const mod_ascii = {
       },
       to_uppercase: {
         kind: "function",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      VerticalLine: {
+        kind: "variant",
+        shape: "unit",
         metadata: {
           since: "unstable",
         },

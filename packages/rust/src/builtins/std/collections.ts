@@ -1316,6 +1316,16 @@ export const mod_collections = {
   },
   TryReserveErrorKind: {
     kind: "enum",
+    members: {
+      AllocError: {
+        kind: "variant",
+        shape: "struct",
+      },
+      CapacityOverflow: {
+        kind: "variant",
+        shape: "unit",
+      },
+    },
   },
   VecDeque: {
     kind: "struct",

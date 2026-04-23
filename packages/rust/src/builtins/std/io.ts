@@ -395,6 +395,295 @@ export const mod_io = {
     metadata: {
       since: "1.0.0",
     },
+    members: {
+      AddrInUse: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      AddrNotAvailable: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      AlreadyExists: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      ArgumentListTooLong: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.83.0",
+        },
+      },
+      BrokenPipe: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      ConnectionAborted: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      ConnectionRefused: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      ConnectionReset: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      CrossesDevices: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.85.0",
+        },
+      },
+      Deadlock: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.83.0",
+        },
+      },
+      DirectoryNotEmpty: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.83.0",
+        },
+      },
+      ExecutableFileBusy: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.83.0",
+        },
+      },
+      FilesystemLoop: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      FileTooLarge: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.83.0",
+        },
+      },
+      HostUnreachable: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.83.0",
+        },
+      },
+      InProgress: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "unstable",
+        },
+      },
+      Interrupted: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      InvalidData: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.2.0",
+        },
+      },
+      InvalidFilename: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.87.0",
+        },
+      },
+      InvalidInput: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      IsADirectory: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.83.0",
+        },
+      },
+      NetworkDown: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.83.0",
+        },
+      },
+      NetworkUnreachable: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.83.0",
+        },
+      },
+      NotADirectory: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.83.0",
+        },
+      },
+      NotConnected: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      NotFound: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      NotSeekable: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.83.0",
+        },
+      },
+      Other: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      OutOfMemory: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.54.0",
+        },
+      },
+      PermissionDenied: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      QuotaExceeded: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.85.0",
+        },
+      },
+      ReadOnlyFilesystem: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.83.0",
+        },
+      },
+      ResourceBusy: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.83.0",
+        },
+      },
+      StaleNetworkFileHandle: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.83.0",
+        },
+      },
+      StorageFull: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.83.0",
+        },
+      },
+      TimedOut: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      TooManyLinks: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.83.0",
+        },
+      },
+      UnexpectedEof: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.6.0",
+        },
+      },
+      Unsupported: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.53.0",
+        },
+      },
+      WouldBlock: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      WriteZero: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+    },
   },
   IntoInnerError: {
     kind: "struct",
@@ -628,6 +917,29 @@ export const mod_io = {
     kind: "enum",
     metadata: {
       since: "1.0.0",
+    },
+    members: {
+      Current: {
+        kind: "variant",
+        shape: "tuple",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      End: {
+        kind: "variant",
+        shape: "tuple",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      Start: {
+        kind: "variant",
+        shape: "tuple",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
     },
   },
   sink: {

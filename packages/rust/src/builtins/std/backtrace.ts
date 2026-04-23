@@ -56,5 +56,28 @@ export const mod_backtrace = {
     metadata: {
       since: "1.65.0",
     },
+    members: {
+      Captured: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.65.0",
+        },
+      },
+      Disabled: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.65.0",
+        },
+      },
+      Unsupported: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.65.0",
+        },
+      },
+    },
   },
 } as const satisfies Record<string, SymbolDescriptor>;

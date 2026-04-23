@@ -83,6 +83,20 @@ export const mod_net = {
           since: "1.75.0",
         },
       },
+      V4: {
+        kind: "variant",
+        shape: "tuple",
+        metadata: {
+          since: "1.7.0",
+        },
+      },
+      V6: {
+        kind: "variant",
+        shape: "tuple",
+        metadata: {
+          since: "1.7.0",
+        },
+      },
     },
   },
   Ipv4Addr: {
@@ -379,6 +393,64 @@ export const mod_net = {
     metadata: {
       since: "unstable",
     },
+    members: {
+      AdminLocal: {
+        kind: "variant",
+        shape: "unit",
+      },
+      Global: {
+        kind: "variant",
+        shape: "unit",
+      },
+      InterfaceLocal: {
+        kind: "variant",
+        shape: "unit",
+      },
+      LinkLocal: {
+        kind: "variant",
+        shape: "unit",
+      },
+      OrganizationLocal: {
+        kind: "variant",
+        shape: "unit",
+      },
+      RealmLocal: {
+        kind: "variant",
+        shape: "unit",
+      },
+      SiteLocal: {
+        kind: "variant",
+        shape: "unit",
+      },
+      Unassigned6: {
+        kind: "variant",
+        shape: "unit",
+      },
+      Unassigned7: {
+        kind: "variant",
+        shape: "unit",
+      },
+      Unassigned9: {
+        kind: "variant",
+        shape: "unit",
+      },
+      UnassignedA: {
+        kind: "variant",
+        shape: "unit",
+      },
+      UnassignedB: {
+        kind: "variant",
+        shape: "unit",
+      },
+      UnassignedC: {
+        kind: "variant",
+        shape: "unit",
+      },
+      UnassignedD: {
+        kind: "variant",
+        shape: "unit",
+      },
+    },
   },
   SocketAddr: {
     kind: "enum",
@@ -434,6 +506,20 @@ export const mod_net = {
         kind: "function",
         metadata: {
           since: "1.9.0",
+        },
+      },
+      V4: {
+        kind: "variant",
+        shape: "tuple",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      V6: {
+        kind: "variant",
+        shape: "tuple",
+        metadata: {
+          since: "1.0.0",
         },
       },
     },

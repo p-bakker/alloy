@@ -110,6 +110,21 @@ export function ref(
     const lastMember = memberPath[memberPath.length - 1];
     const isInstanceMemberAccess = lastMember?.isInstanceMemberSymbol === true;
 
+    // Prelude-bare variant rendering: if we're referencing a single variant of
+    // a prelude enum (e.g. `Result::Ok`, `Option::None`) and the variant's
+    // bare name is itself a prelude entry — and not shadowed locally — emit
+    // just `Ok` / `None` instead of `Result::Ok` / `Option::None`.
+    const isVariantPreludeBare =
+      isPreludeSymbol &&
+      memberPath.length === 1 &&
+      lastMember!.symbolKind === "variant" &&
+      prelude.has(lastMember!.name) &&
+      !currentModuleScope.hasLocalDeclaration(lastMember!.name);
+
+    if (isVariantPreludeBare) {
+      return [<>{lastMember!.name}</>, symbol];
+    }
+
     let useFullyQualified = false;
 
     if (

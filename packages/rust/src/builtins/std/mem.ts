@@ -301,6 +301,20 @@ export const mod_mem_type_info = {
     metadata: {
       since: "unstable",
     },
+    members: {
+      ExternC: {
+        kind: "variant",
+        shape: "unit",
+      },
+      ExternRust: {
+        kind: "variant",
+        shape: "unit",
+      },
+      Named: {
+        kind: "variant",
+        shape: "tuple",
+      },
+    },
   },
   Array: {
     kind: "struct",
@@ -366,6 +380,20 @@ export const mod_mem_type_info = {
     kind: "enum",
     metadata: {
       since: "unstable",
+    },
+    members: {
+      Const: {
+        kind: "variant",
+        shape: "tuple",
+      },
+      Lifetime: {
+        kind: "variant",
+        shape: "tuple",
+      },
+      Type: {
+        kind: "variant",
+        shape: "tuple",
+      },
     },
   },
   GenericType: {
@@ -458,6 +486,72 @@ export const mod_mem_type_info = {
     kind: "enum",
     metadata: {
       since: "unstable",
+    },
+    members: {
+      Array: {
+        kind: "variant",
+        shape: "tuple",
+      },
+      Bool: {
+        kind: "variant",
+        shape: "tuple",
+      },
+      Char: {
+        kind: "variant",
+        shape: "tuple",
+      },
+      DynTrait: {
+        kind: "variant",
+        shape: "tuple",
+      },
+      Enum: {
+        kind: "variant",
+        shape: "tuple",
+      },
+      Float: {
+        kind: "variant",
+        shape: "tuple",
+      },
+      FnPtr: {
+        kind: "variant",
+        shape: "tuple",
+      },
+      Int: {
+        kind: "variant",
+        shape: "tuple",
+      },
+      Other: {
+        kind: "variant",
+        shape: "unit",
+      },
+      Pointer: {
+        kind: "variant",
+        shape: "tuple",
+      },
+      Reference: {
+        kind: "variant",
+        shape: "tuple",
+      },
+      Slice: {
+        kind: "variant",
+        shape: "tuple",
+      },
+      Str: {
+        kind: "variant",
+        shape: "tuple",
+      },
+      Struct: {
+        kind: "variant",
+        shape: "tuple",
+      },
+      Tuple: {
+        kind: "variant",
+        shape: "tuple",
+      },
+      Union: {
+        kind: "variant",
+        shape: "tuple",
+      },
     },
   },
   Union: {

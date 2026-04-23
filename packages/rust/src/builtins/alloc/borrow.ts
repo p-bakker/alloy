@@ -16,6 +16,13 @@ export const mod_borrow = {
       since: "1.0.0",
     },
     members: {
+      Borrowed: {
+        kind: "variant",
+        shape: "tuple",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
       into_owned: {
         kind: "function",
         metadata: {
@@ -34,6 +41,13 @@ export const mod_borrow = {
         associated: true,
         metadata: {
           since: "unstable",
+        },
+      },
+      Owned: {
+        kind: "variant",
+        shape: "tuple",
+        metadata: {
+          since: "1.0.0",
         },
       },
       to_mut: {

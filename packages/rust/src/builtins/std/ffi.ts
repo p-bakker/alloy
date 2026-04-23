@@ -235,6 +235,16 @@ export const mod_ffi = {
   },
   FromBytesWithNulError: {
     kind: "enum",
+    members: {
+      InteriorNul: {
+        kind: "variant",
+        shape: "struct",
+      },
+      NotNulTerminated: {
+        kind: "variant",
+        shape: "unit",
+      },
+    },
   },
   FromVecWithNulError: {
     kind: "struct",
@@ -727,6 +737,16 @@ export const mod_ffi_c_str = {
   },
   FromBytesWithNulError: {
     kind: "enum",
+    members: {
+      InteriorNul: {
+        kind: "variant",
+        shape: "struct",
+      },
+      NotNulTerminated: {
+        kind: "variant",
+        shape: "unit",
+      },
+    },
   },
   FromVecWithNulError: {
     kind: "struct",

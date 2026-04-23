@@ -109,6 +109,16 @@ export const mod_slice = {
     metadata: {
       since: "1.86.0",
     },
+    members: {
+      IndexOutOfBounds: {
+        kind: "variant",
+        shape: "unit",
+      },
+      OverlappingIndices: {
+        kind: "variant",
+        shape: "unit",
+      },
+    },
   },
   GetDisjointMutIndex: {
     kind: "trait",

@@ -6,9 +6,83 @@ import type { SymbolDescriptor } from "../../create-crate.js";
 export const mod_num = {
   FpCategory: {
     kind: "enum",
+    members: {
+      Infinite: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      Nan: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      Normal: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      Subnormal: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+      Zero: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.0.0",
+        },
+      },
+    },
   },
   IntErrorKind: {
     kind: "enum",
+    members: {
+      Empty: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.55.0",
+        },
+      },
+      InvalidDigit: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.55.0",
+        },
+      },
+      NegOverflow: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.55.0",
+        },
+      },
+      PosOverflow: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.55.0",
+        },
+      },
+      Zero: {
+        kind: "variant",
+        shape: "unit",
+        metadata: {
+          since: "1.55.0",
+        },
+      },
+    },
   },
   NonZero: {
     kind: "struct",
