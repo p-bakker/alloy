@@ -2,11 +2,14 @@ import type { Children, Refkey } from "@alloy-js/core";
 import {
   For,
   Indent,
+  type Refkeyable,
   Scope,
   code,
   createScope,
   createSymbol,
   isRefkey,
+  isRefkeyable,
+  toRefkey,
   unresolvedRefkey,
 } from "@alloy-js/core";
 
@@ -24,8 +27,8 @@ import { TypeParameters, WhereClause } from "./type-parameters.js";
 export type TypeParameterProps = TypeParameterProp;
 
 export interface ImplBlockProps {
-  type: Refkey | Children;
-  trait?: Refkey | Children;
+  type: Refkeyable | Children;
+  trait?: Refkeyable | Children;
   typeParameters?: TypeParameterProps[];
   whereClause?: Children;
   attributes?: Children[];
@@ -109,12 +112,17 @@ function renderTypeWithInferredTypeParameters(
 export function ImplBlock(props: ImplBlockProps) {
   const parentScope = useRustScope();
 
-  const renderedType = isRefkey(props.type)
-    ? resolveSymbolNameFromRefkey(props.type, parentScope)
-    : props.type;
-  const targetTypeSymbol = isRefkey(props.type)
-    ? resolveTypeSymbolFromRefkey(props.type, parentScope)
-    : findTypeSymbolFromInline(props.type, parentScope);
+  const typeRefkey = isRefkey(props.type)
+    ? props.type
+    : isRefkeyable(props.type)
+      ? toRefkey(props.type)
+      : undefined;
+  const renderedType = typeRefkey
+    ? resolveSymbolNameFromRefkey(typeRefkey, parentScope)
+    : (props.type as Children);
+  const targetTypeSymbol = typeRefkey
+    ? resolveTypeSymbolFromRefkey(typeRefkey, parentScope)
+    : findTypeSymbolFromInline(props.type as Children, parentScope);
 
   const implTargetSymbol =
     targetTypeSymbol ??

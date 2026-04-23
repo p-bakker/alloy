@@ -228,13 +228,19 @@ export function ref(
     }
 
     return [
-      buildReferenceChildren(commonScope, lexicalDeclaration, memberPath),
+      buildReferenceChildren(
+        currentScope,
+        commonScope,
+        lexicalDeclaration,
+        memberPath,
+      ),
       symbol,
     ];
   });
 }
 
 function buildReferenceChildren(
+  currentScope: RustScopeBase,
   commonScope: RustScopeBase | undefined,
   lexicalDeclaration: RustOutputSymbol,
   memberPath: RustOutputSymbol[],
@@ -242,14 +248,21 @@ function buildReferenceChildren(
   const parts: Children[] = [];
 
   if (commonScope && commonScope.isMemberScope) {
-    // Referencing a member of a type we are inside
+    // Referencing a member of a type we are inside: use `Self::` / `self.`
+    // instead of repeating the type name, matching idiomatic Rust.
     if (lexicalDeclaration.isInstanceMemberSymbol) {
-      // Instance member: self.member
       parts.push("self.", lexicalDeclaration.name);
     } else {
-      // Associated item: Type::member
-      parts.push(commonScope.ownerSymbol!.name, "::", lexicalDeclaration.name);
+      parts.push("Self::", lexicalDeclaration.name);
     }
+  } else if (
+    memberPath.length > 0 &&
+    isInsideImplOf(currentScope, lexicalDeclaration)
+  ) {
+    // Referencing a member of a type whose `impl` block we're inside.
+    // `lexicalDeclaration` is the parent type; emit `Self` and let the
+    // member loop append `::variantName` / `.fieldName`.
+    parts.push("Self");
   } else {
     parts.push(lexicalDeclaration.name);
   }
@@ -263,6 +276,27 @@ function buildReferenceChildren(
   }
 
   return <>{parts}</>;
+}
+
+/**
+ * Walk the scope chain from `from` upward, looking for an `impl` scope whose
+ * owner symbol is `typeSymbol`. Used to detect when a reference to
+ * `TypeSymbol::member` can collapse to `Self::member`.
+ */
+function isInsideImplOf(
+  from: RustScopeBase | undefined,
+  typeSymbol: RustOutputSymbol,
+): boolean {
+  for (
+    let scope: RustScopeBase | undefined = from;
+    scope !== undefined;
+    scope = scope.parent as RustScopeBase | undefined
+  ) {
+    if (scope.ownerSymbol === typeSymbol) {
+      return true;
+    }
+  }
+  return false;
 }
 
 function collectFeatures(

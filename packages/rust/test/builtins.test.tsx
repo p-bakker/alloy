@@ -12,6 +12,8 @@ import {
   EnumDeclaration,
   EnumVariant,
 } from "../src/components/enum-declaration.js";
+import { FunctionDeclaration } from "../src/components/function-declaration.js";
+import { ImplBlock } from "../src/components/impl-block.js";
 import { SourceFile } from "../src/components/source-file.js";
 import { StructDeclaration } from "../src/components/struct-declaration.js";
 import { TypeAlias } from "../src/components/type-alias.js";
@@ -124,6 +126,46 @@ describe("std builtins", () => {
     expect(content).toContain("#[must_use]");
     expect(content).toContain("#[inline]");
     expect(content).toContain("pub struct Foo");
+  });
+
+  it("references to an impl's own type render as Self::", () => {
+    const MyErr = createTypeRef({
+      variants: { NotFound: "unit" },
+    });
+
+    const output = render(
+      <Output>
+        <CrateDirectory name="my_crate">
+          <SourceFile path="lib">
+            <EnumDeclaration name="MyErr" refkey={MyErr} pub>
+              <EnumVariant name="NotFound" refkey={MyErr.NotFound} />
+            </EnumDeclaration>
+            {"\n"}
+            <ImplBlock type={MyErr}>
+              <FunctionDeclaration
+                name="is_not_found"
+                receiver="&self"
+                returnType="bool"
+              >
+                {"matches!(self, "}
+                <MyErr.NotFound />
+                {")"}
+              </FunctionDeclaration>
+            </ImplBlock>
+            {"\n"}
+            fn from_outside() {"{ "}
+            <MyErr.NotFound />
+            {" }"}
+          </SourceFile>
+        </CrateDirectory>
+      </Output>,
+    );
+
+    const content = findFile(output, "src/lib").contents;
+    // Inside the impl block: Self::NotFound
+    expect(content).toContain("matches!(self, Self::NotFound)");
+    // Outside: qualified MyErr::NotFound
+    expect(content).toContain("fn from_outside() { MyErr::NotFound }");
   });
 
   it("createTypeRef exposes variants as callable members on enum refs", () => {

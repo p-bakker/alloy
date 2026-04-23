@@ -78,19 +78,27 @@ export function ErrorModule(props: ErrorModuleProps) {
           returnType={FmtResult}
         >
           <MatchExpression expression="self">
-            <MatchArm pattern="Self::NotFound">
+            <MatchArm pattern={<StoreError.NotFound />}>
               <MacroCall name="write" args={["f", '"key not found"']} />
             </MatchArm>
-            <MatchArm pattern="Self::StorageFull">
+            <MatchArm pattern={<StoreError.StorageFull />}>
               <MacroCall name="write" args={["f", '"storage is full"']} />
             </MatchArm>
-            <MatchArm pattern="Self::SerializationError(msg)">
+            <MatchArm
+              pattern={
+                <StoreError.SerializationError>
+                  msg
+                </StoreError.SerializationError>
+              }
+            >
               <MacroCall
                 name="write"
                 args={["f", '"serialization error: {}"', "msg"]}
               />
             </MatchArm>
-            <MatchArm pattern="Self::LockError(msg)">
+            <MatchArm
+              pattern={<StoreError.LockError>msg</StoreError.LockError>}
+            >
               <MacroCall name="write" args={["f", '"lock error: {}"', "msg"]} />
             </MatchArm>
           </MatchExpression>
