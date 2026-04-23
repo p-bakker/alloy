@@ -26,22 +26,26 @@ import {
 } from "@alloy-js/rust";
 
 import { Config } from "./config-file.js";
-import {
-  ResultAlias,
-  storeErrorNotFoundKey,
-  storeErrorStorageFullKey,
-} from "./error-module.js";
+import { ResultAlias, StoreError } from "./error-module.js";
 import { Cacheable } from "./traits-module.js";
 
-const { Clone, Eq, Err, Ok, Option, PartialEq, Send, Sync } = prelude;
-const { Duration, Instant } = std.time;
-const { HashMap } = std.collections;
-const { Debug } = std.fmt;
-const { Hash } = std.hash;
+const { Clone, Eq, Err, None, Ok, Option, PartialEq, Send, Sync } = prelude;
+const {
+  time: { Duration, Instant },
+  collections: { HashMap },
+  fmt: { Debug },
+  hash: { Hash },
+} = std;
 
 export const Store = createTypeRef();
 export const Entry = createTypeRef();
-export const EntryStatus = createTypeRef();
+export const EntryStatus = createTypeRef({
+  variants: {
+    Active: "unit",
+    Expired: "unit",
+    Evicted: "unit",
+  },
+});
 
 export interface StoreModuleProps {
   children?: Children;
@@ -61,13 +65,19 @@ export function StoreModule(props: StoreModuleProps) {
         derives={[Debug, Clone, PartialEq]}
         doc="Represents the current status of a cached entry."
       >
-        <EnumVariant name="Active" doc="The entry is valid and accessible." />
+        <EnumVariant
+          name="Active"
+          refkey={EntryStatus.Active}
+          doc="The entry is valid and accessible."
+        />
         <EnumVariant
           name="Expired"
+          refkey={EntryStatus.Expired}
           doc="The entry has passed its time-to-live."
         />
         <EnumVariant
           name="Evicted"
+          refkey={EntryStatus.Evicted}
           doc="The entry was removed to make room for new entries."
         />
       </EnumDeclaration>
@@ -85,7 +95,7 @@ export function StoreModule(props: StoreModuleProps) {
         <Field name="value" pub type="V" />
         <Field name="created_at" pub type={Instant} />
         <Field name="ttl" pub type={<Option>{Duration}</Option>} />
-        <Field name="status" pub type="EntryStatus" />
+        <Field name="status" pub type={EntryStatus} />
       </StructDeclaration>
 
       <hbr />
@@ -106,7 +116,14 @@ export function StoreModule(props: StoreModuleProps) {
         ]}
         doc="A generic key-value store with capacity limits and TTL support."
       >
-        <Field name="data" type={<HashMap>K, {Entry}&lt;V&gt;</HashMap>} />
+        <Field
+          name="data"
+          type={
+            <HashMap>
+              K, <Entry>V</Entry>
+            </HashMap>
+          }
+        />
         <Field name="max_capacity" type="usize" />
         <Field name="default_ttl" type={<Option>{Duration}</Option>} />
       </StructDeclaration>
@@ -160,7 +177,9 @@ export function StoreModule(props: StoreModuleProps) {
         >
           <IfExpression condition="self.data.len() >= self.max_capacity && !self.data.contains_key(&key)">
             <ReturnExpression>
-              <Err>{storeErrorStorageFullKey}</Err>
+              <Err>
+                <StoreError.StorageFull />
+              </Err>
             </ReturnExpression>
           </IfExpression>
           <hbr />
@@ -171,7 +190,9 @@ export function StoreModule(props: StoreModuleProps) {
                 <FunctionCallExpression target={Instant.now} />
               </FieldInit>
               <FieldInit name="ttl">self.default_ttl</FieldInit>
-              <FieldInit name="status">EntryStatus::Active</FieldInit>
+              <FieldInit name="status">
+                <EntryStatus.Active />
+              </FieldInit>
             </StructExpression>
           </LetBinding>
           <hbr />
@@ -192,22 +213,30 @@ export function StoreModule(props: StoreModuleProps) {
         >
           <MatchExpression expression="self.data.get(key)">
             <MatchArm pattern="Some(entry)">
-              <IfExpression condition="entry.status == EntryStatus::Expired">
+              <IfExpression
+                condition={code`entry.status == ${EntryStatus.Expired}`}
+              >
                 <ReturnExpression>
-                  <Err>{storeErrorNotFoundKey}</Err>
+                  <Err>
+                    <StoreError.NotFound />
+                  </Err>
                 </ReturnExpression>
               </IfExpression>
               <IfExpression condition="let Some(ttl) = entry.ttl">
                 <IfExpression condition="entry.created_at.elapsed() &gt; ttl">
                   <ReturnExpression>
-                    <Err>{storeErrorNotFoundKey}</Err>
+                    <Err>
+                      <StoreError.NotFound />
+                    </Err>
                   </ReturnExpression>
                 </IfExpression>
               </IfExpression>
               <Ok>&amp;entry.value</Ok>
             </MatchArm>
             <MatchArm pattern="None">
-              <Err>{storeErrorNotFoundKey}</Err>
+              <Err>
+                <StoreError.NotFound />
+              </Err>
             </MatchArm>
           </MatchExpression>
         </FunctionDeclaration>
@@ -232,7 +261,7 @@ export function StoreModule(props: StoreModuleProps) {
             />
             <MethodChainExpression.Call
               name="ok_or"
-              args={[storeErrorNotFoundKey]}
+              args={[StoreError.NotFound]}
             />
           </MethodChainExpression>
         </FunctionDeclaration>
@@ -317,9 +346,9 @@ export function StoreModule(props: StoreModuleProps) {
         <FunctionDeclaration
           name="cached_value"
           receiver="&self"
-          returnType="Option<&V>"
+          returnType={<Option>&amp;V</Option>}
         >
-          None
+          <None />
         </FunctionDeclaration>
       </ImplBlock>
     </SourceFile>

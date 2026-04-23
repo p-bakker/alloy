@@ -16,8 +16,11 @@ import {
   StructExpression,
 } from "@alloy-js/rust";
 
-const { Option, Some } = prelude;
-const { Duration } = std.time;
+const { Clone, Option, Some } = prelude;
+const {
+  time: { Duration },
+  fmt: { Debug },
+} = std;
 
 export const Config = createTypeRef();
 export const maxEntriesKey = refkey();
@@ -61,7 +64,7 @@ export function ConfigFile(props: ConfigFileProps) {
         name="Config"
         refkey={Config}
         pub
-        derives={[std.fmt.Debug, prelude.Clone]}
+        derives={[Debug, Clone]}
       >
         <Field name="max_capacity" pub type="usize" />
         <Field name="default_ttl" pub type={<Option>{Duration}</Option>} />

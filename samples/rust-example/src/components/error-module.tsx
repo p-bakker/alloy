@@ -1,4 +1,4 @@
-import { code, refkey, type Children } from "@alloy-js/core";
+import { code, type Children } from "@alloy-js/core";
 import {
   createTypeRef,
   DocComment,
@@ -15,14 +15,17 @@ import {
   TypeAlias,
 } from "@alloy-js/rust";
 
-const { Result } = prelude;
-const { Display, Formatter, Result: FmtResult } = std.fmt;
+const { Clone, Result } = prelude;
+const { Debug, Display, Formatter, Result: FmtResult } = std.fmt;
 
-export const StoreError = createTypeRef();
-export const storeErrorNotFoundKey = refkey();
-export const storeErrorStorageFullKey = refkey();
-export const storeErrorSerializationKey = refkey();
-export const storeErrorLockKey = refkey();
+export const StoreError = createTypeRef({
+  variants: {
+    NotFound: "unit",
+    StorageFull: "unit",
+    SerializationError: "tuple",
+    LockError: "tuple",
+  },
+});
 export const ResultAlias = createTypeRef();
 
 export interface ErrorModuleProps {
@@ -37,28 +40,28 @@ export function ErrorModule(props: ErrorModuleProps) {
         name="StoreError"
         refkey={StoreError}
         pub
-        derives={[std.fmt.Debug, prelude.Clone]}
+        derives={[Debug, Clone]}
       >
         <EnumVariant
           name="NotFound"
-          refkey={storeErrorNotFoundKey}
+          refkey={StoreError.NotFound}
           doc="The requested key was not found."
         />
         <EnumVariant
           name="StorageFull"
-          refkey={storeErrorStorageFullKey}
+          refkey={StoreError.StorageFull}
           doc="The store has reached its maximum capacity."
         />
         <EnumVariant
           name="SerializationError"
-          refkey={storeErrorSerializationKey}
+          refkey={StoreError.SerializationError}
           doc="Failed to serialize or deserialize a value."
           kind="tuple"
           fields={["String"]}
         />
         <EnumVariant
           name="LockError"
-          refkey={storeErrorLockKey}
+          refkey={StoreError.LockError}
           doc="Failed to acquire a lock on the store."
           kind="tuple"
           fields={["String"]}

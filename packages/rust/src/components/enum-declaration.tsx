@@ -37,7 +37,7 @@ export interface EnumDeclarationProps extends RustVisibilityProps {
 
 export interface EnumVariantProps {
   name: string | Namekey;
-  refkey?: Refkey;
+  refkey?: Refkeyable;
   attributes?: Children[];
   doc?: string;
   kind?: "unit" | "tuple" | "struct";

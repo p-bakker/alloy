@@ -8,6 +8,10 @@ import {
   PRELUDE_TYPES_2024,
 } from "../src/builtins/prelude.js";
 import { CrateDirectory } from "../src/components/crate-directory.js";
+import {
+  EnumDeclaration,
+  EnumVariant,
+} from "../src/components/enum-declaration.js";
 import { SourceFile } from "../src/components/source-file.js";
 import { StructDeclaration } from "../src/components/struct-declaration.js";
 import { TypeAlias } from "../src/components/type-alias.js";
@@ -98,6 +102,42 @@ describe("std builtins", () => {
     expect(content).toContain("use core::convert::TryFrom;");
     expect(content).toContain("use core::iter::FromIterator;");
     expect(content).not.toContain("use std::");
+  });
+
+  it("createTypeRef exposes variants as callable members on enum refs", () => {
+    const MyErr = createTypeRef({
+      variants: { NotFound: "unit", Io: "tuple" },
+    });
+
+    const output = render(
+      <Output>
+        <CrateDirectory name="my_crate">
+          <SourceFile path="lib">
+            <EnumDeclaration name="MyErr" refkey={MyErr} pub>
+              <EnumVariant name="NotFound" refkey={MyErr.NotFound} />
+              <EnumVariant
+                name="Io"
+                refkey={MyErr.Io}
+                kind="tuple"
+                fields={["String"]}
+              />
+            </EnumDeclaration>
+            {"\n"}
+            fn a() {"{ "}
+            <MyErr.NotFound />
+            {" }"}
+            {"\n"}
+            fn b() {"{ "}
+            <MyErr.Io>msg</MyErr.Io>
+            {" }"}
+          </SourceFile>
+        </CrateDirectory>
+      </Output>,
+    );
+
+    const content = findFile(output, "src/lib").contents;
+    expect(content).toContain("fn a() { MyErr::NotFound }");
+    expect(content).toContain("fn b() { MyErr::Io(msg) }");
   });
 
   it("createTypeRef makes user-declared types callable as JSX components", () => {
