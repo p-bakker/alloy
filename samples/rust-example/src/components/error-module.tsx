@@ -1,5 +1,6 @@
-import { Children, code, refkey } from "@alloy-js/core";
+import { code, refkey, type Children } from "@alloy-js/core";
 import {
+  createTypeRef,
   DocComment,
   EnumDeclaration,
   EnumVariant,
@@ -17,12 +18,12 @@ import {
 const { Result } = prelude;
 const { Display, Formatter, Result: FmtResult } = std.fmt;
 
-export const storeErrorKey = refkey();
+export const StoreError = createTypeRef();
 export const storeErrorNotFoundKey = refkey();
 export const storeErrorStorageFullKey = refkey();
 export const storeErrorSerializationKey = refkey();
 export const storeErrorLockKey = refkey();
-export const resultAliasKey = refkey();
+export const ResultAlias = createTypeRef();
 
 export interface ErrorModuleProps {
   children?: Children;
@@ -34,7 +35,7 @@ export function ErrorModule(props: ErrorModuleProps) {
       <DocComment>Error types for the key-value store.</DocComment>
       <EnumDeclaration
         name="StoreError"
-        refkey={storeErrorKey}
+        refkey={StoreError}
         pub
         derives={[std.fmt.Debug, prelude.Clone]}
       >
@@ -66,7 +67,7 @@ export function ErrorModule(props: ErrorModuleProps) {
 
       <hbr />
 
-      <ImplBlock type={storeErrorKey} trait={Display}>
+      <ImplBlock type={StoreError} trait={Display}>
         <FunctionDeclaration
           name="fmt"
           receiver="&self"
@@ -98,11 +99,11 @@ export function ErrorModule(props: ErrorModuleProps) {
       <DocComment>A specialized Result type for store operations.</DocComment>
       <TypeAlias
         name="Result"
-        refkey={resultAliasKey}
+        refkey={ResultAlias}
         pub
         typeParameters={[{ name: "T" }]}
       >
-        <Result>T, StoreError</Result>
+        <Result>T, {StoreError}</Result>
       </TypeAlias>
     </SourceFile>
   );

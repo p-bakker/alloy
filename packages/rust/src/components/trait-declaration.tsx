@@ -5,7 +5,9 @@ import {
   createScope,
   For,
   Indent,
+  type Refkeyable,
   Scope,
+  toRefkey,
 } from "@alloy-js/core";
 
 import { RustTraitScope, useRustScope } from "../scopes/index.js";
@@ -21,7 +23,7 @@ import {
 
 export interface TraitDeclarationProps extends RustVisibilityProps {
   name: string | Namekey;
-  refkey?: Refkey;
+  refkey?: Refkeyable;
   typeParameters?: TypeParameterProp[];
   supertraits?: Children[];
   whereClause?: Children;
@@ -33,7 +35,7 @@ export interface TraitDeclarationProps extends RustVisibilityProps {
 export function TraitDeclaration(props: TraitDeclarationProps) {
   const parentScope = useRustScope();
   const traitSymbol = createTraitSymbol(props.name, {
-    refkeys: props.refkey ? [props.refkey] : [],
+    refkeys: props.refkey ? [toRefkey(props.refkey)] : [],
   });
   const traitScope = createScope(RustTraitScope, traitSymbol, parentScope, {
     binder: parentScope.binder,

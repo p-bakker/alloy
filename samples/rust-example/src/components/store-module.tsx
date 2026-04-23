@@ -1,7 +1,8 @@
-import { Children, code, refkey } from "@alloy-js/core";
+import { code, type Children } from "@alloy-js/core";
 import {
   Attribute,
   ClosureExpression,
+  createTypeRef,
   DocComment,
   EnumDeclaration,
   EnumVariant,
@@ -24,13 +25,13 @@ import {
   StructExpression,
 } from "@alloy-js/rust";
 
-import { configKey } from "./config-file.js";
+import { Config } from "./config-file.js";
 import {
-  resultAliasKey,
+  ResultAlias,
   storeErrorNotFoundKey,
   storeErrorStorageFullKey,
 } from "./error-module.js";
-import { cacheableKey } from "./traits-module.js";
+import { Cacheable } from "./traits-module.js";
 
 const { Clone, Eq, Err, Ok, Option, PartialEq, Send, Sync } = prelude;
 const { Duration, Instant } = std.time;
@@ -38,9 +39,9 @@ const { HashMap } = std.collections;
 const { Debug } = std.fmt;
 const { Hash } = std.hash;
 
-export const storeKey = refkey();
-export const entryKey = refkey();
-export const entryStatusKey = refkey();
+export const Store = createTypeRef();
+export const Entry = createTypeRef();
+export const EntryStatus = createTypeRef();
 
 export interface StoreModuleProps {
   children?: Children;
@@ -55,7 +56,7 @@ export function StoreModule(props: StoreModuleProps) {
 
       <EnumDeclaration
         name="EntryStatus"
-        refkey={entryStatusKey}
+        refkey={EntryStatus}
         pub
         derives={[Debug, Clone, PartialEq]}
         doc="Represents the current status of a cached entry."
@@ -75,7 +76,7 @@ export function StoreModule(props: StoreModuleProps) {
 
       <StructDeclaration
         name="Entry"
-        refkey={entryKey}
+        refkey={Entry}
         pub
         derives={[Debug, Clone]}
         typeParameters={[{ name: "V", constraint: Clone }]}
@@ -91,7 +92,7 @@ export function StoreModule(props: StoreModuleProps) {
 
       <StructDeclaration
         name="Store"
-        refkey={storeKey}
+        refkey={Store}
         pub
         typeParameters={[
           {
@@ -105,7 +106,7 @@ export function StoreModule(props: StoreModuleProps) {
         ]}
         doc="A generic key-value store with capacity limits and TTL support."
       >
-        <Field name="data" type={<HashMap>K, {entryKey}&lt;V&gt;</HashMap>} />
+        <Field name="data" type={<HashMap>K, {Entry}&lt;V&gt;</HashMap>} />
         <Field name="max_capacity" type="usize" />
         <Field name="default_ttl" type={<Option>{Duration}</Option>} />
       </StructDeclaration>
@@ -113,7 +114,7 @@ export function StoreModule(props: StoreModuleProps) {
       <hbr />
 
       <ImplBlock
-        type={storeKey}
+        type={Store}
         typeParameters={[
           {
             name: "K",
@@ -132,7 +133,7 @@ export function StoreModule(props: StoreModuleProps) {
           name="new"
           pub
           receiver="none"
-          parameters={[{ name: "config", type: configKey }]}
+          parameters={[{ name: "config", type: Config }]}
           returnType="Self"
         >
           <StructExpression type="Self">
@@ -155,7 +156,7 @@ export function StoreModule(props: StoreModuleProps) {
             { name: "key", type: "K" },
             { name: "value", type: "V" },
           ]}
-          returnType={code`${resultAliasKey}<()>`}
+          returnType={<ResultAlias>{"()"}</ResultAlias>}
         >
           <IfExpression condition="self.data.len() >= self.max_capacity && !self.data.contains_key(&key)">
             <ReturnExpression>
@@ -187,7 +188,7 @@ export function StoreModule(props: StoreModuleProps) {
           pub
           receiver="&self"
           parameters={[{ name: "key", type: "&K" }]}
-          returnType={code`${resultAliasKey}<&V>`}
+          returnType={<ResultAlias>&amp;V</ResultAlias>}
         >
           <MatchExpression expression="self.data.get(key)">
             <MatchArm pattern="Some(entry)">
@@ -217,7 +218,7 @@ export function StoreModule(props: StoreModuleProps) {
           pub
           receiver="&mut self"
           parameters={[{ name: "key", type: "&K" }]}
-          returnType={code`${resultAliasKey}<V>`}
+          returnType={<ResultAlias>V</ResultAlias>}
         >
           <MethodChainExpression receiver="self.data">
             <MethodChainExpression.Call name="remove" args={["key"]} />
@@ -284,8 +285,8 @@ export function StoreModule(props: StoreModuleProps) {
       <hbr />
 
       <ImplBlock
-        type={storeKey}
-        trait={<>{cacheableKey}&lt;V&gt;</>}
+        type={Store}
+        trait={<Cacheable>V</Cacheable>}
         typeParameters={[
           {
             name: "K",

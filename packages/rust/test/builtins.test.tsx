@@ -9,7 +9,9 @@ import {
 } from "../src/builtins/prelude.js";
 import { CrateDirectory } from "../src/components/crate-directory.js";
 import { SourceFile } from "../src/components/source-file.js";
+import { StructDeclaration } from "../src/components/struct-declaration.js";
 import { TypeAlias } from "../src/components/type-alias.js";
+import { createTypeRef } from "../src/components/type-ref.js";
 import { useCrateContext } from "../src/context/crate-context.js";
 import type { RustCrateScope } from "../src/scopes/index.js";
 import { findFile } from "./utils.js";
@@ -96,6 +98,34 @@ describe("std builtins", () => {
     expect(content).toContain("use core::convert::TryFrom;");
     expect(content).toContain("use core::iter::FromIterator;");
     expect(content).not.toContain("use std::");
+  });
+
+  it("createTypeRef makes user-declared types callable as JSX components", () => {
+    const MyBox = createTypeRef();
+
+    const output = render(
+      <Output>
+        <CrateDirectory name="my_crate">
+          <SourceFile path="lib">
+            <StructDeclaration
+              name="MyBox"
+              refkey={MyBox}
+              pub
+              tuple
+              types={["u32"]}
+              typeParameters={[{ name: "T" }]}
+            />
+            {"\n"}
+            type A = {MyBox};{"\n"}
+            type B = <MyBox>u64</MyBox>;
+          </SourceFile>
+        </CrateDirectory>
+      </Output>,
+    );
+
+    const content = findFile(output, "src/lib").contents;
+    expect(content).toContain("type A = MyBox;");
+    expect(content).toContain("type B = MyBox<u64>;");
   });
 
   it("renders generic types as JSX components with type args", () => {

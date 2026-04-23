@@ -6,6 +6,7 @@ import {
   Indent,
   type Refkeyable,
   Scope,
+  toRefkey,
 } from "@alloy-js/core";
 
 import { RustImplScope, useRustScope } from "../scopes/index.js";
@@ -26,7 +27,7 @@ import {
 
 export interface EnumDeclarationProps extends RustVisibilityProps {
   name: string | Namekey;
-  refkey?: Refkey;
+  refkey?: Refkeyable;
   derives?: (string | Refkeyable)[] | Refkeyable;
   attributes?: Children[];
   doc?: string;
@@ -60,7 +61,7 @@ function DeclareNamedTypeTypeParameters(props: {
 export function EnumDeclaration(props: EnumDeclarationProps) {
   const parentScope = useRustScope();
   const enumSymbol = createEnumSymbol(props.name, {
-    refkeys: props.refkey ? [props.refkey] : [],
+    refkeys: props.refkey ? [toRefkey(props.refkey)] : [],
   });
   const enumScope = createScope(RustImplScope, enumSymbol, parentScope, {
     binder: parentScope.binder,
@@ -139,7 +140,7 @@ export function EnumDeclaration(props: EnumDeclarationProps) {
 
 export function EnumVariant(props: EnumVariantProps) {
   const variantSymbol = createVariantSymbol(props.name, {
-    refkeys: props.refkey ? [props.refkey] : [],
+    refkeys: props.refkey ? [toRefkey(props.refkey)] : [],
   });
 
   const tupleFields = (props.fields ?? []).filter(

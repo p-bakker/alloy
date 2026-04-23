@@ -1,5 +1,6 @@
-import { Children, code, refkey } from "@alloy-js/core";
+import { code, type Children } from "@alloy-js/core";
 import {
+  createTypeRef,
   DocComment,
   FunctionDeclaration,
   prelude,
@@ -7,12 +8,12 @@ import {
   TraitDeclaration,
 } from "@alloy-js/rust";
 
-import { resultAliasKey } from "./error-module.js";
+import { ResultAlias } from "./error-module.js";
 
 const { Clone, Option, Send, Sync, Vec } = prelude;
 
-export const serializableKey = refkey();
-export const cacheableKey = refkey();
+export const Serializable = createTypeRef();
+export const Cacheable = createTypeRef();
 
 export interface TraitsModuleProps {
   children?: Children;
@@ -27,7 +28,7 @@ export function TraitsModule(props: TraitsModuleProps) {
 
       <TraitDeclaration
         name="Serializable"
-        refkey={serializableKey}
+        refkey={Serializable}
         pub
         doc="A trait for types that can be serialized to and deserialized from bytes."
       >
@@ -35,9 +36,9 @@ export function TraitsModule(props: TraitsModuleProps) {
           name="to_bytes"
           receiver="&self"
           returnType={
-            <>
-              {resultAliasKey}&lt;<Vec>u8</Vec>&gt;
-            </>
+            <ResultAlias>
+              <Vec>u8</Vec>
+            </ResultAlias>
           }
         />
 
@@ -47,7 +48,7 @@ export function TraitsModule(props: TraitsModuleProps) {
           name="from_bytes"
           receiver="none"
           parameters={[{ name: "bytes", type: "&[u8]" }]}
-          returnType={code`${resultAliasKey}<Self>`}
+          returnType={<ResultAlias>Self</ResultAlias>}
           whereClause="Self: Sized"
         />
       </TraitDeclaration>
@@ -59,7 +60,7 @@ export function TraitsModule(props: TraitsModuleProps) {
       </DocComment>
       <TraitDeclaration
         name="Cacheable"
-        refkey={cacheableKey}
+        refkey={Cacheable}
         pub
         typeParameters={[
           {

@@ -6,6 +6,7 @@ import {
   Indent,
   type Refkeyable,
   Scope,
+  toRefkey,
 } from "@alloy-js/core";
 
 import { RustImplScope, useRustScope } from "../scopes/index.js";
@@ -26,7 +27,7 @@ import {
 
 export interface StructDeclarationProps extends RustVisibilityProps {
   name: string | Namekey;
-  refkey?: Refkey;
+  refkey?: Refkeyable;
   derives?: (string | Refkeyable)[] | Refkeyable;
   attributes?: Children[];
   doc?: string;
@@ -62,7 +63,7 @@ function DeclareNamedTypeTypeParameters(props: {
 export function StructDeclaration(props: StructDeclarationProps) {
   const parentScope = useRustScope();
   const structSymbol = createStructSymbol(props.name, {
-    refkeys: props.refkey ? [props.refkey] : [],
+    refkeys: props.refkey ? [toRefkey(props.refkey)] : [],
   });
   const structScope = createScope(RustImplScope, structSymbol, parentScope, {
     binder: parentScope.binder,
@@ -166,7 +167,7 @@ export function StructDeclaration(props: StructDeclarationProps) {
 
 export function Field(props: FieldProps) {
   const fieldSymbol = createFieldSymbol(props.name, {
-    refkeys: props.refkey ? [props.refkey] : [],
+    refkeys: props.refkey ? [toRefkey(props.refkey)] : [],
   });
   fieldSymbol.visibility = toRustVisibility(props.pub);
 

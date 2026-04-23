@@ -1,5 +1,10 @@
 import type { Children, Namekey, Refkey } from "@alloy-js/core";
-import { Declaration as CoreDeclaration, For } from "@alloy-js/core";
+import {
+  Declaration as CoreDeclaration,
+  For,
+  type Refkeyable,
+  toRefkey,
+} from "@alloy-js/core";
 
 import { createTypeAliasSymbol } from "../symbols/factories.js";
 import type { TypeParameterProp } from "./type-parameters.js";
@@ -12,7 +17,7 @@ import {
 
 export interface TypeAliasProps extends RustVisibilityProps {
   name: string | Namekey;
-  refkey?: Refkey;
+  refkey?: Refkeyable;
   attributes?: Children[];
   typeParameters?: TypeParameterProp[];
   children?: Children;
@@ -20,7 +25,7 @@ export interface TypeAliasProps extends RustVisibilityProps {
 
 export function TypeAlias(props: TypeAliasProps) {
   const typeAliasSymbol = createTypeAliasSymbol(props.name, {
-    refkeys: props.refkey ? [props.refkey] : [],
+    refkeys: props.refkey ? [toRefkey(props.refkey)] : [],
   });
 
   typeAliasSymbol.visibility = toRustVisibility(props.pub);

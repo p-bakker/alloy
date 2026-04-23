@@ -1,7 +1,8 @@
-import { Children, refkey } from "@alloy-js/core";
+import { refkey, type Children } from "@alloy-js/core";
 import {
   Attribute,
   ConstDeclaration,
+  createTypeRef,
   DocComment,
   Field,
   FieldInit,
@@ -18,7 +19,7 @@ import {
 const { Option, Some } = prelude;
 const { Duration } = std.time;
 
-export const configKey = refkey();
+export const Config = createTypeRef();
 export const maxEntriesKey = refkey();
 export const defaultTtlSecsKey = refkey();
 
@@ -58,7 +59,7 @@ export function ConfigFile(props: ConfigFileProps) {
       </DocComment>
       <StructDeclaration
         name="Config"
-        refkey={configKey}
+        refkey={Config}
         pub
         derives={[std.fmt.Debug, prelude.Clone]}
       >
@@ -70,7 +71,7 @@ export function ConfigFile(props: ConfigFileProps) {
 
       <hbr />
 
-      <ImplBlock type={configKey}>
+      <ImplBlock type={Config}>
         <DocComment>Creates a new Config with sensible defaults.</DocComment>
         <FunctionDeclaration name="new" pub receiver="none" returnType="Self">
           <StructExpression type="Self">
