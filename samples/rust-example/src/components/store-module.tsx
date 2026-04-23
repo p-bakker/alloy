@@ -89,7 +89,7 @@ export function StoreModule(props: StoreModuleProps) {
         refkey={Entry}
         pub
         derives={[Debug, Clone]}
-        typeParameters={[{ name: "V", constraint: Clone }]}
+        typeParameters={[{ name: "V", constraints: Clone }]}
         doc="A single entry in the store, holding a value and metadata."
       >
         <Field name="value" pub type="V" />
@@ -107,11 +107,11 @@ export function StoreModule(props: StoreModuleProps) {
         typeParameters={[
           {
             name: "K",
-            constraint: code`${Eq} + ${Hash} + ${Clone}`,
+            constraints: code`${Eq} + ${Hash} + ${Clone}`,
           },
           {
             name: "V",
-            constraint: code`${Clone} + ${Send} + ${Sync}`,
+            constraints: code`${Clone} + ${Send} + ${Sync}`,
           },
         ]}
         doc="A generic key-value store with capacity limits and TTL support."
@@ -135,11 +135,11 @@ export function StoreModule(props: StoreModuleProps) {
         typeParameters={[
           {
             name: "K",
-            constraint: code`${Eq} + ${Hash} + ${Clone}`,
+            constraints: code`${Eq} + ${Hash} + ${Clone}`,
           },
           {
             name: "V",
-            constraint: code`${Clone} + ${Send} + ${Sync}`,
+            constraints: code`${Clone} + ${Send} + ${Sync}`,
           },
         ]}
       >
@@ -319,11 +319,11 @@ export function StoreModule(props: StoreModuleProps) {
         typeParameters={[
           {
             name: "K",
-            constraint: code`${Eq} + ${Hash} + ${Clone}`,
+            constraints: code`${Eq} + ${Hash} + ${Clone}`,
           },
           {
             name: "V",
-            constraint: code`${Clone} + ${Send} + ${Sync}`,
+            constraints: code`${Clone} + ${Send} + ${Sync}`,
           },
         ]}
       >

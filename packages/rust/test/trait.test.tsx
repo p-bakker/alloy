@@ -109,7 +109,7 @@ describe("TraitDeclaration", () => {
               name="Sink"
               typeParameters={[
                 { name: "T" },
-                { name: "E", constraint: "Display" },
+                { name: "E", constraints: "Display" },
               ]}
               whereClause="T: Clone"
             />

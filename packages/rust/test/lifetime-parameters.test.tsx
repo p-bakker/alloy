@@ -33,7 +33,7 @@ describe("lifetime parameter integration", () => {
               name="Ref"
               typeParameters={[
                 { lifetime: "'a" },
-                { name: "T", constraint: "'a + Clone" },
+                { name: "T", constraints: "'a + Clone" },
               ]}
             />
             <hbr />
@@ -51,8 +51,8 @@ describe("lifetime parameter integration", () => {
               type="Ref<'a, T>"
               typeParameters={[
                 { lifetime: "'a" },
-                { lifetime: "'b", constraint: "'a" },
-                { name: "T", constraint: "'a + Clone" },
+                { lifetime: "'b", constraints: "'a" },
+                { name: "T", constraints: "'a + Clone" },
               ]}
             />
           </SourceFile>

@@ -2,11 +2,12 @@ import type { Children, Namekey, Refkey } from "@alloy-js/core";
 import { Declaration as CoreDeclaration } from "@alloy-js/core";
 
 import { createAssociatedTypeSymbol } from "../symbols/factories.js";
+import { renderConstraints } from "./type-parameters.js";
 
 export interface AssociatedTypeProps {
   name: string | Namekey;
   refkey?: Refkey;
-  constraint?: Children;
+  constraints?: Children | Children[];
   children?: Children;
 }
 
@@ -24,10 +25,10 @@ export function AssociatedType(props: AssociatedTypeProps) {
           {" = "}
           {props.children}
         </>
-      ) : props.constraint ? (
+      ) : props.constraints ? (
         <>
           {": "}
-          {props.constraint}
+          {renderConstraints(props.constraints)}
         </>
       ) : null}
       {";"}

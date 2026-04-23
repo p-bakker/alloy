@@ -329,11 +329,11 @@ describe("STC wrappers", () => {
     `);
 
     expect(
-      inFile(<TypeParameters params={[{ name: "T", constraint: "Clone" }]} />),
+      inFile(<TypeParameters params={[{ name: "T", constraints: "Clone" }]} />),
     ).toRenderTo(d`<T: Clone>`);
     expect(
       inFile(
-        Stc.TypeParameters({ params: [{ name: "T", constraint: "Clone" }] }),
+        Stc.TypeParameters({ params: [{ name: "T", constraints: "Clone" }] }),
       ),
     ).toRenderTo(d`<T: Clone>`);
   });

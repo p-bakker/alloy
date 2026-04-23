@@ -123,7 +123,7 @@ describe("FunctionDeclaration", () => {
               returnType="U"
               typeParameters={[
                 { name: "T" },
-                { name: "U", constraint: "Display" },
+                { name: "U", constraints: "Display" },
               ]}
               whereClause="U: Clone"
             />

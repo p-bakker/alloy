@@ -61,7 +61,7 @@ describe("AssociatedType", () => {
         <CrateDirectory name="my_crate">
           <SourceFile path="lib.rs">
             <TraitDeclaration name="Iterable">
-              <AssociatedType name="Item" constraint="Clone" />
+              <AssociatedType name="Item" constraints="Clone" />
             </TraitDeclaration>
           </SourceFile>
         </CrateDirectory>
@@ -106,7 +106,7 @@ describe("AssociatedType", () => {
         <CrateDirectory name="my_crate">
           <SourceFile path="lib.rs">
             {Stc.TraitDeclaration({ name: "Iterable" }).children([
-              Stc.AssociatedType({ name: "Item", constraint: "Clone" }),
+              Stc.AssociatedType({ name: "Item", constraints: "Clone" }),
             ])}
           </SourceFile>
         </CrateDirectory>

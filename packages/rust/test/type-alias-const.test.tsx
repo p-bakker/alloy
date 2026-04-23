@@ -85,7 +85,7 @@ describe("TypeAlias", () => {
               name="Collection"
               typeParameters={[
                 { name: "T" },
-                { name: "U", constraint: "Display" },
+                { name: "U", constraints: "Display" },
               ]}
             >
               {"Vec<T>"}

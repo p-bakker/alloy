@@ -65,7 +65,7 @@ export function TraitsModule(props: TraitsModuleProps) {
         typeParameters={[
           {
             name: "V",
-            constraint: code`${Clone} + ${Send} + ${Sync}`,
+            constraints: [Clone, Send, Sync],
           },
         ]}
       >

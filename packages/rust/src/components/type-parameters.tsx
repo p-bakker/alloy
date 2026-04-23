@@ -4,7 +4,11 @@ import { For } from "@alloy-js/core";
 export interface TypeParameterProp {
   name?: string;
   lifetime?: string;
-  constraint?: Children;
+  /**
+   * Trait bounds for this parameter. A single `Children` value renders
+   * as-is; an array is auto-joined with ` + `.
+   */
+  constraints?: Children | Children[];
 }
 
 export interface TypeParametersProps {
@@ -48,10 +52,10 @@ export function TypeParameters(props: TypeParametersProps) {
         {(param) => (
           <>
             {param.lifetime ?? param.name}
-            {param.constraint ? (
+            {param.constraints ? (
               <>
                 {": "}
-                {param.constraint}
+                {renderConstraints(param.constraints)}
               </>
             ) : null}
           </>
@@ -72,5 +76,20 @@ export function WhereClause(props: WhereClauseProps) {
       {"where "}
       {props.children}
     </>
+  );
+}
+
+export function renderConstraints(
+  constraints: Children | Children[],
+): Children {
+  if (!Array.isArray(constraints)) return constraints;
+  const bounds = constraints.filter(
+    (b) => b !== null && b !== undefined && b !== false,
+  );
+  if (bounds.length === 0) return null;
+  return (
+    <For each={bounds} joiner={" + "}>
+      {(bound) => bound}
+    </For>
   );
 }

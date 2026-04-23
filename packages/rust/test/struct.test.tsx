@@ -125,7 +125,7 @@ describe("StructDeclaration", () => {
               name="Foo"
               typeParameters={[
                 { name: "T" },
-                { name: "U", constraint: "Display" },
+                { name: "U", constraints: "Display" },
               ]}
               whereClause="U: Clone"
             />
@@ -164,7 +164,7 @@ describe("StructDeclaration", () => {
               derives={["Debug", "Clone"]}
               typeParameters={[
                 { name: "T" },
-                { name: "U", constraint: "Display" },
+                { name: "U", constraints: "Display" },
               ]}
               whereClause="U: Clone"
             />

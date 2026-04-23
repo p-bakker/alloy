@@ -20,14 +20,14 @@ describe("TypeParameters", () => {
 
   it("renders a single constrained parameter", () => {
     expect(
-      <TypeParameters params={[{ name: "T", constraint: "Display" }]} />,
+      <TypeParameters params={[{ name: "T", constraints: "Display" }]} />,
     ).toRenderTo(d`<T: Display>`);
   });
 
   it("renders mixed constrained and unconstrained parameters", () => {
     expect(
       <TypeParameters
-        params={[{ name: "T" }, { name: "U", constraint: "Display + Clone" }]}
+        params={[{ name: "T" }, { name: "U", constraints: "Display + Clone" }]}
       />,
     ).toRenderTo(d`<T, U: Display + Clone>`);
   });
@@ -44,7 +44,7 @@ describe("TypeParameters", () => {
         params={[
           { name: "T" },
           { lifetime: "'a" },
-          { name: "U", constraint: "'a + Display" },
+          { name: "U", constraints: "'a + Display" },
           { lifetime: "'b" },
         ]}
       />,
@@ -54,7 +54,7 @@ describe("TypeParameters", () => {
   it("renders lifetime bounds", () => {
     expect(
       <TypeParameters
-        params={[{ lifetime: "'a" }, { lifetime: "'b", constraint: "'a" }]}
+        params={[{ lifetime: "'a" }, { lifetime: "'b", constraints: "'a" }]}
       />,
     ).toRenderTo(d`<'a, 'b: 'a>`);
   });
@@ -62,7 +62,7 @@ describe("TypeParameters", () => {
   it("renders type parameter lifetime bounds", () => {
     expect(
       <TypeParameters
-        params={[{ lifetime: "'a" }, { name: "T", constraint: "'a + Clone" }]}
+        params={[{ lifetime: "'a" }, { name: "T", constraints: "'a + Clone" }]}
       />,
     ).toRenderTo(d`<'a, T: 'a + Clone>`);
   });
