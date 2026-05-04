@@ -89,6 +89,30 @@ describe("createRustNamePolicy", () => {
       "AlreadyPascal",
     );
   });
+
+  it("passes `_` through unchanged across every element kind", () => {
+    // `_` is Rust's anonymous-binding identifier: legal as a function
+    // parameter name, a let pattern, a `const _: T = …;` /
+    // `static _: T = …;` declaration, etc. The case transforms would
+    // strip the underscore to an empty string; the reserved-word path
+    // would emit `r#_` (invalid Rust). So the policy short-circuits
+    // and returns `_` unchanged regardless of element kind.
+    const namePolicy = createRustNamePolicy();
+    const elements: RustElements[] = [
+      "struct",
+      "enum",
+      "enum-variant",
+      "trait",
+      "type-alias",
+      "type-parameter",
+      "constant",
+      "function",
+      "variable",
+    ];
+    for (const el of elements) {
+      expect(namePolicy.getName("_", el)).toBe("_");
+    }
+  });
 });
 
 describe("useRustNamePolicy", () => {

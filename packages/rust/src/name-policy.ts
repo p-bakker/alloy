@@ -69,6 +69,14 @@ function ensureNonReservedName(name: string): string {
 
 export function createRustNamePolicy(): NamePolicy<RustElements> {
   return createNamePolicy((name, element) => {
+    // `_` is Rust's anonymous-binding name — legal as a let pattern,
+    // a `const _: T = …;` / `static _: T = …;` declaration that runs
+    // compile-time assertions, a function parameter you don't read,
+    // etc. Pass it through unchanged: no case transform (which would
+    // strip the underscore to an empty string), no reserved-word
+    // escaping (`_` isn't reserved, and `r#_` isn't valid Rust).
+    if (name === "_") return name;
+
     let transformedName: string;
 
     switch (element) {
