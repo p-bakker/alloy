@@ -5,6 +5,7 @@ import {
   SourceFile,
   createRustNamePolicy,
 } from "@alloy-js/rust";
+
 import { ConfigFile } from "./components/config-file.js";
 import { ErrorModule } from "./components/error-module.js";
 import { StoreModule } from "./components/store-module.js";

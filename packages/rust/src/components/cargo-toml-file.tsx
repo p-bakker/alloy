@@ -1,4 +1,5 @@
 import { SourceFile, memo } from "@alloy-js/core";
+
 import { useCrateContext } from "../context/crate-context.js";
 import type { CrateDependency } from "../scopes/rust-crate-scope.js";
 
@@ -47,9 +48,9 @@ export function CargoTomlFile(props: CargoTomlFileProps) {
     const crateType = crate?.crateType ?? "lib";
     const crateName = crate?.name ?? props.name;
     const targetLines =
-      crateType === "bin" ?
-        ["[[bin]]", `name = "${crateName}"`, 'path = "main.rs"']
-      : ["[lib]", 'path = "lib.rs"'];
+      crateType === "bin"
+        ? ["[[bin]]", `name = "${crateName}"`, 'path = "main.rs"']
+        : ["[lib]", 'path = "lib.rs"'];
 
     const lines = [
       "[package]",

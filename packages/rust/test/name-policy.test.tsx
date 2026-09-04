@@ -1,10 +1,8 @@
 import { Output } from "@alloy-js/core";
 import { describe, expect, it } from "vitest";
-import {
-  createRustNamePolicy,
-  RustElements,
-  useRustNamePolicy,
-} from "../src/name-policy.js";
+
+import type { RustElements } from "../src/name-policy.js";
+import { createRustNamePolicy, useRustNamePolicy } from "../src/name-policy.js";
 
 const RESERVED_KEYWORDS = [
   "as",

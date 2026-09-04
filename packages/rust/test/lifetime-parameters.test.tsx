@@ -2,6 +2,7 @@ import { Output } from "@alloy-js/core";
 import "@alloy-js/core/testing";
 import { d } from "@alloy-js/core/testing";
 import { describe, expect, it } from "vitest";
+
 import {
   CrateDirectory,
   EnumDeclaration,

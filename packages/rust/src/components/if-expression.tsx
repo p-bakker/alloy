@@ -1,4 +1,5 @@
-import { Children, For, Indent, isComponentCreator } from "@alloy-js/core";
+import type { Children } from "@alloy-js/core";
+import { For, Indent, isComponentCreator } from "@alloy-js/core";
 
 export interface IfExpressionProps {
   condition: Children;
@@ -57,7 +58,7 @@ function renderBlock(children: Children | undefined) {
   return (
     <>
       {"{"}
-      {statements.length > 0 ?
+      {statements.length > 0 ? (
         <>
           <Indent>
             <For each={statements} joiner={<hbr />}>
@@ -66,7 +67,7 @@ function renderBlock(children: Children | undefined) {
           </Indent>
           <hbr />
         </>
-      : null}
+      ) : null}
       {"}"}
     </>
   );

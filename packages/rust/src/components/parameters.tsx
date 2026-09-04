@@ -1,5 +1,6 @@
 import { Declaration as CoreDeclaration, For } from "@alloy-js/core";
-import { ParameterDescriptor } from "../parameter-descriptor.js";
+
+import type { ParameterDescriptor } from "../parameter-descriptor.js";
 import { createParameterSymbol } from "../symbols/factories.js";
 
 export interface ParametersProps {
@@ -9,20 +10,21 @@ export interface ParametersProps {
 
 function Parameter(props: { parameter: ParameterDescriptor }) {
   const parameterSymbol = createParameterSymbol(props.parameter.name);
-  const typePrefix =
-    props.parameter.refType ? `${props.parameter.refType} ` : "";
+  const typePrefix = props.parameter.refType
+    ? `${props.parameter.refType} `
+    : "";
 
   return (
     <CoreDeclaration symbol={parameterSymbol}>
       {props.parameter.mutable ? "mut " : ""}
       {parameterSymbol.name}
-      {props.parameter.type !== undefined ?
+      {props.parameter.type !== undefined ? (
         <>
           {": "}
           {typePrefix}
           {props.parameter.type}
         </>
-      : null}
+      ) : null}
     </CoreDeclaration>
   );
 }
@@ -33,11 +35,11 @@ export function Parameters(props: ParametersProps) {
   return (
     <>
       {shouldWrap ? "(" : null}
-      {props.parameters && props.parameters.length > 0 ?
+      {props.parameters && props.parameters.length > 0 ? (
         <For each={props.parameters} joiner={", "}>
           {(parameter) => <Parameter parameter={parameter} />}
         </For>
-      : null}
+      ) : null}
       {shouldWrap ? ")" : null}
     </>
   );

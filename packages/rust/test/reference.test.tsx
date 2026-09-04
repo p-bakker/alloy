@@ -1,14 +1,9 @@
-import {
-  Children,
-  Output,
-  Scope,
-  createScope,
-  refkey,
-  render,
-} from "@alloy-js/core";
+import type { Children } from "@alloy-js/core";
+import { Output, Scope, createScope, refkey, render } from "@alloy-js/core";
 import "@alloy-js/core/testing";
 import { d } from "@alloy-js/core/testing";
 import { describe, expect, it } from "vitest";
+
 import { CrateDirectory } from "../src/components/crate-directory.js";
 import { Declaration } from "../src/components/declaration.js";
 import { FunctionDeclaration } from "../src/components/function-declaration.js";
@@ -23,7 +18,7 @@ import {
 import { TraitDeclaration } from "../src/components/trait-declaration.js";
 import { useCrateContext } from "../src/context/crate-context.js";
 import { RustModuleScope, useRustModuleScope } from "../src/scopes/index.js";
-import { RustCrateScope } from "../src/scopes/rust-crate-scope.js";
+import type { RustCrateScope } from "../src/scopes/rust-crate-scope.js";
 import { findFile } from "./utils.js";
 
 interface ScopeCaptureProps {

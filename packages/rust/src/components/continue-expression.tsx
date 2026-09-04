@@ -6,9 +6,7 @@ export function ContinueExpression(props: ContinueExpressionProps) {
   return (
     <>
       {"continue"}
-      {props.label ?
-        <> {props.label}</>
-      : null}
+      {props.label ? <> {props.label}</> : null}
     </>
   );
 }

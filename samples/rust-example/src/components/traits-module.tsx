@@ -7,6 +7,7 @@ import {
   SourceFile,
   TraitDeclaration,
 } from "@alloy-js/rust";
+
 import { resultAliasKey } from "./error-module.js";
 
 export const serializableKey = refkey();

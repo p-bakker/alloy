@@ -1,5 +1,6 @@
 import { createSymbol, watch } from "@alloy-js/core";
 import { describe, expect, it, vi } from "vitest";
+
 import { RustOutputSymbol } from "../src/symbols/rust-output-symbol.js";
 
 describe("RustOutputSymbol", () => {

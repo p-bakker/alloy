@@ -2,6 +2,7 @@ import { Output, refkey, render } from "@alloy-js/core";
 import "@alloy-js/core/testing";
 import { d } from "@alloy-js/core/testing";
 import { describe, expect, it } from "vitest";
+
 import {
   AssociatedType,
   CrateDirectory,
@@ -21,9 +22,9 @@ function MemberKindsProbe(props: { name: string }) {
     if (symbol instanceof NamedTypeSymbol && symbol.name === props.name) {
       return [...symbol.members]
         .map((member) =>
-          member instanceof RustOutputSymbol ?
-            `${member.name}:${member.symbolKind}`
-          : member.name,
+          member instanceof RustOutputSymbol
+            ? `${member.name}:${member.symbolKind}`
+            : member.name,
         )
         .join(",");
     }

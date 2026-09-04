@@ -1,10 +1,12 @@
-import { Refkey, memo, resolve, unresolvedRefkey } from "@alloy-js/core";
+import type { Refkey } from "@alloy-js/core";
+import { memo, resolve, unresolvedRefkey } from "@alloy-js/core";
+
 import { isBuiltinCrate } from "../create-crate.js";
 import { useRustScope } from "../scopes/contexts.js";
 import { RustCrateScope } from "../scopes/rust-crate-scope.js";
 import { RustModuleScope } from "../scopes/rust-module-scope.js";
-import { RustScopeBase } from "../scopes/rust-scope.js";
-import { RustOutputSymbol } from "./rust-output-symbol.js";
+import type { RustScopeBase } from "../scopes/rust-scope.js";
+import type { RustOutputSymbol } from "./rust-output-symbol.js";
 
 export const PRELUDE_TYPES = new Set<string>([
   "Option",

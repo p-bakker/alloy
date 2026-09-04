@@ -6,6 +6,7 @@ import {
   useScope,
   type Children,
 } from "@alloy-js/core";
+
 import { RustCrateScope } from "../scopes/rust-crate-scope.js";
 import { RustModuleScope } from "../scopes/rust-module-scope.js";
 import { ModDeclarations } from "./mod-declarations.js";
@@ -66,12 +67,10 @@ function isStandaloneModulePath(path: string): boolean {
 export function SourceFile(props: SourceFileProps) {
   const parentScope = useScope();
   const scopeParent =
-    (
-      parentScope instanceof RustCrateScope ||
-      parentScope instanceof RustModuleScope
-    ) ?
-      parentScope
-    : undefined;
+    parentScope instanceof RustCrateScope ||
+    parentScope instanceof RustModuleScope
+      ? parentScope
+      : undefined;
   const visibility = toRustVisibility(props);
   if (scopeParent && isStandaloneModulePath(props.path)) {
     scopeParent.addChildModule(getStandaloneModuleName(props.path), visibility);
@@ -82,12 +81,12 @@ export function SourceFile(props: SourceFileProps) {
   const declarationScope = getDeclarationScope(props.path, scopeParent, scope);
 
   const header =
-    props.headerComment !== undefined || props.header !== undefined ?
+    props.headerComment !== undefined || props.header !== undefined ? (
       <>
         {props.headerComment}
         {props.header}
       </>
-    : undefined;
+    ) : undefined;
 
   return (
     <CoreSourceFile
@@ -97,16 +96,12 @@ export function SourceFile(props: SourceFileProps) {
       header={header}
     >
       <Scope value={scope}>
-        {declarationScope ?
-          <ModDeclarations scope={declarationScope} />
-        : null}
-        {(
-          declarationScope &&
-          declarationScope.childModules.size > 0 &&
-          (scope.imports.size > 0 || props.children !== undefined)
-        ) ?
+        {declarationScope ? <ModDeclarations scope={declarationScope} /> : null}
+        {declarationScope &&
+        declarationScope.childModules.size > 0 &&
+        (scope.imports.size > 0 || props.children !== undefined) ? (
           <hbr />
-        : null}
+        ) : null}
         <UseStatements />
         <Show when={scope.imports.size > 0}>
           <hbr />

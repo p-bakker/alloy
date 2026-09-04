@@ -1,4 +1,5 @@
 import { type OutputScopeOptions } from "@alloy-js/core";
+
 import type { NamedTypeSymbol } from "../symbols/named-type-symbol.js";
 import { RustScopeBase } from "./rust-scope.js";
 

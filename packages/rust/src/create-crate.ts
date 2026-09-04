@@ -1,3 +1,4 @@
+import type { SymbolCreator } from "@alloy-js/core";
 import {
   type Binder,
   createScope,
@@ -5,8 +6,8 @@ import {
   getSymbolCreatorSymbol,
   type Refkey,
   refkey,
-  SymbolCreator,
 } from "@alloy-js/core";
+
 import { RustCrateScope, RustModuleScope } from "./scopes/index.js";
 import {
   FunctionSymbol,

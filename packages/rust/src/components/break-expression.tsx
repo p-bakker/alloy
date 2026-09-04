@@ -1,4 +1,4 @@
-import { Children } from "@alloy-js/core";
+import type { Children } from "@alloy-js/core";
 
 export interface BreakExpressionProps {
   label?: string;
@@ -9,12 +9,8 @@ export function BreakExpression(props: BreakExpressionProps) {
   return (
     <>
       {"break"}
-      {props.label ?
-        <> {props.label}</>
-      : null}
-      {typeof props.children !== "undefined" ?
-        <> {props.children}</>
-      : null}
+      {props.label ? <> {props.label}</> : null}
+      {typeof props.children !== "undefined" ? <> {props.children}</> : null}
     </>
   );
 }

@@ -7,6 +7,7 @@ import {
   type Children,
 } from "@alloy-js/core";
 import { describe, expect, it } from "vitest";
+
 import { CrateDirectory } from "../src/components/crate-directory.js";
 import { Reference } from "../src/components/reference.js";
 import { SourceFile } from "../src/components/source-file.js";
@@ -17,7 +18,8 @@ import {
   getCrateScope,
 } from "../src/create-crate.js";
 import { useRustModuleScope } from "../src/scopes/contexts.js";
-import { RustCrateScope, RustModuleScope } from "../src/scopes/index.js";
+import type { RustCrateScope } from "../src/scopes/index.js";
+import { RustModuleScope } from "../src/scopes/index.js";
 import { findFile } from "./utils.js";
 
 interface ScopeCaptureProps {

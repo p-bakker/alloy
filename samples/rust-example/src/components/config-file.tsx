@@ -12,6 +12,7 @@ import {
   StructDeclaration,
   StructExpression,
 } from "@alloy-js/rust";
+
 import { stdCrate } from "../externals.js";
 
 export const configKey = refkey();

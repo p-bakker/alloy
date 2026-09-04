@@ -1,8 +1,6 @@
-import {
-  Children,
-  Declaration as CoreDeclaration,
-  Refkey,
-} from "@alloy-js/core";
+import type { Children, Refkey } from "@alloy-js/core";
+import { Declaration as CoreDeclaration } from "@alloy-js/core";
+
 import { createStaticSymbol } from "../symbols/factories.js";
 import { toRustVisibility, toVisibilityPrefix } from "./visibility.js";
 

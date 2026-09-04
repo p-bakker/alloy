@@ -1,4 +1,4 @@
-import { Children } from "@alloy-js/core";
+import type { Children } from "@alloy-js/core";
 
 export interface LetBindingProps {
   name: string;
@@ -16,18 +16,18 @@ export function LetBinding(props: LetBindingProps) {
       {"let "}
       {props.mutable ? "mut " : ""}
       {props.name}
-      {hasType ?
+      {hasType ? (
         <>
           {": "}
           {props.type}
         </>
-      : null}
-      {hasInitializer ?
+      ) : null}
+      {hasInitializer ? (
         <>
           {" = "}
           {props.children}
         </>
-      : null}
+      ) : null}
       {";"}
     </>
   );

@@ -1,4 +1,5 @@
 import { useScope } from "@alloy-js/core";
+
 import { RustCrateScope } from "./rust-crate-scope.js";
 import { RustModuleScope } from "./rust-module-scope.js";
 import { RustScopeBase } from "./rust-scope.js";

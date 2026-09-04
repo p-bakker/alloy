@@ -2,6 +2,7 @@ import { Output, render } from "@alloy-js/core";
 import "@alloy-js/core/testing";
 import { d } from "@alloy-js/core/testing";
 import { describe, expect, it } from "vitest";
+
 import { CargoTomlFile } from "../src/components/cargo-toml-file.js";
 import { CrateDirectory } from "../src/components/crate-directory.js";
 import { Reference } from "../src/components/reference.js";

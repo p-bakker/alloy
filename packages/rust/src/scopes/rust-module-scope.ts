@@ -3,11 +3,12 @@ import {
   type OutputSpace,
   shallowReactive,
 } from "@alloy-js/core";
+
 import {
   type RustOutputSymbol,
   type RustVisibility,
 } from "../symbols/rust-output-symbol.js";
-import { RustCrateScope } from "./rust-crate-scope.js";
+import type { RustCrateScope } from "./rust-crate-scope.js";
 import { RustScopeBase } from "./rust-scope.js";
 
 export interface RustModuleDeclaration {

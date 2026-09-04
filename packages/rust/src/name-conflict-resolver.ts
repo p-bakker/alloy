@@ -1,4 +1,4 @@
-import { RustOutputSymbol } from "./symbols/rust-output-symbol.js";
+import type { RustOutputSymbol } from "./symbols/rust-output-symbol.js";
 
 function isUseImportedSymbol(symbol: RustOutputSymbol): boolean {
   return (

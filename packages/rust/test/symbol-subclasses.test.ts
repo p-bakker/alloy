@@ -1,5 +1,6 @@
 import { createSymbol, watch } from "@alloy-js/core";
 import { describe, expect, it, vi } from "vitest";
+
 import { FunctionSymbol } from "../src/symbols/function-symbol.js";
 import { NamedTypeSymbol } from "../src/symbols/named-type-symbol.js";
 import { RustOutputSymbol } from "../src/symbols/rust-output-symbol.js";

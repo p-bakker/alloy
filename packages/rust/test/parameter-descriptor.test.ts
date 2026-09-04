@@ -1,6 +1,7 @@
 import { namekey } from "@alloy-js/core";
 import "@alloy-js/core/testing";
 import { describe, expect, it } from "vitest";
+
 import {
   isParameterDescriptor,
   type ParameterDescriptor,
@@ -8,13 +9,12 @@ import {
 
 function formatParameter(parameter: ParameterDescriptor): string {
   const prefix =
-    parameter.refType === "&mut" ? "&mut "
-    : parameter.refType === "&" ? "&"
-    : "";
-  const mutability =
-    parameter.refType ? ""
-    : parameter.mutable ? "mut "
-    : "";
+    parameter.refType === "&mut"
+      ? "&mut "
+      : parameter.refType === "&"
+        ? "&"
+        : "";
+  const mutability = parameter.refType ? "" : parameter.mutable ? "mut " : "";
   return `${prefix}${mutability}${String(parameter.name)}`;
 }
 

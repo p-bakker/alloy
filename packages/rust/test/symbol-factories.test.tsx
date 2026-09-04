@@ -1,5 +1,6 @@
 import { Output, Scope, render, useBinder } from "@alloy-js/core";
 import { describe, expect, it } from "vitest";
+
 import { createRustNamePolicy } from "../src/name-policy.js";
 import {
   RustCrateScope,

@@ -1,18 +1,17 @@
+import type { Children, Refkey } from "@alloy-js/core";
 import {
-  Children,
   Declaration as CoreDeclaration,
-  Refkey,
   createSymbol,
   useBinder,
 } from "@alloy-js/core";
-import { RustElements, useRustNamePolicy } from "../name-policy.js";
+
+import type { RustElements } from "../name-policy.js";
+import { useRustNamePolicy } from "../name-policy.js";
 import { useRustScope } from "../scopes/contexts.js";
 import { RustCrateScope } from "../scopes/rust-crate-scope.js";
 import { RustModuleScope } from "../scopes/rust-module-scope.js";
-import {
-  RustOutputSymbol,
-  RustSymbolKind,
-} from "../symbols/rust-output-symbol.js";
+import type { RustSymbolKind } from "../symbols/rust-output-symbol.js";
+import { RustOutputSymbol } from "../symbols/rust-output-symbol.js";
 import { toRustVisibility, toVisibilityPrefix } from "./visibility.js";
 
 export interface DeclarationProps {

@@ -1,17 +1,15 @@
+import type { Namekey, OutputSpace } from "@alloy-js/core";
 import {
   createSymbol,
-  Namekey,
-  OutputSpace,
   track,
   TrackOpTypes,
   trigger,
   TriggerOpTypes,
   watch,
 } from "@alloy-js/core";
-import {
-  RustOutputSymbol,
-  RustOutputSymbolOptions,
-} from "./rust-output-symbol.js";
+
+import type { RustOutputSymbolOptions } from "./rust-output-symbol.js";
+import { RustOutputSymbol } from "./rust-output-symbol.js";
 
 export type NamedTypeTypeKind = "struct" | "enum" | "trait" | "type-alias";
 export interface NamedTypeSymbolOptions extends RustOutputSymbolOptions {}

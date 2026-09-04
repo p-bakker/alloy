@@ -1,7 +1,6 @@
+import type { Children, Refkey } from "@alloy-js/core";
 import {
-  Children,
   Indent,
-  Refkey,
   Scope,
   code,
   createScope,
@@ -9,6 +8,7 @@ import {
   isRefkey,
   unresolvedRefkey,
 } from "@alloy-js/core";
+
 import {
   RustImplScope,
   RustModuleScope,
@@ -17,11 +17,8 @@ import {
 import { NamedTypeSymbol } from "../symbols/named-type-symbol.js";
 import { RustOutputSymbol } from "../symbols/rust-output-symbol.js";
 import { Reference } from "./reference.js";
-import {
-  TypeParameterProp,
-  TypeParameters,
-  WhereClause,
-} from "./type-parameters.js";
+import type { TypeParameterProp } from "./type-parameters.js";
+import { TypeParameters, WhereClause } from "./type-parameters.js";
 
 export type TypeParameterProps = TypeParameterProp;
 
@@ -110,13 +107,11 @@ function renderTypeWithInferredTypeParameters(
 export function ImplBlock(props: ImplBlockProps) {
   const parentScope = useRustScope();
 
-  const renderedType =
-    isRefkey(props.type) ?
-      resolveSymbolNameFromRefkey(props.type, parentScope)
+  const renderedType = isRefkey(props.type)
+    ? resolveSymbolNameFromRefkey(props.type, parentScope)
     : props.type;
-  const targetTypeSymbol =
-    isRefkey(props.type) ?
-      resolveTypeSymbolFromRefkey(props.type, parentScope)
+  const targetTypeSymbol = isRefkey(props.type)
+    ? resolveTypeSymbolFromRefkey(props.type, parentScope)
     : findTypeSymbolFromInline(props.type, parentScope);
 
   const implTargetSymbol =
@@ -127,9 +122,11 @@ export function ImplBlock(props: ImplBlockProps) {
     });
 
   const renderedTrait =
-    props.trait && isRefkey(props.trait) ?
+    props.trait && isRefkey(props.trait) ? (
       <Reference refkey={props.trait} />
-    : props.trait;
+    ) : (
+      props.trait
+    );
 
   const implScope = createScope(RustImplScope, implTargetSymbol, parentScope, {
     binder: parentScope.binder,
@@ -146,20 +143,20 @@ export function ImplBlock(props: ImplBlockProps) {
     <>
       {code`impl`}
       <TypeParameters params={implTypeParameters} />{" "}
-      {renderedTrait ?
+      {renderedTrait ? (
         <>
           {renderedTrait}
           {code` for `}
         </>
-      : null}
+      ) : null}
       {renderedTypeWithTypeParameters}
-      {props.whereClause ?
+      {props.whereClause ? (
         <>
           {" "}
           <WhereClause>{props.whereClause}</WhereClause>
         </>
-      : null}
-      {props.children ?
+      ) : null}
+      {props.children ? (
         <>
           {code` {`}
           <Scope value={implScope}>
@@ -168,7 +165,9 @@ export function ImplBlock(props: ImplBlockProps) {
           <hbr />
           {code`}`}
         </>
-      : code` {}`}
+      ) : (
+        code` {}`
+      )}
     </>
   );
 }

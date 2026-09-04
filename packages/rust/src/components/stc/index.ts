@@ -1,4 +1,5 @@
 import { stc } from "@alloy-js/core";
+
 import { AssociatedType as AssociatedTypeComponent } from "../associated-type.js";
 import {
   Attribute as AttributeComponent,

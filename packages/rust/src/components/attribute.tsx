@@ -1,4 +1,6 @@
-import { Children, For, Refkey } from "@alloy-js/core";
+import type { Children, Refkey } from "@alloy-js/core";
+import { For } from "@alloy-js/core";
+
 import { Reference } from "./reference.js";
 
 export interface AttributeProps {
@@ -33,16 +35,18 @@ function AttributeBase(props: AttributeBaseProps) {
   return (
     <>
       {props.marker}
-      {typeof props.name === "string" ?
+      {typeof props.name === "string" ? (
         props.name
-      : <Reference refkey={props.name} />}
-      {props.args !== undefined ?
+      ) : (
+        <Reference refkey={props.name} />
+      )}
+      {props.args !== undefined ? (
         <>
           {"("}
           {props.args}
           {")"}
         </>
-      : null}
+      ) : null}
       {"]"}
     </>
   );

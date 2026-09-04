@@ -1,4 +1,5 @@
 import type { OutputSpace } from "@alloy-js/core";
+
 import { RustScopeBase } from "./rust-scope.js";
 
 export class RustLexicalScope extends RustScopeBase {

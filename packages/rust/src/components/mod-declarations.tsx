@@ -1,6 +1,7 @@
 import { code, memo } from "@alloy-js/core";
-import { RustCrateScope } from "../scopes/rust-crate-scope.js";
-import { RustModuleScope } from "../scopes/rust-module-scope.js";
+
+import type { RustCrateScope } from "../scopes/rust-crate-scope.js";
+import type { RustModuleScope } from "../scopes/rust-module-scope.js";
 
 interface ModDeclaration {
   name: string;
@@ -40,9 +41,7 @@ export function ModDeclarations(props: ModDeclarationsProps) {
               name={declaration.name}
               visibility={declaration.visibility}
             />
-            {index < declarations.length - 1 ?
-              <hbr />
-            : null}
+            {index < declarations.length - 1 ? <hbr /> : null}
           </>
         ))}
       </>

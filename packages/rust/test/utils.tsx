@@ -1,14 +1,14 @@
-import {
+import type {
   Children,
   ContentOutputFile,
-  Output,
   OutputDirectory,
   OutputFile,
   PrintTreeOptions,
-  render,
 } from "@alloy-js/core";
+import { Output, render } from "@alloy-js/core";
 import { dedent } from "@alloy-js/core/testing";
 import { expect } from "vitest";
+
 import { CrateDirectory } from "../src/components/crate-directory.js";
 import { SourceFile } from "../src/components/source-file.js";
 
@@ -96,9 +96,9 @@ export function findFile(
   if (!result) {
     const available = collectPaths(res);
     const hint =
-      available.length > 0 ?
-        `Available files: ${available.join(", ")}`
-      : "No files found in output";
+      available.length > 0
+        ? `Available files: ${available.join(", ")}`
+        : "No files found in output";
     throw new Error(`Expected to find file "${path}" in output. ${hint}`);
   }
   return result as ContentOutputFile;

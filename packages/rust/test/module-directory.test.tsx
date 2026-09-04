@@ -2,6 +2,7 @@ import { Output, code, render } from "@alloy-js/core";
 import "@alloy-js/core/testing";
 import { d } from "@alloy-js/core/testing";
 import { describe, expect, it } from "vitest";
+
 import { CrateDirectory } from "../src/components/crate-directory.js";
 import { ModuleDirectory } from "../src/components/module-directory.js";
 import { SourceFile } from "../src/components/source-file.js";
@@ -15,9 +16,9 @@ function ScopeCapture() {
   const crateScope = useCrateContext()!.scope;
   const directoryScope = sourceFileScope.parent;
   const parentDirectoryScope =
-    directoryScope instanceof RustModuleScope ?
-      directoryScope.parent
-    : undefined;
+    directoryScope instanceof RustModuleScope
+      ? directoryScope.parent
+      : undefined;
 
   return (
     <>

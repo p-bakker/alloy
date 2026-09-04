@@ -1,6 +1,7 @@
 import { createSymbol } from "@alloy-js/core";
 import "@alloy-js/core/testing";
 import { describe, expect, it } from "vitest";
+
 import { rustNameConflictResolver } from "../src/name-conflict-resolver.js";
 import { RustOutputSymbol } from "../src/symbols/rust-output-symbol.js";
 

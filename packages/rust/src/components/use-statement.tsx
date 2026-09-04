@@ -1,4 +1,5 @@
 import { code, memo } from "@alloy-js/core";
+
 import { useRustModuleScope } from "../scopes/contexts.js";
 
 export interface UseStatementProps {
@@ -53,9 +54,7 @@ function UseStatementGroup(props: UseStatementGroupProps) {
       {props.entries.map((entry, index) => (
         <>
           <UseStatementPath path={entry.path} symbols={entry.symbols} />
-          {index < props.entries.length - 1 ?
-            <hbr />
-          : null}
+          {index < props.entries.length - 1 ? <hbr /> : null}
         </>
       ))}
     </>
@@ -104,12 +103,12 @@ export function UseStatements() {
         {groups.map((group, index) => (
           <>
             <UseStatementGroup entries={group} />
-            {index < groups.length - 1 ?
+            {index < groups.length - 1 ? (
               <>
                 <hbr />
                 <hbr />
               </>
-            : null}
+            ) : null}
           </>
         ))}
       </>

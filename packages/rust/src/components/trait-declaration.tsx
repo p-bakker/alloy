@@ -1,21 +1,18 @@
+import type { Children, Refkey } from "@alloy-js/core";
 import {
-  Children,
   code,
   Declaration as CoreDeclaration,
   createScope,
   For,
   Indent,
-  Refkey,
   Scope,
 } from "@alloy-js/core";
+
 import { RustTraitScope, useRustScope } from "../scopes/index.js";
 import { createTraitSymbol } from "../symbols/factories.js";
 import { DocComment } from "./doc-comment.js";
-import {
-  TypeParameterProp,
-  TypeParameters,
-  WhereClause,
-} from "./type-parameters.js";
+import type { TypeParameterProp } from "./type-parameters.js";
+import { TypeParameters, WhereClause } from "./type-parameters.js";
 import { toRustVisibility, toVisibilityPrefix } from "./visibility.js";
 
 export interface TraitDeclarationProps {
@@ -45,31 +42,31 @@ export function TraitDeclaration(props: TraitDeclarationProps) {
 
   return (
     <>
-      {props.doc ?
+      {props.doc ? (
         <>
           <DocComment>{props.doc}</DocComment>
         </>
-      : null}
+      ) : null}
       <CoreDeclaration symbol={traitSymbol}>
         {visibilityPrefix}
         {code`trait `}
         {traitSymbol.name}
         <TypeParameters params={props.typeParameters} />
-        {props.supertraits && props.supertraits.length > 0 ?
+        {props.supertraits && props.supertraits.length > 0 ? (
           <>
             {code`: `}
             <For each={props.supertraits} joiner={code` + `}>
               {(supertrait) => supertrait}
             </For>
           </>
-        : null}
-        {props.whereClause ?
+        ) : null}
+        {props.whereClause ? (
           <>
             {" "}
             <WhereClause>{props.whereClause}</WhereClause>
           </>
-        : null}
-        {props.children ?
+        ) : null}
+        {props.children ? (
           <>
             {code` {`}
             <Scope value={traitScope}>
@@ -78,7 +75,9 @@ export function TraitDeclaration(props: TraitDeclarationProps) {
             <hbr />
             {code`}`}
           </>
-        : code` {}`}
+        ) : (
+          code` {}`
+        )}
       </CoreDeclaration>
     </>
   );

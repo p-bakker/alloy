@@ -1,4 +1,6 @@
-import { OutputScope, OutputScopeOptions } from "@alloy-js/core";
+import type { OutputScopeOptions } from "@alloy-js/core";
+import { OutputScope } from "@alloy-js/core";
+
 import type { RustOutputSymbol } from "../symbols/rust-output-symbol.js";
 
 export class RustScopeBase extends OutputScope {

@@ -1,25 +1,20 @@
-import {
-  createSymbol,
-  Namekey,
-  NamePolicyGetter,
-  useBinder,
-} from "@alloy-js/core";
-import { RustElements, useRustNamePolicy } from "../name-policy.js";
+import type { Namekey, NamePolicyGetter } from "@alloy-js/core";
+import { createSymbol, useBinder } from "@alloy-js/core";
+
+import type { RustElements } from "../name-policy.js";
+import { useRustNamePolicy } from "../name-policy.js";
 import { useRustScope } from "../scopes/contexts.js";
 import { RustCrateScope } from "../scopes/rust-crate-scope.js";
 import { RustFunctionScope } from "../scopes/rust-function-scope.js";
 import { RustImplScope } from "../scopes/rust-impl-scope.js";
 import { RustModuleScope } from "../scopes/rust-module-scope.js";
 import { RustTraitScope } from "../scopes/rust-trait-scope.js";
-import { FunctionSymbol, FunctionSymbolOptions } from "./function-symbol.js";
-import {
-  NamedTypeSymbol,
-  NamedTypeSymbolOptions,
-} from "./named-type-symbol.js";
-import {
-  RustOutputSymbol,
-  RustOutputSymbolOptions,
-} from "./rust-output-symbol.js";
+import type { FunctionSymbolOptions } from "./function-symbol.js";
+import { FunctionSymbol } from "./function-symbol.js";
+import type { NamedTypeSymbolOptions } from "./named-type-symbol.js";
+import { NamedTypeSymbol } from "./named-type-symbol.js";
+import type { RustOutputSymbolOptions } from "./rust-output-symbol.js";
+import { RustOutputSymbol } from "./rust-output-symbol.js";
 
 export function createStructSymbol(
   originalName: string | Namekey,
@@ -239,10 +234,11 @@ export function createTypeParameterSymbol(
 ) {
   const scope = useRustScope();
   const typeParameterSpace =
-    scope instanceof RustFunctionScope ? scope.typeParameters
-    : scope.ownerSymbol instanceof NamedTypeSymbol ?
-      scope.ownerSymbol.typeParameters
-    : undefined;
+    scope instanceof RustFunctionScope
+      ? scope.typeParameters
+      : scope.ownerSymbol instanceof NamedTypeSymbol
+        ? scope.ownerSymbol.typeParameters
+        : undefined;
 
   if (!typeParameterSpace) {
     throw new Error(

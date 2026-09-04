@@ -1,12 +1,12 @@
+import type { Children, Refkey } from "@alloy-js/core";
 import {
-  Children,
   Declaration as CoreDeclaration,
   For,
   Indent,
-  Refkey,
   Scope,
   createScope,
 } from "@alloy-js/core";
+
 import { RustImplScope, useRustScope } from "../scopes/index.js";
 import {
   createEnumSymbol,
@@ -14,7 +14,8 @@ import {
   createVariantSymbol,
 } from "../symbols/factories.js";
 import { DocComment } from "./doc-comment.js";
-import { TypeParameterProp, TypeParameters } from "./type-parameters.js";
+import type { TypeParameterProp } from "./type-parameters.js";
+import { TypeParameters } from "./type-parameters.js";
 import { toRustVisibility, toVisibilityPrefix } from "./visibility.js";
 
 export interface EnumDeclarationProps {
@@ -62,11 +63,10 @@ export function EnumDeclaration(props: EnumDeclarationProps) {
   });
   enumSymbol.visibility = toRustVisibility(props);
   const visibilityPrefix = toVisibilityPrefix(props);
-  const variants =
-    props.children ?
-      (Array.isArray(props.children) ?
-        props.children
-      : [props.children]
+  const variants = props.children
+    ? (Array.isArray(props.children)
+        ? props.children
+        : [props.children]
       ).filter(
         (child) => !(typeof child === "string" && child.trim().length === 0),
       )
@@ -74,18 +74,18 @@ export function EnumDeclaration(props: EnumDeclarationProps) {
 
   return (
     <>
-      {props.doc ?
+      {props.doc ? (
         <>
           <DocComment>{props.doc}</DocComment>
         </>
-      : null}
-      {props.attributes ?
+      ) : null}
+      {props.attributes ? (
         <>
           {props.attributes}
           <hbr />
         </>
-      : null}
-      {props.derives && props.derives.length > 0 ?
+      ) : null}
+      {props.derives && props.derives.length > 0 ? (
         <>
           {"#[derive("}
           <For each={props.derives} joiner={", "}>
@@ -94,7 +94,7 @@ export function EnumDeclaration(props: EnumDeclarationProps) {
           {")]"}
           <hbr />
         </>
-      : null}
+      ) : null}
       <CoreDeclaration symbol={enumSymbol}>
         <Scope value={enumScope}>
           <DeclareNamedTypeTypeParameters
@@ -105,7 +105,7 @@ export function EnumDeclaration(props: EnumDeclarationProps) {
         {"enum "}
         {enumSymbol.name}
         <TypeParameters params={props.typeParameters} />
-        {variants.length > 0 ?
+        {variants.length > 0 ? (
           <>
             {" {"}
             <Scope value={enumScope}>
@@ -118,7 +118,9 @@ export function EnumDeclaration(props: EnumDeclarationProps) {
             <hbr />
             {"}"}
           </>
-        : " {}"}
+        ) : (
+          " {}"
+        )}
       </CoreDeclaration>
     </>
   );
@@ -132,31 +134,28 @@ export function EnumVariant(props: EnumVariantProps) {
   const tupleFields = (props.fields ?? []).filter(
     (field) => !(typeof field === "string" && field.trim().length === 0),
   );
-  const members =
-    props.children ?
-      (Array.isArray(props.children) ?
-        props.children
-      : [props.children]
+  const members = props.children
+    ? (Array.isArray(props.children)
+        ? props.children
+        : [props.children]
       ).filter(
         (child) => !(typeof child === "string" && child.trim().length === 0),
       )
     : [];
   const variantKind =
     props.kind ??
-    (tupleFields.length > 0 ? "tuple"
-    : members.length > 0 ? "struct"
-    : "unit");
+    (tupleFields.length > 0 ? "tuple" : members.length > 0 ? "struct" : "unit");
   const tupleValues = tupleFields.length > 0 ? tupleFields : members;
 
   return (
     <CoreDeclaration symbol={variantSymbol}>
-      {props.doc ?
+      {props.doc ? (
         <>
           <DocComment>{props.doc}</DocComment>
         </>
-      : null}
+      ) : null}
       {variantSymbol.name}
-      {variantKind === "tuple" && tupleValues.length > 0 ?
+      {variantKind === "tuple" && tupleValues.length > 0 ? (
         <>
           {"("}
           <For each={tupleValues} joiner={", "}>
@@ -164,7 +163,7 @@ export function EnumVariant(props: EnumVariantProps) {
           </For>
           {"),"}
         </>
-      : variantKind === "struct" ?
+      ) : variantKind === "struct" ? (
         <>
           {" {"}
           <Indent>
@@ -175,7 +174,9 @@ export function EnumVariant(props: EnumVariantProps) {
           <hbr />
           {"},"}
         </>
-      : ","}
+      ) : (
+        ","
+      )}
     </CoreDeclaration>
   );
 }

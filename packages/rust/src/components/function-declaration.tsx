@@ -1,12 +1,12 @@
+import type { Children, Refkey } from "@alloy-js/core";
 import {
-  Children,
   Declaration as CoreDeclaration,
   Indent,
-  Refkey,
   Scope,
   createScope,
 } from "@alloy-js/core";
-import { ParameterDescriptor } from "../parameter-descriptor.js";
+
+import type { ParameterDescriptor } from "../parameter-descriptor.js";
 import {
   RustFunctionScope,
   RustImplScope,
@@ -19,11 +19,8 @@ import {
 } from "../symbols/factories.js";
 import { DocComment } from "./doc-comment.js";
 import { Parameters } from "./parameters.js";
-import {
-  TypeParameterProp,
-  TypeParameters,
-  WhereClause,
-} from "./type-parameters.js";
+import type { TypeParameterProp } from "./type-parameters.js";
+import { TypeParameters, WhereClause } from "./type-parameters.js";
 import { toRustVisibility, toVisibilityPrefix } from "./visibility.js";
 
 export interface FunctionDeclarationProps {
@@ -50,9 +47,8 @@ export function FunctionDeclaration(props: FunctionDeclarationProps) {
     parentScope instanceof RustImplScope ||
     parentScope instanceof RustTraitScope;
   const effectiveReceiver = isMethod ? (props.receiver ?? "&self") : "none";
-  const functionSymbol =
-    isMethod ?
-      createMethodSymbol(props.name, {
+  const functionSymbol = isMethod
+    ? createMethodSymbol(props.name, {
         refkeys: props.refkey ? [props.refkey] : [],
       })
     : createFunctionSymbol(props.name, {
@@ -79,11 +75,11 @@ export function FunctionDeclaration(props: FunctionDeclarationProps) {
 
   return (
     <>
-      {props.doc ?
+      {props.doc ? (
         <>
           <DocComment>{props.doc}</DocComment>
         </>
-      : null}
+      ) : null}
       <CoreDeclaration symbol={functionSymbol}>
         {visibilityPrefix}
         {props.async ? "async " : ""}
@@ -94,36 +90,38 @@ export function FunctionDeclaration(props: FunctionDeclarationProps) {
         <Scope value={functionScope}>
           <TypeParameters params={props.typeParameters} />
           {"("}
-          {effectiveReceiver !== "none" ?
+          {effectiveReceiver !== "none" ? (
             <>
               {effectiveReceiver}
               {props.parameters && props.parameters.length > 0 ? ", " : ""}
             </>
-          : null}
+          ) : null}
           <Parameters parameters={props.parameters} wrap={false} />
           {")"}
-          {props.returnType ?
+          {props.returnType ? (
             <>
               {" -> "}
               {props.returnType}
             </>
-          : null}
-          {props.whereClause ?
+          ) : null}
+          {props.whereClause ? (
             <>
               {" "}
               <WhereClause>{props.whereClause}</WhereClause>
             </>
-          : null}
-          {props.children ?
+          ) : null}
+          {props.children ? (
             <>
               {" {"}
               <Indent>{props.children}</Indent>
               <hbr />
               {"}"}
             </>
-          : parentScope instanceof RustTraitScope ?
+          ) : parentScope instanceof RustTraitScope ? (
             ";"
-          : " {}"}
+          ) : (
+            " {}"
+          )}
         </Scope>
       </CoreDeclaration>
     </>

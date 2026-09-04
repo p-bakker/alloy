@@ -1,3 +1,8 @@
+import { execSync } from "child_process";
+import { existsSync, rmSync } from "fs";
+import { tmpdir } from "os";
+import { join } from "path";
+
 import { Output, render, writeOutput } from "@alloy-js/core";
 import {
   CrateDirectory,
@@ -5,11 +10,8 @@ import {
   SourceFile,
   createRustNamePolicy,
 } from "@alloy-js/rust";
-import { execSync } from "child_process";
-import { existsSync, rmSync } from "fs";
-import { tmpdir } from "os";
-import { join } from "path";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
+
 import { ConfigFile } from "../src/components/config-file.js";
 import { ErrorModule } from "../src/components/error-module.js";
 import { StoreModule } from "../src/components/store-module.js";
@@ -19,9 +21,8 @@ import { stdCrate } from "../src/externals.js";
 function hasRustToolchain(): boolean {
   try {
     // Check standard PATH first, then common cargo install location
-    const cargoPath =
-      process.env.CARGO_HOME ?
-        join(process.env.CARGO_HOME, "bin", "cargo")
+    const cargoPath = process.env.CARGO_HOME
+      ? join(process.env.CARGO_HOME, "bin", "cargo")
       : join(process.env.HOME ?? "", ".cargo", "bin", "cargo");
     const cmd = existsSync(cargoPath) ? cargoPath : "cargo";
     execSync(`${cmd} --version`, { stdio: "pipe" });
@@ -32,9 +33,8 @@ function hasRustToolchain(): boolean {
 }
 
 function getCargoBin(): string {
-  const cargoPath =
-    process.env.CARGO_HOME ?
-      join(process.env.CARGO_HOME, "bin", "cargo")
+  const cargoPath = process.env.CARGO_HOME
+    ? join(process.env.CARGO_HOME, "bin", "cargo")
     : join(process.env.HOME ?? "", ".cargo", "bin", "cargo");
   return existsSync(cargoPath) ? cargoPath : "cargo";
 }

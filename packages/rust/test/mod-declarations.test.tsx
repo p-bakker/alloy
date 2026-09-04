@@ -2,6 +2,7 @@ import { Output, Scope, code, render } from "@alloy-js/core";
 import "@alloy-js/core/testing";
 import { d } from "@alloy-js/core/testing";
 import { describe, expect, it } from "vitest";
+
 import { CrateDirectory } from "../src/components/crate-directory.js";
 import { ModDeclarations } from "../src/components/mod-declarations.js";
 import { ModuleDirectory } from "../src/components/module-directory.js";

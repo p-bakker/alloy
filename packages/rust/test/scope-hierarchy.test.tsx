@@ -1,5 +1,6 @@
 import { Output, Scope, createSymbol } from "@alloy-js/core";
 import { describe, expect, it } from "vitest";
+
 import {
   RustCrateScope,
   RustFunctionScope,

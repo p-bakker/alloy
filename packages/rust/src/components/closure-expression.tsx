@@ -1,4 +1,5 @@
-import { Children, For, Indent, isComponentCreator } from "@alloy-js/core";
+import type { Children } from "@alloy-js/core";
+import { For, Indent, isComponentCreator } from "@alloy-js/core";
 
 export interface ClosureParameter {
   name: string;
@@ -53,7 +54,7 @@ function renderBlock(children: Children[]) {
   return (
     <>
       {"{"}
-      {children.length > 0 ?
+      {children.length > 0 ? (
         <>
           <Indent>
             <For each={children} joiner={<hbr />}>
@@ -62,7 +63,7 @@ function renderBlock(children: Children[]) {
           </Indent>
           <hbr />
         </>
-      : null}
+      ) : null}
       {"}"}
     </>
   );
@@ -82,22 +83,22 @@ export function ClosureExpression(props: ClosureExpressionProps) {
         {(parameter) => (
           <>
             {parameter.name}
-            {parameter.type ?
-              <>: {parameter.type}</>
-            : null}
+            {parameter.type ? <>: {parameter.type}</> : null}
           </>
         )}
       </For>
       {"|"}
-      {hasReturnType ?
+      {hasReturnType ? (
         <>
           {" "}
           {"->"} {props.returnType}
         </>
-      : null}
-      {renderAsBlock ?
+      ) : null}
+      {renderAsBlock ? (
         <> {renderBlock(bodyStatements)}</>
-      : <> {bodyStatements[0]}</>}
+      ) : (
+        <> {bodyStatements[0]}</>
+      )}
     </>
   );
 }

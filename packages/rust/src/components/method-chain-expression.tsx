@@ -1,11 +1,5 @@
-import {
-  BasePartProps,
-  Children,
-  createAccessExpression,
-  For,
-  Indent,
-  Wrap,
-} from "@alloy-js/core";
+import type { BasePartProps, Children } from "@alloy-js/core";
+import { createAccessExpression, For, Indent, Wrap } from "@alloy-js/core";
 
 export interface MethodChainExpressionProps {
   receiver: Children;
@@ -93,7 +87,7 @@ const { Expression, Part, registerOuterComponent } = createAccessExpression<
       <>
         {"."}
         {part.name}
-        {part.typeArgs.length > 0 ?
+        {part.typeArgs.length > 0 ? (
           <>
             {"::<"}
             <For each={part.typeArgs} joiner={", "}>
@@ -101,7 +95,7 @@ const { Expression, Part, registerOuterComponent } = createAccessExpression<
             </For>
             {">"}
           </>
-        : null}
+        ) : null}
         {"("}
         <Wrap
           when={part.args.length > 1}

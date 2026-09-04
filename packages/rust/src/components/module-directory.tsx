@@ -5,6 +5,7 @@ import {
   useScope,
   type Children,
 } from "@alloy-js/core";
+
 import { RustCrateScope } from "../scopes/rust-crate-scope.js";
 import { RustModuleScope } from "../scopes/rust-module-scope.js";
 import { toRustVisibility } from "./visibility.js";
@@ -25,12 +26,10 @@ function getModuleName(path: string): string {
 export function ModuleDirectory(props: ModuleDirectoryProps) {
   const parentScope = useScope();
   const scopeParent =
-    (
-      parentScope instanceof RustCrateScope ||
-      parentScope instanceof RustModuleScope
-    ) ?
-      parentScope
-    : undefined;
+    parentScope instanceof RustCrateScope ||
+    parentScope instanceof RustModuleScope
+      ? parentScope
+      : undefined;
   const moduleName = getModuleName(props.path);
   const visibility = toRustVisibility(props);
 

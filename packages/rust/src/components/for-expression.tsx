@@ -1,4 +1,5 @@
-import { Children, For, Indent } from "@alloy-js/core";
+import type { Children } from "@alloy-js/core";
+import { For, Indent } from "@alloy-js/core";
 
 export interface ForExpressionProps {
   pattern: Children;
@@ -42,7 +43,7 @@ function renderBlock(children: Children | undefined) {
   return (
     <>
       {"{"}
-      {statements.length > 0 ?
+      {statements.length > 0 ? (
         <>
           <Indent>
             <For each={statements} joiner={<hbr />}>
@@ -51,7 +52,7 @@ function renderBlock(children: Children | undefined) {
           </Indent>
           <hbr />
         </>
-      : null}
+      ) : null}
       {"}"}
     </>
   );
@@ -60,12 +61,12 @@ function renderBlock(children: Children | undefined) {
 export function ForExpression(props: ForExpressionProps) {
   return (
     <>
-      {props.label ?
+      {props.label ? (
         <>
           {props.label}
           {": "}
         </>
-      : null}
+      ) : null}
       {"for "}
       {props.pattern}
       {" in "}

@@ -1,12 +1,12 @@
+import type { Children, Refkey } from "@alloy-js/core";
 import {
-  Children,
   Declaration as CoreDeclaration,
   For,
   Indent,
-  Refkey,
   Scope,
   createScope,
 } from "@alloy-js/core";
+
 import { RustImplScope, useRustScope } from "../scopes/index.js";
 import {
   createFieldSymbol,
@@ -14,11 +14,8 @@ import {
   createTypeParameterSymbol,
 } from "../symbols/factories.js";
 import { DocComment } from "./doc-comment.js";
-import {
-  TypeParameterProp,
-  TypeParameters,
-  WhereClause,
-} from "./type-parameters.js";
+import type { TypeParameterProp } from "./type-parameters.js";
+import { TypeParameters, WhereClause } from "./type-parameters.js";
 import { toRustVisibility, toVisibilityPrefix } from "./visibility.js";
 
 export interface StructDeclarationProps {
@@ -72,11 +69,10 @@ export function StructDeclaration(props: StructDeclarationProps) {
 
   structSymbol.visibility = toRustVisibility(props);
   const visibilityPrefix = toVisibilityPrefix(props);
-  const members =
-    props.children ?
-      (Array.isArray(props.children) ?
-        props.children
-      : [props.children]
+  const members = props.children
+    ? (Array.isArray(props.children)
+        ? props.children
+        : [props.children]
       ).filter(
         (child) => !(typeof child === "string" && child.trim().length === 0),
       )
@@ -85,18 +81,18 @@ export function StructDeclaration(props: StructDeclarationProps) {
 
   return (
     <>
-      {props.doc ?
+      {props.doc ? (
         <>
           <DocComment>{props.doc}</DocComment>
         </>
-      : null}
-      {props.attributes ?
+      ) : null}
+      {props.attributes ? (
         <>
           {props.attributes}
           <hbr />
         </>
-      : null}
-      {props.derives && props.derives.length > 0 ?
+      ) : null}
+      {props.derives && props.derives.length > 0 ? (
         <>
           {"#[derive("}
           <For each={props.derives} joiner={", "}>
@@ -105,7 +101,7 @@ export function StructDeclaration(props: StructDeclarationProps) {
           {")]"}
           <hbr />
         </>
-      : null}
+      ) : null}
       <CoreDeclaration symbol={structSymbol}>
         <Scope value={structScope}>
           <DeclareNamedTypeTypeParameters
@@ -116,30 +112,30 @@ export function StructDeclaration(props: StructDeclarationProps) {
         {"struct "}
         {structSymbol.name}
         <TypeParameters params={props.typeParameters} />
-        {props.whereClause && !props.tuple ?
+        {props.whereClause && !props.tuple ? (
           <>
             {" "}
             <WhereClause>{props.whereClause}</WhereClause>
           </>
-        : null}
-        {props.unit ?
+        ) : null}
+        {props.unit ? (
           ";"
-        : props.tuple ?
+        ) : props.tuple ? (
           <>
             {"("}
             <For each={tupleTypes} joiner={", "}>
               {(type) => type}
             </For>
             {")"}
-            {props.whereClause ?
+            {props.whereClause ? (
               <>
                 {" "}
                 <WhereClause>{props.whereClause}</WhereClause>
               </>
-            : null}
+            ) : null}
             {";"}
           </>
-        : members.length > 0 ?
+        ) : members.length > 0 ? (
           <>
             {" {"}
             <Scope value={structScope}>
@@ -152,7 +148,9 @@ export function StructDeclaration(props: StructDeclarationProps) {
             <hbr />
             {"}"}
           </>
-        : " {}"}
+        ) : (
+          " {}"
+        )}
       </CoreDeclaration>
     </>
   );
@@ -167,11 +165,11 @@ export function Field(props: FieldProps) {
 
   return (
     <CoreDeclaration symbol={fieldSymbol}>
-      {props.doc ?
+      {props.doc ? (
         <>
           <DocComment>{props.doc}</DocComment>
         </>
-      : null}
+      ) : null}
       {visibilityPrefix}
       {fieldSymbol.name}
       {": "}

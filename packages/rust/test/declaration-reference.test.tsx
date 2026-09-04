@@ -2,6 +2,7 @@ import { Output, refkey } from "@alloy-js/core";
 import "@alloy-js/core/testing";
 import { d } from "@alloy-js/core/testing";
 import { describe, expect, it } from "vitest";
+
 import { CrateDirectory } from "../src/components/crate-directory.js";
 import { Declaration } from "../src/components/declaration.js";
 import { Reference } from "../src/components/reference.js";

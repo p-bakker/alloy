@@ -22,6 +22,7 @@ import {
   StructDeclaration,
   StructExpression,
 } from "@alloy-js/rust";
+
 import { stdCrate } from "../externals.js";
 import { resultAliasKey, storeErrorKey } from "./error-module.js";
 import { cacheableKey } from "./traits-module.js";

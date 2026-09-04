@@ -1,4 +1,5 @@
-import { Children, For, Indent } from "@alloy-js/core";
+import type { Children } from "@alloy-js/core";
+import { For, Indent } from "@alloy-js/core";
 
 export interface MatchExpressionProps {
   expression: Children;
@@ -29,7 +30,7 @@ export function MatchExpression(props: MatchExpressionProps) {
       {"match "}
       {props.expression}
       {" {"}
-      {arms.length > 0 ?
+      {arms.length > 0 ? (
         <>
           <Indent>
             <For each={arms} joiner={<hbr />}>
@@ -38,7 +39,7 @@ export function MatchExpression(props: MatchExpressionProps) {
           </Indent>
           <hbr />
         </>
-      : null}
+      ) : null}
       {"}"}
     </>
   );
@@ -51,19 +52,20 @@ export function MatchArm(props: MatchArmProps) {
   return (
     <>
       {props.pattern}
-      {props.guard ?
+      {props.guard ? (
         <>
           {" if "}
           {props.guard}
         </>
-      : null}
+      ) : null}
       {" => "}
-      {renderInline ?
+      {renderInline ? (
         <>
           {statements[0]}
           {","}
         </>
-      : <>
+      ) : (
+        <>
           {"{"}
           <Indent>
             <For each={statements} joiner={<hbr />}>
@@ -73,7 +75,7 @@ export function MatchArm(props: MatchArmProps) {
           <hbr />
           {"},"}
         </>
-      }
+      )}
     </>
   );
 }

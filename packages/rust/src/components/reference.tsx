@@ -1,4 +1,6 @@
-import { Refkey, computed, emitSymbol } from "@alloy-js/core";
+import type { Refkey } from "@alloy-js/core";
+import { computed, emitSymbol } from "@alloy-js/core";
+
 import { ref } from "../symbols/reference.js";
 
 export interface ReferenceProps {

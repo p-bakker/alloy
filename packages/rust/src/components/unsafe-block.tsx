@@ -1,4 +1,5 @@
-import { Children, For, Indent } from "@alloy-js/core";
+import type { Children } from "@alloy-js/core";
+import { For, Indent } from "@alloy-js/core";
 
 export interface UnsafeBlockProps {
   children?: Children;
@@ -39,7 +40,7 @@ function renderBlock(children: Children | undefined) {
   return (
     <>
       {"{"}
-      {statements.length > 0 ?
+      {statements.length > 0 ? (
         <>
           <Indent>
             <For each={statements} joiner={<hbr />}>
@@ -48,7 +49,7 @@ function renderBlock(children: Children | undefined) {
           </Indent>
           <hbr />
         </>
-      : null}
+      ) : null}
       {"}"}
     </>
   );

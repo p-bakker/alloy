@@ -1,4 +1,5 @@
-import { Children, For, memo } from "@alloy-js/core";
+import type { Children } from "@alloy-js/core";
+import { For, memo } from "@alloy-js/core";
 
 export interface ValueProps {
   value?: unknown;
